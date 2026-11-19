@@ -2,6 +2,7 @@
 <html lang="el">
 <head>
 <meta charset="utf-8">
+<script>(function(){var P=/*LANGPAGE*/'el';try{var L=localStorage.getItem('hw_lang');if(!L&&P==='el'&&!/^el/i.test(navigator.language||''))L='en';if(L&&L!==P){location.replace(L==='en'?'en.html':'./');}}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Home WOD · CrossFit στο σπίτι</title>
 <meta name="description" content="CrossFit προπονήσεις στο σπίτι για απώλεια βάρους: WOD με τον εξοπλισμό σου, animated ασκήσεις, timer AMRAP, EMOM, For Time, Tabata.">
@@ -307,6 +308,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 
 .pl-timer.rest{color:var(--mint)}
 .av[hidden]{display:none!important}
+.langsw{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:36px;padding:0 10px;margin-right:8px;border-radius:12px;border:1px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;text-decoration:none;letter-spacing:.04em}.langsw:hover{background:rgba(255,255,255,.06)}
 </style>
 </head>
 <body>
@@ -319,7 +321,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
       <button data-v="library">Ασκήσεις</button>
       <button data-v="history">Πρόοδος</button>
     </nav>
-    <button class="acct" id="acctBtn"><span class="av" id="acctAv" hidden></span><span id="acctName">Σύνδεση</span></button>
+    <a class="langsw" href="en.html" id="langSw" data-lang="en">EN</a><button class="acct" id="acctBtn"><span class="av" id="acctAv" hidden></span><span id="acctName">Σύνδεση</span></button>
     <a class="btn primary navcta" href="#builder" data-go="builder">Φτιάξε WOD</a>
   </div>
 </header>
@@ -1352,7 +1354,7 @@ $('#yr').textContent=new Date().getFullYear();$('#exCount').textContent=EX.filte
 refreshMusic();
 renderSetup();
 $('#genBtn').onclick=generate;
-window.addEventListener('load',()=>Cloud.init());
+window.addEventListener('load',()=>Cloud.init());document.getElementById('langSw')?.addEventListener('click',e=>{try{localStorage.setItem('hw_lang',e.currentTarget.dataset.lang)}catch(_){}});
 $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[{ex:'rest',label:'Βαθιές ανάσες',sub:'Χαλάρωσε τους ώμους',dur:45,info:'STRETCHING'}],list=[];
   pick.forEach((id,i)=>{const e=EXM[id];const d=e.side?60:50;const sub=e.side?`30" κάθε πλευρά · ${e.gr}`:e.gr;segs.push({ex:id,label:e.name,sub,dur:d,info:`ΔΙΑΤΑΣΗ ${i+1}/${pick.length}`,rest:true});list.push({ex:id,label:`${d}" ${e.name}`,sub})});
   const min=segs.reduce((s,x)=>s+x.dur,0)/60;const names=ST.focus.map(m=>MUN[m]);
