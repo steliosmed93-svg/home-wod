@@ -51,6 +51,11 @@ section[hidden]{display:none}
 .hero-cap{position:absolute;left:20px;top:20px;background:rgba(14,14,16,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line2);border-radius:16px;padding:10px 16px}
 .hero-cap b{display:block;font-size:16px}.hero-cap span{font-size:12.5px;color:var(--mut)}
 .features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:24px 0 10px}
+.mchips{display:flex;flex-wrap:wrap;gap:8px}
+.mchips button{padding:10px 15px;border-radius:99px;border:1px solid var(--line2);font-weight:600;font-size:13.5px;color:#cfcfd4;background:var(--card2);transition:.2s}
+.mchips button.on{background:var(--accSoft);color:var(--acc);border-color:rgba(255,138,91,.55)}
+.mchips button.all.on{background:var(--fg);color:#111;border-color:var(--fg)}
+.filters.sub{padding-top:8px}
 .feat{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
 .feat i{font-style:normal;font-size:12px;font-weight:800;color:var(--acc)}
 .feat h4{margin:10px 0 8px;font-size:17px;font-weight:800;letter-spacing:-.03em}
@@ -275,7 +280,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
         <h1>Κάψε θερμίδες στο σπίτι με το <em>WOD της ημέρας</em>.</h1>
         <p class="lead">Διάλεξε τον εξοπλισμό που έχεις, την ένταση και τον χρόνο σου. Το Home WOD φτιάχνει την προπόνηση, σου δείχνει κάθε άσκηση και μετράει τον χρόνο για σένα.</p>
         <div class="cta"><a class="btn primary" href="#builder" data-go="builder">Φτιάξε το WOD σου</a><button class="btn" data-go="timer">Άνοιξε το Timer</button></div>
-        <div class="kpis"><div><b>31</b><span>ασκήσεις με animation</span></div><div><b>7</b><span>τύποι timer</span></div><div><b>20–45'</b><span>διάρκεια προπόνησης</span></div></div>
+        <div class="kpis"><div><b id="exCount">70</b><span>ασκήσεις και διατάσεις</span></div><div><b>7</b><span>τύποι timer</span></div><div><b>20–60'</b><span>διάρκεια προπόνησης</span></div></div>
       </div>
       <div class="l-visual"><div class="stage"><svg id="heroFig"></svg></div><div class="hero-cap"><b id="heroName"></b><span id="heroGr"></span></div></div>
     </div>
@@ -293,6 +298,9 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
       <h3 class="lbl">Βάρος kettlebell</h3>
       <div class="seg" id="kbSeg"></div>
     </div>
+    <h3 class="lbl">Περιοχές που θέλεις να δουλέψεις</h3>
+    <div class="mchips" id="focusChips"></div>
+    <p class="note" style="margin-top:10px">Διάλεξε μία ή περισσότερες. Χωρίς επιλογή, το WOD δουλεύει όλο το σώμα. Οι διατάσεις στο τέλος προσαρμόζονται στις περιοχές.</p>
     </div><div class="col">
     <h3 class="lbl">Επίπεδο</h3>
     <div class="seg" id="lvlSeg"></div>
@@ -326,8 +334,9 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
   </section>
 
   <section id="v-library" hidden>
-    <div class="sec-head top"><div class="eyebrow">Βιβλιοθήκη</div><h2>Ασκήσεις</h2><p>31 ασκήσεις με animation. Πάτα μία για τεχνική και οδηγίες.</p></div>
+    <div class="sec-head top"><div class="eyebrow">Βιβλιοθήκη</div><h2>Ασκήσεις</h2><p>Ασκήσεις και διατάσεις με animation. Φίλτραρε ανά εξοπλισμό ή περιοχή και πάτα μία για τεχνική.</p></div>
     <div class="filters" id="libFilters"></div>
+    <div class="filters sub" id="libMus"></div>
     <div class="grid" id="libGrid"></div>
   </section>
 
@@ -402,14 +411,14 @@ const GROUND=182;
 const dn=(a,l)=>[Math.sin(a*D2R)*l,Math.cos(a*D2R)*l];
 const up=(a,l)=>[Math.sin(a*D2R)*l,-Math.cos(a*D2R)*l];
 const add=(p,v)=>[p[0]+v[0],p[1]+v[1]];
-const KEYS=['t','a1','a2','b1','b2','l1','l2','m1','m2','air','x','hd'];
-function norm(p){const q=Object.assign({t:0,a1:0,a2:0,l1:0,l2:0,air:0,x:0,hd:0,d:1},p);
-  if(q.b1===undefined)q.b1=q.a1;if(q.b2===undefined)q.b2=q.a2;if(q.m1===undefined)q.m1=q.l1;if(q.m2===undefined)q.m2=q.l2;return q}
+const KEYS=['t','a1','a2','b1','b2','l1','l2','m1','m2','air','x','hd','pf','pfb'];
+function norm(p){const q=Object.assign({t:0,a1:0,a2:0,l1:0,l2:0,air:0,x:0,hd:0,d:1,pf:0,pfb:0},p);
+  if(p.pfb===undefined)q.pfb=q.pf;if(q.b1===undefined)q.b1=q.a1;if(q.b2===undefined)q.b2=q.a2;if(q.m1===undefined)q.m1=q.l1;if(q.m2===undefined)q.m2=q.l2;return q}
 function joints(q){
   const H=[0,0],S=add(H,up(q.t,LEN.tor)),N=add(S,up(q.t+q.hd,LEN.neck)),C=add(S,up(q.t+q.hd,LEN.neck+LEN.hr));
   const E1=add(S,dn(q.a1,LEN.ua)),W1=add(E1,dn(q.a2,LEN.fa)),E2=add(S,dn(q.b1,LEN.ua)),W2=add(E2,dn(q.b2,LEN.fa));
-  const K1=add(H,dn(q.l1,LEN.th)),A1=add(K1,dn(q.l2,LEN.sh)),T1=add(A1,[Math.cos(q.l2*D2R)*LEN.ft,-Math.sin(q.l2*D2R)*LEN.ft]);
-  const K2=add(H,dn(q.m1,LEN.th)),A2=add(K2,dn(q.m2,LEN.sh)),T2=add(A2,[Math.cos(q.m2*D2R)*LEN.ft,-Math.sin(q.m2*D2R)*LEN.ft]);
+  const K1=add(H,dn(q.l1,LEN.th)),A1=add(K1,dn(q.l2,LEN.sh)),T1=q.pf>.5?add(A1,dn(q.l2,7)):add(A1,[Math.cos(q.l2*D2R)*LEN.ft,-Math.sin(q.l2*D2R)*LEN.ft]);
+  const K2=add(H,dn(q.m1,LEN.th)),A2=add(K2,dn(q.m2,LEN.sh)),T2=q.pfb>.5?add(A2,dn(q.m2,7)):add(A2,[Math.cos(q.m2*D2R)*LEN.ft,-Math.sin(q.m2*D2R)*LEN.ft]);
   return {H,S,N,C,E1,W1,E2,W2,K1,A1,T1,K2,A2,T2};
 }
 const PTS=['H','S','N','C','E1','W1','E2','W2','K1','A1','T1','K2','A2','T2'];
@@ -418,7 +427,7 @@ function offsetFor(ex,q,J){
   let maxY=-1e9;for(const k of PTS){const y=J[k][1]+(k==='C'?LEN.hr:0);if(y>maxY)maxY=y}
   const g=ex.ground||GROUND,dy=g-maxY-(q.air||0);
   let dx=q.x||0;
-  if(ex.anchor==='foot')dx=-J.A1[0];else if(ex.anchor==='hand')dx=-J.W1[0];else if(ex.anchor==='bhand')dx=-J.W2[0];
+  if(ex.anchor==='foot')dx=-J.A1[0];else if(ex.anchor==='hand')dx=-J.W1[0];else if(ex.anchor==='bhand')dx=-J.W2[0];else if(ex.anchor==='bfoot')dx=-J.A2[0];
   return [dx,dy];
 }
 function tr(J,dx,dy){const o={};for(const k of PTS)o[k]=[J[k][0]+dx,J[k][1]+dy];return o}
@@ -433,7 +442,7 @@ function prepEx(ex){
   ex.cx=0;
   if(ex.anchor!=='fixed'){let mn=1e9,mx=-1e9;for(let i=0;i<24;i++){const P=poseAt(ex,i/24*ex.period);
       for(const k of PTS){const r=k==='C'?LEN.hr:4;mn=Math.min(mn,P.J[k][0]-r);mx=Math.max(mx,P.J[k][0]+r)}
-      if(ex.props&&ex.props.band==='post'){mx=Math.max(mx,P.J.A1[0]+96)}}
+      if(ex.props&&(ex.props.band==='post'||ex.props.band==='posthigh')){mx=Math.max(mx,P.J.A1[0]+96)}}
     ex.cx=100-(mn+mx)/2}
 }
 function poseAt(ex,time){
@@ -452,10 +461,12 @@ function dbSVG(W,col){return `<circle cx="${W[0].toFixed(1)}" cy="${W[1].toFixed
 function bandSVG(A,W,col){const m=[(A[0]+W[0])/2+5,(A[1]+W[1])/2];return `<path d="M${pt(A)} Q${pt(m)} ${pt(W)}" stroke="${col}" stroke-width="2.6" fill="none"/>`}
 function props(ex,P,time){
   const pr=ex.props||{},J=P.J,q=P.q;let b='',f='';
-  if(pr.kb){f+=kbSVG(J.W1,pr.kb==='arm'?q.a2:null,'#ff8a5b')}
+  if(pr.kb==='hip'){f+=kbSVG([J.H[0]+2,J.H[1]-24],null,'#ff8a5b')}else if(pr.kb){f+=kbSVG(J.W1,pr.kb==='arm'?q.a2:null,'#ff8a5b')}
+  if(pr.wall){b+=`<rect x="${(J.H[0]-14).toFixed(1)}" y="${GROUND-150}" width="6" height="150" fill="#3a3a3a"/>`}
+  if(pr.band==='ankles'){f+=bandSVG(J.A2,J.A1,'#6fd6b8')}
   if(pr.db){if(pr.db==='both')b+=dbSVG(J.W2,'#7a4636');f+=dbSVG(J.W1,'#ff8a5b')}
   if(pr.band==='foot'){b+=bandSVG(J.A2,J.W2,'#2e5a4e');f+=bandSVG(J.A1,J.W1,'#6fd6b8')}
-  if(pr.band==='post'){const px=J.A1[0]+92,py=GROUND-54;b+=`<rect x="${(px-3).toFixed(1)}" y="${GROUND-82}" width="6" height="82" fill="#3a3a3a"/>`;
+  if(pr.band==='post'||pr.band==='posthigh'){const hi=pr.band==='posthigh',px=J.A1[0]+92,py=GROUND-(hi?122:54),ph=hi?140:82;b+=`<rect x="${(px-3).toFixed(1)}" y="${GROUND-ph}" width="6" height="${ph}" fill="#3a3a3a"/>`;
     b+=`<line x1="${px}" y1="${py}" x2="${J.W2[0]}" y2="${J.W2[1]}" stroke="#2e5a4e" stroke-width="2.6"/>`;
     f+=`<line x1="${px}" y1="${py}" x2="${J.W1[0]}" y2="${J.W1[1]}" stroke="#6fd6b8" stroke-width="2.6"/>`}
   if(pr.bike){const H=J.H,Cc=[H[0]+20,H[1]+46],F=[H[0]+82,H[1]+36],Pv=[F[0]-12,F[1]-8],rot=(time*540)%360;
@@ -506,73 +517,149 @@ const STAND={a1:4,a2:4};
 const PL={t:75,l1:-65,l2:-65};
 function legRun(p){const K=[[28,8],[0,-25],[-38,-78],[58,-58]];const x=p*4,i=Math.floor(x)%4,u=ease(x-Math.floor(x)),A=K[i],B=K[(i+1)%4];return [A[0]+(B[0]-A[0])*u,A[1]+(B[1]-A[1])*u]}
 const EX=[
- {id:'air_squat',name:'Air Squat',gr:'Καθίσματα σώματος',eq:'bw',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',
+ {id:'air_squat',m:['quads','glutes'],name:'Air Squat',gr:'Καθίσματα σώματος',eq:'bw',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',
   frames:[STAND,{t:40,a1:90,a2:90,l1:85,l2:-35}],cues:['Φτέρνες κάτω, βάρος στη μέση του πέλματος','Λεκάνη κάτω από τα γόνατα, στήθος ψηλά','Γόνατα ακολουθούν τα δάχτυλα'],mu:'Τετρακέφαλοι, γλουτοί'},
- {id:'pushup',name:'Push-up',gr:'Κάμψεις',eq:'bw',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'hand',
+ {id:'pushup',m:['chest','triceps','shoulders'],name:'Push-up',gr:'Κάμψεις',eq:'bw',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'hand',
   frames:[PL,{t:85,a1:-105,a2:10,l1:-85,l2:-85}],cues:['Σώμα σανίδα, σφιχτοί γλουτοί και κοιλιά','Αγκώνες περίπου 45° από τον κορμό','Αρχάριος: με τα γόνατα στο έδαφος'],mu:'Στήθος, τρικέφαλοι, ώμοι'},
- {id:'burpee',name:'Burpee',gr:'Μπέρπι',eq:'bw',cat:['engine'],unit:'reps',base:8,period:4.4,anchor:'hip',
+ {id:'burpee',m:['cardio','chest','quads'],name:'Burpee',gr:'Μπέρπι',eq:'bw',cat:['engine'],unit:'reps',base:8,period:4.4,anchor:'hip',
   frames:[{x:0,...STAND},{x:-8,t:60,a1:15,a2:15,l1:90,l2:-30},{x:0,...PL},{x:18,t:88,a1:-112,a2:8,l1:-88,l2:-88},{x:0,...PL},{x:-8,t:60,a1:15,a2:15,l1:90,l2:-30},{x:0,air:14,a1:178,a2:180,l1:-3,l2:-6,d:.8},{x:0,...STAND,d:.6}],
   cues:['Στήθος στο έδαφος, μετά πάνω','Άλμα με παλαμάκι πάνω από το κεφάλι','Αρχάριος: πάτα πίσω τα πόδια ένα ένα'],mu:'Όλο το σώμα, καρδιο'},
- {id:'mountain_climber',name:'Mountain Climbers',gr:'Ορειβάτες',eq:'bw',cat:['core','engine'],unit:'reps',base:24,period:1,anchor:'hand',
+ {id:'mountain_climber',m:['core','cardio','shoulders'],name:'Mountain Climbers',gr:'Ορειβάτες',eq:'bw',cat:['core','engine'],unit:'reps',base:24,period:1,anchor:'hand',
   frames:[{...PL,m1:60,m2:-80},{t:75,l1:0,l2:-110,m1:0,m2:-110,d:.5},{t:75,l1:60,l2:-80,m1:-65,m2:-65},{t:75,l1:0,l2:-110,m1:0,m2:-110,d:.5}],
   cues:['Ώμοι πάνω από τους καρπούς','Γόνατο δυνατά προς το στήθος','Λεκάνη χαμηλά, όχι στον αέρα'],mu:'Κοιλιακοί, ώμοι, καρδιο',note:'σύνολο'},
- {id:'lunge',name:'Reverse Lunge',gr:'Προβολές προς τα πίσω',eq:'bw',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',
+ {id:'lunge',m:['quads','glutes'],name:'Reverse Lunge',gr:'Προβολές προς τα πίσω',eq:'bw',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',
   frames:[STAND,{t:5,a1:4,a2:4,l1:80,l2:0,m1:-25,m2:-95}],cues:['Μεγάλο βήμα πίσω, γόνατο σχεδόν στο έδαφος','Κορμός όρθιος','Εναλλάξ πόδια'],mu:'Γλουτοί, τετρακέφαλοι',note:'εναλλάξ'},
- {id:'jump_squat',name:'Jump Squat',gr:'Καθίσματα με άλμα',eq:'bw',cat:['engine','lower'],unit:'reps',base:10,period:2.1,anchor:'foot',
+ {id:'jump_squat',m:['quads','glutes','cardio'],name:'Jump Squat',gr:'Καθίσματα με άλμα',eq:'bw',cat:['engine','lower'],unit:'reps',base:10,period:2.1,anchor:'foot',
   frames:[STAND,{t:40,a1:-40,a2:-30,l1:85,l2:-35},{air:20,a1:40,a2:60,l1:-4,l2:-10,d:.7},{...STAND,d:.5}],cues:['Μαλακή προσγείωση στα δάχτυλα και μετά φτέρνες','Χέρια βοηθούν την ώθηση','Χωρίς άλμα αν πονάνε γόνατα'],mu:'Πόδια, εκρηκτικότητα'},
- {id:'plank',name:'Plank',gr:'Σανίδα',eq:'bw',cat:['core'],unit:'sec',base:40,period:3.2,anchor:'hand',
+ {id:'plank',m:['core'],name:'Plank',gr:'Σανίδα',eq:'bw',cat:['core'],unit:'sec',base:40,period:3.2,anchor:'hand',
   frames:[{t:85,a1:0,a2:90,l1:-80,l2:-80},{t:84,a1:0,a2:90,l1:-79,l2:-79}],cues:['Αγκώνες κάτω από τους ώμους','Σφίξε γλουτούς και κοιλιά','Ανάσα σταθερή'],mu:'Κορμός'},
- {id:'high_knees',name:'High Knees',gr:'Ψηλά γόνατα',eq:'bw',cat:['engine'],unit:'sec',base:30,period:.7,anchor:'hip',
+ {id:'high_knees',m:['cardio','core'],name:'High Knees',gr:'Ψηλά γόνατα',eq:'bw',cat:['engine'],unit:'sec',base:30,period:.7,anchor:'hip',
   frames:[{l1:90,l2:0,m1:-4,m2:-14,a1:-35,a2:50,b1:40,b2:115,air:3},{l1:-4,l2:-14,m1:90,m2:0,a1:40,a2:115,b1:-35,b2:50,air:3}],cues:['Γόνατα στο ύψος της λεκάνης','Πάνω στα δάχτυλα','Γρήγορα χέρια'],mu:'Καρδιο'},
- {id:'situp',name:'Sit-up',gr:'Κοιλιακοί',eq:'bw',cat:['core'],unit:'reps',base:15,period:2.6,anchor:'hip',
+ {id:'situp',m:['core'],name:'Sit-up',gr:'Κοιλιακοί',eq:'bw',cat:['core'],unit:'reps',base:15,period:2.6,anchor:'hip',
   frames:[{t:-85,a1:-95,a2:-95,l1:135,l2:45},{t:20,a1:100,a2:100,l1:135,l2:45}],cues:['Πέλματα στο έδαφος','Χέρια πίσω από το κεφάλι κάτω, μετά στα δάχτυλα','Έλεγχος στην επιστροφή'],mu:'Κοιλιακοί'},
- {id:'kb_swing',name:'KB Swing',gr:'Αιωρήσεις kettlebell',eq:'kb',cat:['lower','engine'],unit:'reps',base:15,period:1.8,anchor:'foot',props:{kb:'arm'},
+ {id:'kb_swing',m:['glutes','hams','cardio'],name:'KB Swing',gr:'Αιωρήσεις kettlebell',eq:'kb',cat:['lower','engine'],unit:'reps',base:15,period:1.8,anchor:'foot',props:{kb:'arm'},
   frames:[{t:55,a1:-25,a2:-25,l1:22,l2:-12},{t:-4,a1:90,a2:90}],cues:['Κίνηση από τη λεκάνη, όχι από τα χέρια','Δυνατό σφίξιμο γλουτών πάνω','Πλάτη ίσια στο κάτω σημείο'],mu:'Γλουτοί, οπίσθιοι μηριαίοι, κορμός'},
- {id:'goblet_squat',name:'Goblet Squat',gr:'Κάθισμα με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},
+ {id:'goblet_squat',m:['quads','glutes','core'],name:'Goblet Squat',gr:'Κάθισμα με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},
   frames:[{a1:20,a2:165},{t:35,a1:35,a2:175,l1:88,l2:-38}],cues:['Kettlebell κολλητά στο στήθος','Αγκώνες ανάμεσα στα γόνατα κάτω','Ώθηση από όλο το πέλμα'],mu:'Πόδια, γλουτοί, κορμός'},
- {id:'kb_deadlift',name:'KB Deadlift',gr:'Άρση θανάτου με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},
+ {id:'kb_deadlift',m:['hams','glutes','back'],name:'KB Deadlift',gr:'Άρση θανάτου με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},
   frames:[{a1:0,a2:0},{t:65,a1:-5,a2:-5,l1:45,l2:-15}],cues:['Πλάτη ουδέτερη','Σπρώξε το πάτωμα μακριά','Λεκάνη μπροστά στο τέλος'],mu:'Οπίσθια αλυσίδα'},
- {id:'kb_hp',name:'KB Sumo High Pull',gr:'Έλξη μέχρι το πηγούνι',eq:'kb',cat:['engine','upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{kb:'hang'},
+ {id:'kb_hp',m:['shoulders','back','glutes'],name:'KB Sumo High Pull',gr:'Έλξη μέχρι το πηγούνι',eq:'kb',cat:['engine','upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{kb:'hang'},
   frames:[{t:50,a1:0,a2:0,l1:50,l2:-18},{t:-5,a1:-120,a2:60,air:2}],cues:['Φαρδιά στάση','Πρώτα πόδια, μετά χέρια','Αγκώνες ψηλά και έξω'],mu:'Πόδια, ώμοι, πλάτη'},
- {id:'kb_press',name:'KB Push Press',gr:'Ώθηση πάνω από το κεφάλι',eq:'kb',cat:['upper'],unit:'reps',base:10,period:2.4,anchor:'foot',props:{kb:'arm'},
+ {id:'kb_press',m:['shoulders','triceps'],name:'KB Push Press',gr:'Ώθηση πάνω από το κεφάλι',eq:'kb',cat:['upper'],unit:'reps',base:10,period:2.4,anchor:'foot',props:{kb:'arm'},
   frames:[{a1:10,a2:170,b1:25,b2:25},{l1:25,l2:-22,a1:10,a2:170,b1:25,b2:25,d:.6},{a1:178,a2:180,b1:25,b2:25,air:2},{a1:10,a2:170,b1:25,b2:25,d:.6}],cues:['Μικρό λύγισμα γονάτων και ώθηση','Τέντωσε τον αγκώνα πάνω από το αυτί','Μισές επαναλήψεις ανά χέρι'],mu:'Ώμοι, τρικέφαλοι, πόδια',note:'μισά ανά χέρι'},
- {id:'db_thruster',name:'DB Thruster',gr:'Κάθισμα + πίεση',eq:'db',cat:['engine','lower'],unit:'reps',base:10,period:2.6,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+ {id:'db_thruster',m:['quads','shoulders','cardio'],name:'DB Thruster',gr:'Κάθισμα + πίεση',eq:'db',cat:['engine','lower'],unit:'reps',base:10,period:2.6,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
   frames:[{a1:15,a2:165},{t:35,a1:30,a2:170,l1:85,l2:-35},{a1:178,a2:180,d:1.1}],cues:['Βαράκια στους ώμους','Από το κάθισμα σπρώξε κατευθείαν πάνω','Μία συνεχόμενη κίνηση'],mu:'Όλο το σώμα'},
- {id:'db_row',name:'DB Bent-over Row',gr:'Κωπηλατική',eq:'db',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
+ {id:'db_row',m:['back','biceps'],name:'DB Bent-over Row',gr:'Κωπηλατική',eq:'db',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
   frames:[{t:62,a1:0,a2:0,l1:22,l2:-12},{t:62,a1:-70,a2:15,l1:22,l2:-12}],cues:['Κορμός σκυμμένος, πλάτη ίσια','Τράβα τους αγκώνες προς τη λεκάνη','Ωμοπλάτες μαζί πάνω'],mu:'Πλάτη, δικέφαλοι'},
- {id:'db_press',name:'DB Shoulder Press',gr:'Πιέσεις ώμων',eq:'db',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+ {id:'db_press',m:['shoulders','triceps'],name:'DB Shoulder Press',gr:'Πιέσεις ώμων',eq:'db',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
   frames:[{a1:15,a2:165},{a1:178,a2:180}],cues:['Κοιλιά σφιχτή, χωρίς καμπύλη στη μέση','Βαράκια πάνω από το κεφάλι','Κατέβασμα ελεγχόμενο'],mu:'Ώμοι, τρικέφαλοι'},
- {id:'db_rdl',name:'DB Romanian Deadlift',gr:'Ρουμανική άρση',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.8,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
+ {id:'db_rdl',m:['hams','glutes'],name:'DB Romanian Deadlift',gr:'Ρουμανική άρση',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.8,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
   frames:[{a1:0,a2:0},{t:72,a1:0,a2:0,l1:12,l2:-12}],cues:['Λεκάνη πίσω, γόνατα ελαφρώς λυγισμένα','Βαράκια κολλητά στα πόδια','Νιώσε το τέντωμα πίσω στους μηρούς'],mu:'Οπίσθιοι μηριαίοι, γλουτοί'},
- {id:'db_snatch',name:'DB Snatch',gr:'Αρπαγή με ένα χέρι',eq:'db',cat:['engine'],unit:'reps',base:10,period:2.4,anchor:'foot',props:{db:'near'},dbw:[7.5,10,15],one:true,
+ {id:'db_snatch',m:['shoulders','glutes','cardio'],name:'DB Snatch',gr:'Αρπαγή με ένα χέρι',eq:'db',cat:['engine'],unit:'reps',base:10,period:2.4,anchor:'foot',props:{db:'near'},dbw:[7.5,10,15],one:true,
   frames:[{t:55,a1:0,a2:0,b1:-20,b2:-20,l1:45,l2:-15},{t:2,a1:70,a2:150,b1:-20,b2:-20,air:3,d:.6},{a1:178,a2:180,b1:-20,b2:-20}],cues:['Από το έδαφος πάνω σε μία κίνηση','Εκρηκτικά πόδια, βαράκι κοντά στο σώμα','Εναλλάξ χέρια'],mu:'Όλο το σώμα',note:'εναλλάξ'},
- {id:'db_lunge',name:'DB Reverse Lunge',gr:'Προβολές με βαράκια',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+ {id:'db_lunge',m:['quads','glutes'],name:'DB Reverse Lunge',gr:'Προβολές με βαράκια',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
   frames:[{a1:0,a2:0},{t:5,a1:0,a2:0,l1:80,l2:0,m1:-25,m2:-95}],cues:['Βαράκια στο πλάι','Κορμός όρθιος','Εναλλάξ πόδια'],mu:'Γλουτοί, πόδια',note:'εναλλάξ'},
- {id:'renegade_row',name:'Renegade Row',gr:'Κωπηλατική σε σανίδα',eq:'db',cat:['upper','core'],unit:'reps',base:8,period:2.2,anchor:'bhand',props:{db:'both'},dbw:[5,8,10],
+ {id:'renegade_row',m:['back','core','biceps'],name:'Renegade Row',gr:'Κωπηλατική σε σανίδα',eq:'db',cat:['upper','core'],unit:'reps',base:8,period:2.2,anchor:'bhand',props:{db:'both'},dbw:[5,8,10],
   frames:[PL,{...PL,a1:-60,a2:25,b1:0,b2:0}],cues:['Πόδια ανοιχτά για σταθερότητα','Λεκάνη παράλληλη στο έδαφος','Εναλλάξ χέρια'],mu:'Πλάτη, κορμός',note:'εναλλάξ'},
- {id:'band_squat',name:'Band Squat',gr:'Κάθισμα με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',props:{band:'foot'},
+ {id:'band_squat',m:['quads','glutes'],name:'Band Squat',gr:'Κάθισμα με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',props:{band:'foot'},
   frames:[{a1:15,a2:165},{t:38,a1:30,a2:170,l1:85,l2:-35}],cues:['Λάστιχο κάτω από τα πέλματα, χέρια στους ώμους','Σπρώξε δυνατά πάνω','Κράτα την ένταση και κάτω'],mu:'Πόδια, γλουτοί'},
- {id:'band_row',name:'Band Row',gr:'Κωπηλατική με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'post'},
+ {id:'band_row',m:['back','biceps'],name:'Band Row',gr:'Κωπηλατική με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'post'},
   frames:[{t:15,a1:85,a2:85,l1:15,l2:-12},{t:15,a1:-30,a2:70,l1:15,l2:-12}],cues:['Δέσε το λάστιχο σε σταθερό σημείο στο ύψος του στήθους','Ωμοπλάτες πίσω και κάτω','Αγκώνες κοντά στο σώμα'],mu:'Πλάτη, δικέφαλοι'},
- {id:'band_gm',name:'Band Good Morning',gr:'Κάμψη ισχίων με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:15,period:2.8,anchor:'foot',props:{band:'foot'},
+ {id:'band_gm',m:['hams','glutes','back'],name:'Band Good Morning',gr:'Κάμψη ισχίων με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:15,period:2.8,anchor:'foot',props:{band:'foot'},
   frames:[{a1:-10,a2:175},{t:78,a1:5,a2:150,l1:12,l2:-12}],cues:['Λάστιχο από τα πέλματα πίσω από τον αυχένα','Λεκάνη πίσω, πλάτη ίσια','Σφίξε γλουτούς για να σηκωθείς'],mu:'Οπίσθια αλυσίδα'},
- {id:'band_press',name:'Band Overhead Press',gr:'Πιέσεις ώμων με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{band:'foot'},
+ {id:'band_press',m:['shoulders','triceps'],name:'Band Overhead Press',gr:'Πιέσεις ώμων με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{band:'foot'},
   frames:[{a1:15,a2:165},{a1:178,a2:180}],cues:['Λάστιχο κάτω από τα πέλματα','Χέρια πάνω, τέντωμα πλήρες','Κορμός σφιχτός'],mu:'Ώμοι'},
- {id:'band_curl',name:'Band Curl',gr:'Κάμψεις δικεφάλων',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'foot'},
+ {id:'band_curl',m:['biceps'],name:'Band Curl',gr:'Κάμψεις δικεφάλων',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'foot'},
   frames:[{a1:0,a2:0},{a1:5,a2:150}],cues:['Αγκώνες κολλητά στο σώμα','Ανέβα γρήγορα, κατέβα αργά','Χωρίς ταλάντευση του κορμού'],mu:'Δικέφαλοι'},
- {id:'bike',name:'Air Bike',gr:'Ποδήλατο αέρα',eq:'bike',cat:['machine'],unit:'cal',base:12,period:.9,anchor:'fixed',fx:58,fy:108,props:{bike:true},
+ {id:'bike',m:['cardio','quads'],name:'Air Bike',gr:'Ποδήλατο αέρα',eq:'bike',cat:['machine'],unit:'cal',base:12,period:.9,anchor:'fixed',fx:58,fy:108,props:{bike:true},
   gen:p=>{const th=2*Math.PI*p;const[l1,l2]=legIK(20+13*Math.cos(th),46+13*Math.sin(th));const[m1,m2]=legIK(20-13*Math.cos(th),46-13*Math.sin(th));
     const S=up(20,50);const[a1,a2]=armIK(48+9*Math.cos(th+Math.PI)-S[0],-22-S[1]);const[b1,b2]=armIK(48+9*Math.cos(th)-S[0],-22-S[1]);return {t:20,l1,l2,m1,m2,a1,a2,b1,b2}},
   cues:['Σπρώξε και τράβα ταυτόχρονα με χέρια και πόδια','Σέλα στο ύψος της λεκάνης','Μέτρα θερμίδες στην οθόνη'],mu:'Όλο το σώμα, καρδιο'},
- {id:'run',name:'Treadmill Run',gr:'Τρέξιμο στον διάδρομο',eq:'tread',cat:['machine'],unit:'m',base:200,period:.72,anchor:'hip',ground:164,props:{tread:true},
+ {id:'run',m:['cardio'],name:'Treadmill Run',gr:'Τρέξιμο στον διάδρομο',eq:'tread',cat:['machine'],unit:'m',base:200,period:.72,anchor:'hip',ground:164,props:{tread:true},
   gen:p=>{const[l1,l2]=legRun(p),[m1,m2]=legRun((p+.5)%1),c=Math.cos(2*Math.PI*p);return {t:12,l1,l2,m1,m2,a1:-38*c,a2:-38*c+88,b1:38*c,b2:38*c+88,air:2.5*Math.abs(Math.sin(4*Math.PI*p))}},
   cues:['Ελαφρύ πάτημα κάτω από το σώμα','Χέρια στις 90°','Χωρίς να κρατιέσαι από τις χειρολαβές'],mu:'Καρδιο, πόδια'},
  {id:'incline_walk',name:'Incline Walk',gr:'Περπάτημα σε κλίση',eq:'tread',cat:['walk'],unit:'sec',base:60,period:1.3,anchor:'hip',ground:164,props:{tread:true},hide:true,
   gen:p=>{const th=2*Math.PI*p;const f=x=>{const t=22*Math.sin(x);return [t,t-32*Math.max(0,Math.cos(x))]};const[l1,l2]=f(th),[m1,m2]=f(th+Math.PI);return {t:8,l1,l2,m1,m2,a1:-18*Math.sin(th),a2:-18*Math.sin(th)+22,b1:18*Math.sin(th),b2:18*Math.sin(th)+22}},
   cues:['Κλίση 8 έως 12%','Χωρίς να κρατιέσαι','Ρυθμός που μπορείς να μιλάς'],mu:'Καρδιο χαμηλής έντασης'},
- {id:'fold',name:'Forward Fold',gr:'Διάταση οπίσθιων μηριαίων',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:6,anchor:'foot',hide:true,
+ {id:'inchworm',m:['core','hams','shoulders'],name:'Inchworm',gr:'Περπάτημα με τα χέρια σε σανίδα',eq:'bw',cat:['core'],unit:'reps',base:8,period:4.2,anchor:'foot',
+  frames:[{a1:4,a2:4},{t:110,a1:-10,a2:-10,l1:5,l2:-5},{t:75,l1:-65,l2:-65,d:1.4},{t:110,a1:-10,a2:-10,l1:5,l2:-5}],cues:['Λύγισε λίγο τα γόνατα για να φτάσεις το πάτωμα','Περπάτα με τα χέρια μέχρι τη σανίδα','Γύρνα πίσω με τον ίδιο τρόπο'],mu:'Κορμός, οπίσθιοι μηριαίοι, ώμοι'},
+ {id:'pike_pushup',m:['shoulders','triceps'],name:'Pike Push-up',gr:'Κάμψεις ώμων σε ανάποδο V',eq:'bw',cat:['upper'],unit:'reps',base:8,period:2.4,anchor:'hand',
+  frames:[{t:110,hd:15,a1:0,a2:0,l1:-25,l2:-25},{t:125,hd:20,a1:-70,a2:15,l1:-25,l2:-25}],cues:['Λεκάνη ψηλά, σώμα σαν ανάποδο V','Το κεφάλι κατεβαίνει μπροστά από τα χέρια','Αρχάριος: με τα γόνατα λυγισμένα'],mu:'Ώμοι, τρικέφαλοι'},
+ {id:'hollow_hold',m:['core'],name:'Hollow Hold',gr:'Στάση «βάρκα» ξαπλωτά',eq:'bw',cat:['core'],unit:'sec',base:30,period:3,anchor:'hip',
+  frames:[{t:-78,hd:10,a1:-100,a2:-100,l1:80,l2:80,pf:1},{t:-80,hd:10,a1:-102,a2:-102,l1:82,l2:82,pf:1}],cues:['Μέση κολλητά στο πάτωμα','Χέρια και πόδια τεντωμένα, λίγο πάνω από το έδαφος','Αρχάριος: γόνατα λυγισμένα'],mu:'Κοιλιακοί'},
+ {id:'bicycle_crunch',m:['core'],name:'Bicycle Crunch',gr:'Ποδηλατάκι κοιλιακών',eq:'bw',cat:['core'],unit:'reps',base:20,period:1.6,anchor:'hip',note:'σύνολο',
+  frames:[{t:-70,hd:15,a1:-150,a2:-30,l1:150,l2:80,m1:95,m2:95,pf:1},{t:-70,hd:15,a1:-150,a2:-30,l1:95,l2:95,m1:150,m2:80,pf:1}],cues:['Αγκώνας προς το αντίθετο γόνατο','Ώμοι πάνω από το πάτωμα','Αργά και ελεγχόμενα'],mu:'Κοιλιακοί, πλάγιοι'},
+ {id:'shoulder_taps',m:['core','shoulders'],name:'Plank Shoulder Taps',gr:'Σανίδα με αγγίγματα ώμων',eq:'bw',cat:['core'],unit:'reps',base:20,period:1.6,anchor:'bhand',note:'σύνολο',
+  frames:[{t:75,l1:-65,l2:-65},{t:75,l1:-65,l2:-65,a1:20,a2:170,b1:0,b2:0}],cues:['Πόδια ανοιχτά για σταθερότητα','Λεκάνη ακίνητη','Εναλλάξ χέρια'],mu:'Κορμός, ώμοι'},
+ {id:'butt_kicks',m:['cardio','hams'],name:'Butt Kicks',gr:'Φτέρνες στους γλουτούς',eq:'bw',cat:['engine'],unit:'sec',base:30,period:.7,anchor:'hip',
+  frames:[{l1:-8,l2:-165,m1:0,m2:-5,a1:-30,a2:60,b1:30,b2:110,air:3},{l1:0,l2:-5,m1:-8,m2:-165,a1:30,a2:110,b1:-30,b2:60,air:3}],cues:['Φτέρνες γρήγορα στους γλουτούς','Πάνω στα δάχτυλα','Χέρια σε ρυθμό'],mu:'Καρδιο, οπίσθιοι μηριαίοι'},
+ {id:'single_leg_bridge',m:['glutes','hams'],name:'Single-leg Glute Bridge',gr:'Γέφυρα γλουτών με ένα πόδι',eq:'bw',cat:['lower'],unit:'reps',base:12,period:2.4,anchor:'bfoot',note:'μισά ανά πλευρά',
+  frames:[{t:-92,hd:15,a1:90,a2:90,l1:150,l2:150,m1:130,m2:35},{t:-105,hd:20,a1:90,a2:90,l1:120,l2:120,m1:110,m2:10}],cues:['Το ένα πόδι τεντωμένο ψηλά','Σπρώξε από τη φτέρνα του άλλου','Λεκάνη ίσια, χωρίς να γέρνει'],mu:'Γλουτοί, οπίσθιοι μηριαίοι'},
+ {id:'wall_sit',m:['quads','glutes'],name:'Wall Sit',gr:'Κάθισμα στον τοίχο',eq:'bw',cat:['lower'],unit:'sec',base:40,period:3,anchor:'foot',props:{wall:true},
+  frames:[{t:0,a1:80,a2:80,l1:90,l2:0},{t:0,a1:82,a2:82,l1:89,l2:0}],cues:['Πλάτη κολλητά στον τοίχο','Γόνατα 90° πάνω από τους αστραγάλους','Ανάσες σταθερές'],mu:'Τετρακέφαλοι, γλουτοί'},
+ {id:'kb_lunge',m:['quads','glutes'],name:'KB Goblet Reverse Lunge',gr:'Προβολές με kettlebell στο στήθος',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},note:'εναλλάξ',
+  frames:[{a1:20,a2:165},{t:5,a1:22,a2:168,l1:80,l2:0,m1:-25,m2:-95}],cues:['Kettlebell κολλητά στο στήθος','Μεγάλο βήμα πίσω','Κορμός όρθιος'],mu:'Τετρακέφαλοι, γλουτοί'},
+ {id:'kb_row',m:['back','biceps'],name:'KB Single-arm Row',gr:'Κωπηλατική με ένα χέρι',eq:'kb',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{kb:'hang'},note:'μισά ανά χέρι',
+  frames:[{t:60,l1:30,l2:-10,a1:0,a2:0,b1:25,b2:25},{t:60,l1:30,l2:-10,a1:-70,a2:15,b1:25,b2:25}],cues:['Το ελεύθερο χέρι στηρίζεται στο γόνατο','Τράβα τον αγκώνα προς τη λεκάνη','Πλάτη ίσια'],mu:'Πλάτη, δικέφαλοι'},
+ {id:'kb_bridge',m:['glutes','hams'],name:'KB Glute Bridge',gr:'Γέφυρα γλουτών με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',props:{kb:'hip'},
+  frames:[{t:-92,hd:15,a1:90,a2:90,l1:130,l2:35},{t:-105,hd:20,a1:90,a2:90,l1:110,l2:10}],cues:['Kettlebell πάνω στη λεκάνη, κράτα το με τα χέρια','Σπρώξε από τις φτέρνες','Σφίξε γλουτούς στην κορυφή'],mu:'Γλουτοί, οπίσθιοι μηριαίοι'},
+ {id:'kb_curl',m:['biceps'],name:'KB Biceps Curl',gr:'Κάμψεις δικεφάλων με kettlebell',eq:'kb',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{kb:'hang'},
+  frames:[{a1:0,a2:0},{a1:5,a2:150}],cues:['Κράτα το kettlebell από τα πλάγια της λαβής','Αγκώνες κολλητά στο σώμα','Κατέβασε αργά'],mu:'Δικέφαλοι'},
+ {id:'kb_floor_press',m:['chest','triceps'],name:'KB Floor Press',gr:'Πιέσεις στήθους με kettlebell',eq:'kb',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'foot',props:{kb:'arm'},note:'μισά ανά χέρι',
+  frames:[{t:-92,hd:15,a1:90,a2:180,b1:90,b2:90,l1:130,l2:35},{t:-92,hd:15,a1:180,a2:180,b1:90,b2:90,l1:130,l2:35}],cues:['Ξαπλωμένος, γόνατα λυγισμένα','Αγκώνας ακουμπά απαλά στο πάτωμα','Σπρώξε ίσια πάνω'],mu:'Στήθος, τρικέφαλοι'},
+ {id:'db_hammer_curl',m:['biceps'],name:'DB Hammer Curl',gr:'Κάμψεις «σφυρί»',eq:'db',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+  frames:[{a1:0,a2:0},{a1:5,a2:150}],cues:['Παλάμες κοιτάζουν η μία την άλλη','Αγκώνες ακίνητοι','Χωρίς ταλάντευση'],mu:'Δικέφαλοι, πήχεις'},
+ {id:'db_upright_row',m:['shoulders','back'],name:'DB Upright Row',gr:'Έλξεις στο πηγούνι',eq:'db',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{db:'both'},dbw:[5,8,10],
+  frames:[{a1:0,a2:0},{a1:-120,a2:60}],cues:['Αγκώνες οδηγούν προς τα πάνω και έξω','Μέχρι το ύψος του στήθους','Ώμοι χαλαροί'],mu:'Ώμοι, τραπεζοειδείς'},
+ {id:'db_pullover',m:['back','chest'],name:'DB Pullover',gr:'Πούλοβερ με βαράκι',eq:'db',cat:['upper'],unit:'reps',base:12,period:2.8,anchor:'foot',props:{db:'near'},dbw:[8,10,15],one:true,
+  frames:[{t:-92,hd:15,a1:175,a2:175,l1:130,l2:35},{t:-92,hd:15,a1:265,a2:265,l1:130,l2:35}],cues:['Ένα βαράκι με τα δύο χέρια','Κατέβασε πίσω από το κεφάλι με σχεδόν τεντωμένα χέρια','Κοιλιά σφιχτή'],mu:'Πλάτη, στήθος'},
+ {id:'db_goblet_squat',m:['quads','glutes'],name:'DB Goblet Squat',gr:'Κάθισμα με βαράκι στο στήθος',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{db:'near'},dbw:[8,12.5,15],one:true,
+  frames:[{a1:20,a2:165},{t:35,a1:35,a2:175,l1:88,l2:-38}],cues:['Βαράκι κάθετα στο στήθος','Αγκώνες ανάμεσα στα γόνατα','Στήθος ψηλά'],mu:'Τετρακέφαλοι, γλουτοί'},
+ {id:'band_face_pull',m:['shoulders','back'],name:'Band Face Pull',gr:'Έλξεις λάστιχου στο πρόσωπο',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'posthigh'},
+  frames:[{t:-5,a1:100,a2:100},{t:-5,a1:-110,a2:45}],cues:['Λάστιχο δεμένο ψηλά, στο ύψος του κεφαλιού','Τράβα προς το πρόσωπο, αγκώνες ψηλά','Ωμοπλάτες μαζί'],mu:'Πίσω ώμοι, πλάτη'},
+ {id:'band_oh_ext',m:['triceps'],name:'Band Overhead Triceps',gr:'Εκτάσεις τρικεφάλων με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:15,period:2.2,anchor:'foot',props:{band:'foot'},
+  frames:[{a1:172,a2:345},{a1:178,a2:178}],cues:['Λάστιχο κάτω από το πίσω πόδι','Αγκώνες δείχνουν μπροστά','Τέντωσε εντελώς πάνω'],mu:'Τρικέφαλοι'},
+ {id:'band_kickback',m:['glutes'],name:'Band Glute Kickback',gr:'Λακτίσματα γλουτών με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:16,period:2,anchor:'bfoot',props:{band:'ankles'},note:'μισά ανά πλευρά',
+  frames:[{t:12,a1:-30,a2:50,l1:0,l2:0,m1:0,m2:0},{t:20,a1:-30,a2:50,l1:-40,l2:-35,m1:0,m2:0}],cues:['Λάστιχο γύρω από τους αστραγάλους','Σπρώξε το πόδι πίσω με τον γλουτό','Μέση σταθερή'],mu:'Γλουτοί'},
+ {id:'glute_bridge',m:['glutes','hams'],name:'Glute Bridge',gr:'Γέφυρα γλουτών',eq:'bw',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',
+  frames:[{t:-92,hd:15,a1:90,a2:90,l1:130,l2:35},{t:-105,hd:20,a1:90,a2:90,l1:110,l2:10}],cues:['Πέλματα κοντά στους γλουτούς','Σπρώξε από τις φτέρνες και σφίξε γλουτούς πάνω','Κράτα 1 δευτερόλεπτο στην κορυφή'],mu:'Γλουτοί, οπίσθιοι μηριαίοι'},
+ {id:'donkey_kick',m:['glutes'],name:'Donkey Kicks',gr:'Λακτίσματα γλουτών στα τέσσερα',eq:'bw',cat:['lower'],unit:'reps',base:20,period:1.8,anchor:'hand',note:'εναλλάξ',
+  frames:[{t:72,a1:0,a2:0,l1:0,l2:-100,pf:1},{t:72,a1:0,a2:0,l1:-85,l2:-175,m1:0,m2:-100,pf:1}],cues:['Γόνατο λυγισμένο 90°','Πέλμα προς το ταβάνι','Μέση σταθερή, χωρίς καμπύλη'],mu:'Γλουτοί'},
+ {id:'superman',m:['back','glutes'],name:'Superman',gr:'Υπερέκταση στο πάτωμα',eq:'bw',cat:['upper'],unit:'reps',base:12,period:2.4,anchor:'hip',
+  frames:[{t:90,a1:90,a2:90,l1:-90,l2:-90,pf:1},{t:78,hd:-5,a1:105,a2:105,l1:-80,l2:-80,pf:1}],cues:['Σήκωσε χέρια και πόδια μαζί','Βλέμμα στο πάτωμα','Κράτα 2 δευτερόλεπτα πάνω'],mu:'Πλάτη, γλουτοί'},
+ {id:'leg_raise',m:['core'],name:'Leg Raises',gr:'Ανυψώσεις ποδιών',eq:'bw',cat:['core'],unit:'reps',base:12,period:2.6,anchor:'hip',
+  frames:[{t:-92,hd:15,a1:90,a2:90,l1:86,l2:86,pf:1},{t:-92,hd:15,a1:90,a2:90,l1:178,l2:178,pf:1}],cues:['Μέση κολλητά στο πάτωμα','Κατέβασε αργά','Λύγισε λίγο τα γόνατα αν πονάει η μέση'],mu:'Κοιλιακοί'},
+ {id:'diamond_pushup',m:['triceps','chest'],name:'Diamond Push-up',gr:'Κάμψεις με κλειστά χέρια',eq:'bw',cat:['upper'],unit:'reps',base:8,period:2.4,anchor:'hand',
+  frames:[{t:75,l1:-65,l2:-65},{t:85,a1:-105,a2:10,l1:-85,l2:-85}],cues:['Χέρια μαζί κάτω από το στήθος','Αγκώνες κοντά στο σώμα','Αρχάριος: με τα γόνατα κάτω'],mu:'Τρικέφαλοι, στήθος'},
+ {id:'db_curl',m:['biceps'],name:'DB Biceps Curl',gr:'Κάμψεις δικεφάλων με βαράκια',eq:'db',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{db:'both'},dbw:[5,8,10],
+  frames:[{a1:0,a2:0},{a1:5,a2:150}],cues:['Αγκώνες κολλητά στο σώμα','Γύρνα τις παλάμες προς τα πάνω','Κατέβασμα σε 2 δευτερόλεπτα'],mu:'Δικέφαλοι'},
+ {id:'db_oh_ext',m:['triceps'],name:'DB Overhead Extension',gr:'Εκτάσεις τρικεφάλων πάνω από το κεφάλι',eq:'db',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{db:'near'},dbw:[5,8,12.5],one:true,
+  frames:[{a1:178,a2:178},{a1:172,a2:345}],cues:['Ένα βαράκι με τα δύο χέρια','Αγκώνες δείχνουν μπροστά, κοντά στο κεφάλι','Κορμός σφιχτός'],mu:'Τρικέφαλοι'},
+ {id:'db_kickback',m:['triceps'],name:'DB Triceps Kickback',gr:'Εκτάσεις τρικεφάλων προς τα πίσω',eq:'db',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{db:'both'},dbw:[3,5,8],
+  frames:[{t:60,a1:-60,a2:0,l1:22,l2:-12},{t:60,a1:-60,a2:-60,l1:22,l2:-12}],cues:['Μπράτσο σταθερό, παράλληλο με τον κορμό','Τέντωσε εντελώς τον αγκώνα','Πλάτη ίσια'],mu:'Τρικέφαλοι'},
+ {id:'db_front_raise',m:['shoulders'],name:'DB Front Raise',gr:'Εμπρόσθιες ανυψώσεις',eq:'db',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{db:'both'},dbw:[3,5,8],
+  frames:[{a1:0,a2:0},{a1:90,a2:90}],cues:['Ανέβασε μέχρι το ύψος των ώμων','Χωρίς ταλάντευση του κορμού','Ελαφρύ βάρος, καθαρή κίνηση'],mu:'Ώμοι'},
+ {id:'db_floor_press',m:['chest','triceps'],name:'DB Floor Press',gr:'Πιέσεις στήθους στο πάτωμα',eq:'db',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
+  frames:[{t:-92,hd:15,a1:90,a2:180,l1:130,l2:35},{t:-92,hd:15,a1:180,a2:180,l1:130,l2:35}],cues:['Ξαπλωμένος, γόνατα λυγισμένα','Αγκώνες ακουμπούν απαλά στο πάτωμα','Σπρώξε τα βαράκια ίσια πάνω'],mu:'Στήθος, τρικέφαλοι'},
+ {id:'glute_stretch',m:[],st:['glutes'],side:true,name:'Knee to Chest',gr:'Διάταση γλουτού',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hip',hide:true,
+  frames:[{t:-92,hd:15,a1:150,a2:120,l1:-150,l2:100,m1:88,m2:88,pfb:1},{t:-92,hd:15,a1:155,a2:125,l1:-156,l2:104,m1:88,m2:88,pfb:1}],cues:['Τράβα απαλά το γόνατο προς το στήθος','Το άλλο πόδι τεντωμένο στο πάτωμα','20" κάθε πλευρά'],mu:'Γλουτοί, μέση'},
+ {id:'hip_flexor',m:[],st:['glutes','quads'],side:true,name:'Kneeling Hip Flexor',gr:'Διάταση καμπτήρων ισχίου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'foot',hide:true,
+  frames:[{t:-8,a1:30,a2:60,l1:88,l2:0,m1:-5,m2:-90,pfb:1},{t:-12,a1:30,a2:60,l1:88,l2:0,m1:-8,m2:-92,pfb:1}],cues:['Πίσω γόνατο στο πάτωμα','Σφίξε τον γλουτό του πίσω ποδιού','Λεκάνη ελαφρώς μπροστά'],mu:'Καμπτήρες ισχίου, τετρακέφαλοι'},
+ {id:'calf_stretch',m:[],st:['hams','cardio'],side:true,name:'Calf Stretch',gr:'Διάταση γαστροκνημίου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'foot',hide:true,
+  frames:[{t:25,a1:80,a2:80,l1:30,l2:-5,m1:-25,m2:-25},{t:28,a1:80,a2:80,l1:32,l2:-6,m1:-26,m2:-26}],cues:['Χέρια σε τοίχο','Πίσω φτέρνα κολλητά στο πάτωμα','Πίσω γόνατο τεντωμένο'],mu:'Γάμπες'},
+ {id:'chest_stretch',m:[],st:['chest','biceps'],name:'Chest Opener',gr:'Διάταση στήθους και δικεφάλων',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'foot',hide:true,
+  frames:[{t:-2,a1:-40,a2:-40},{t:-4,a1:-50,a2:-50}],cues:['Πλέξε τα δάχτυλα πίσω από την πλάτη','Τέντωσε τα χέρια και άνοιξε το στήθος','Ώμοι μακριά από τα αυτιά'],mu:'Στήθος, δικέφαλοι'},
+ {id:'shoulder_stretch',m:[],st:['shoulders','back'],side:true,name:'Cross-body Shoulder',gr:'Διάταση ώμου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'foot',hide:true,
+  frames:[{a1:90,a2:90,b1:40,b2:110},{a1:86,a2:86,b1:40,b2:112}],cues:['Φέρε το χέρι οριζόντια μπροστά από το στήθος','Πίεσε απαλά με το άλλο χέρι','20" κάθε πλευρά'],mu:'Ώμοι'},
+ {id:'triceps_stretch',m:[],st:['triceps'],side:true,name:'Overhead Triceps',gr:'Διάταση τρικεφάλων',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'foot',hide:true,
+  frames:[{a1:172,a2:345,b1:160,b2:200},{a1:175,a2:350,b1:162,b2:202}],cues:['Χέρι πάνω, παλάμη πίσω στην πλάτη','Το άλλο χέρι σπρώχνει απαλά τον αγκώνα','20" κάθε πλευρά'],mu:'Τρικέφαλοι'},
+ {id:'child_pose',m:[],st:['back','shoulders'],name:"Child's Pose",gr:'Στάση του παιδιού',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:100,hd:10,a1:70,a2:75,l1:50,l2:-90,pf:1},{t:98,hd:10,a1:70,a2:75,l1:50,l2:-90,pf:1}],cues:['Κάθισε στις φτέρνες','Τέντωσε τα χέρια μπροστά στο πάτωμα','Αργές ανάσες στην πλάτη'],mu:'Πλάτη, ώμοι'},
+ {id:'sphinx',m:[],st:['core','back'],name:'Sphinx / Cobra',gr:'Διάταση κοιλιακών',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:60,a1:0,a2:90,l1:-90,l2:-90,pf:1},{t:57,a1:0,a2:90,l1:-90,l2:-90,pf:1}],cues:['Πήχεις στο πάτωμα κάτω από τους ώμους','Σήκωσε απαλά το στήθος','Λεκάνη στο πάτωμα'],mu:'Κοιλιακοί, μέση'},
+ {id:'fold',m:[],st:['hams','back'],name:'Forward Fold',gr:'Διάταση οπίσθιων μηριαίων',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:6,anchor:'foot',hide:true,
   frames:[{...STAND,d:.6},{t:105,a1:-4,a2:-4,l1:2,l2:-2},{t:108,a1:-4,a2:-4,l1:2,l2:-2,d:1.6}],cues:['Γόνατα ελαφρώς λυγισμένα','Άφησε το κεφάλι να κρέμεται','Αργές βαθιές ανάσες'],mu:'Οπίσθιοι μηριαίοι, μέση'},
- {id:'quad',name:'Quad Stretch',gr:'Διάταση τετρακεφάλου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hip',hide:true,
+ {id:'quad',m:[],st:['quads'],side:true,name:'Quad Stretch',gr:'Διάταση τετρακεφάλου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hip',hide:true,
   frames:[{l1:-15,l2:-165,m1:0,m2:0,a1:-25,a2:-35,b1:75,b2:85},{t:2,l1:-17,l2:-167,m1:0,m2:0,a1:-27,a2:-37,b1:75,b2:85}],cues:['Γόνατα κοντά μεταξύ τους','Λεκάνη ελαφρώς μπροστά','20" κάθε πόδι'],mu:'Τετρακέφαλοι'},
  {id:'rest',name:'Rest',gr:'Ξεκούραση',eq:'bw',cat:['rest'],unit:'sec',base:30,period:3.6,anchor:'hip',hide:true,
   gen:p=>{const s=Math.sin(2*Math.PI*p);return {t:2+1.5*s,hd:-3*s,a1:-32,a2:48,l1:3,l2:-3,m1:-3,m2:3}},cues:['Βαθιές ανάσες από τη μύτη','Χέρια στη μέση, όχι σκυμμένος'],mu:''}
@@ -582,6 +669,7 @@ const EXM={};EX.forEach(e=>{EXM[e.id]=e;prepEx(e)});
 /* ================= STATE ================= */
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const ST=Object.assign({eq:{kb:true,bike:true,tread:true,db:true,band:true},kbw:16,lvl:1,dur:30,fmt:'random',bw:'',music:{svc:'spotify',links:{}},tm:{mode:'amrap',v:{}}},LS.get('hw_settings',{}));
+if(!Array.isArray(ST.focus))ST.focus=[];
 if(!ST.music||!ST.music.links)ST.music={svc:'spotify',links:{}};if(!ST.tm||!ST.tm.v)ST.tm={mode:'amrap',v:{}};
 const save=()=>LS.set('hw_settings',ST);
 const ICON={
@@ -592,6 +680,7 @@ const ICON={
  db:'<svg viewBox="0 0 32 32" fill="currentColor"><rect x="3" y="10" width="6" height="12" rx="1.5"/><rect x="23" y="10" width="6" height="12" rx="1.5"/><rect x="9" y="14.5" width="14" height="3"/></svg>',
  band:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 22c4-10 8-10 12 0s8 10 12 0"/></svg>'
 };
+const MUN={glutes:'Γλουτοί',quads:'Τετρακέφαλοι',hams:'Οπίσθιοι μηριαίοι',chest:'Στήθος',back:'Πλάτη',shoulders:'Ώμοι',biceps:'Δικέφαλοι',triceps:'Τρικέφαλοι',core:'Κοιλιακοί',cardio:'Καρδιο'};
 const EQN={bw:'Βάρος σώματος',kb:'Kettlebell',bike:'Air Bike',tread:'Διάδρομος',db:'Βαράκια ≤15 kg',band:'Λάστιχα'};
 const EQS={bw:'BODYWEIGHT',kb:'KETTLEBELL',bike:'AIR BIKE',tread:'ΔΙΑΔΡΟΜΟΣ',db:'ΒΑΡΑΚΙΑ',band:'ΛΑΣΤΙΧΑ'};
 const LVL=['Αρχάριος','Μεσαίος','Προχωρημένος'];
@@ -606,8 +695,10 @@ function renderSetup(){
   $('#kbBox').hidden=!ST.eq.kb;
   segBtns($('#kbSeg'),[8,12,16,20,24].map(v=>[v,v+' kg']),ST.kbw,v=>{ST.kbw=+v;save()});
   segBtns($('#lvlSeg'),LVL.map((l,i)=>[i,l]),ST.lvl,v=>{ST.lvl=+v;save()});
-  segBtns($('#durSeg'),[20,30,45].map(v=>[v,v+"'"]),ST.dur,v=>{ST.dur=+v;save()});
+  segBtns($('#durSeg'),[20,30,45,60].map(v=>[v,v+"'"]),ST.dur,v=>{ST.dur=+v;save()});
   segBtns($('#fmtSeg'),FMTS,ST.fmt,v=>{ST.fmt=v;save()});
+  const fc=$('#focusChips');const drawF=()=>{fc.innerHTML=`<button class="all ${ST.focus.length?'':'on'}" data-k="">Όλο το σώμα</button>`+Object.keys(MUN).map(k=>`<button data-k="${k}" class="${ST.focus.includes(k)?'on':''}">${MUN[k]}</button>`).join('')};drawF();
+  fc.onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;if(!k)ST.focus=[];else{const i=ST.focus.indexOf(k);if(i>=0)ST.focus.splice(i,1);else ST.focus.push(k)}save();drawF()};
   const bw=$('#bw');bw.value=ST.bw||'';bw.oninput=()=>{ST.bw=bw.value;save()};
 }
 
@@ -634,7 +725,26 @@ function load(ex,extra){
   if(extra)parts.push(extra);
   return parts.join(' · ');
 }
+function pickFocus(k,opt){
+  const eqs=new Set(['bw',...Object.keys(ST.eq).filter(x=>ST.eq[x])]);
+  const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&e.m&&e.m.length&&!e.cat.includes('rest')&&!(opt.noSec&&e.unit==='sec'));
+  const f=ST.focus.slice();const wantEngine=!f.includes('cardio')&&k>=3&&!opt.noEngine;
+  const slots=[];let i=0;while(slots.length<(wantEngine?k-1:k)){slots.push(f[i%f.length]);i++}
+  if(wantEngine)slots.splice(Math.min(1,slots.length),0,'cardio');
+  const used=new Set(),out=[];
+  for(const s of slots){
+    let pool;
+    if(s==='cardio'){const mach=avail.filter(e=>e.cat.includes('machine')&&!used.has(e.id));
+      pool=(opt.machine&&mach.length&&Math.random()<.6)?mach:avail.filter(e=>e.m.includes('cardio')&&!e.cat.includes('machine')&&!used.has(e.id))}
+    else pool=avail.filter(e=>e.m.includes(s)&&!e.cat.includes('machine')&&!used.has(e.id));
+    if(!pool.length)pool=avail.filter(e=>!used.has(e.id)&&!e.cat.includes('machine'));
+    let tot=0;const w=pool.map(e=>{const x=(e.eq==='bw'?1:3)*(e.m[0]===s?2:1);tot+=x;return x});let r=Math.random()*tot,j=0;while(r>w[j]&&j<w.length-1){r-=w[j];j++}
+    const p=pool[j];if(p){used.add(p.id);out.push(p)}
+  }
+  return out;
+}
 function pickMoves(k,opt){
+  if(ST.focus&&ST.focus.length)return pickFocus(k,opt||{});
   const eqs=new Set(['bw',...Object.keys(ST.eq).filter(x=>ST.eq[x])]);
   const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&!e.cat.includes('rest'));
   const used=new Set(),out=[];
@@ -656,22 +766,28 @@ function pickMoves(k,opt){
 const NAMES=['ΚΕΡΒΕΡΟΣ','ΤΙΤΑΝΑΣ','ΣΠΑΡΤΗ','ΑΤΛΑΣ','ΜΙΝΩΤΑΥΡΟΣ','ΚΥΚΛΩΠΑΣ','ΥΔΡΑ','ΗΦΑΙΣΤΟΣ','ΑΡΗΣ','ΚΡΟΝΟΣ','ΠΡΟΜΗΘΕΑΣ','ΘΕΡΜΟΠΥΛΕΣ','ΜΑΡΑΘΩΝΑΣ','ΗΡΑΚΛΗΣ','ΑΧΙΛΛΕΑΣ','ΛΕΩΝΙΔΑΣ','ΜΕΔΟΥΣΑ','ΠΗΓΑΣΟΣ'];
 function item(ex,mult,info){return {ex:ex.id,label:amount(ex,mult),sub:load(ex),info}}
 function buildWarm(){
-  const segs=[],list=[];const r=ST.dur===20?1:2;
+  const segs=[],list=[];const r=ST.dur===20?1:ST.dur===60?3:2;
   if(ST.eq.bike){const e=EXM.bike;segs.push({ex:'bike',label:'Air Bike',sub:'Χαλαρός ρυθμός',dur:90,info:'ΖΕΣΤΑΜΑ'});list.push({ex:'bike',label:'90" Air Bike',sub:'Χαλαρός ρυθμός'})}
   else if(ST.eq.tread){segs.push({ex:'incline_walk',label:'Incline Walk',sub:load(EXM.incline_walk),dur:90,info:'ΖΕΣΤΑΜΑ'});list.push({ex:'incline_walk',label:'90" Incline Walk',sub:load(EXM.incline_walk)})}
-  const mv=['air_squat','lunge','mountain_climber','high_knees'];
+  const mv=['air_squat','inchworm','lunge','high_knees'];
   for(let i=0;i<r;i++)mv.forEach(id=>segs.push({ex:id,label:EXM[id].name,sub:'Ελαφρύς ρυθμός',dur:30,info:`ΖΕΣΤΑΜΑ · ΓΥΡΟΣ ${i+1}/${r}`}));
   mv.forEach(id=>list.push({ex:id,label:`30" ${EXM[id].name}`,sub:EXM[id].gr}));
   const sec=segs.reduce((s,x)=>s+x.dur,0);
   return {name:'ΖΕΣΤΑΜΑ',type:'timeline',segs,list,desc:`${r} ${r>1?'γύροι':'γύρος'} χωρίς διάλειμμα, ήπια ένταση.`,min:sec/60,met:5};
 }
-function buildCool(){
-  const segs=[],list=[];
-  if(ST.eq.tread){segs.push({ex:'incline_walk',label:'Χαλαρό περπάτημα',sub:'4 km/h, χωρίς κλίση',dur:90,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'incline_walk',label:'90" χαλαρό περπάτημα',sub:'4 km/h'})}
-  else{segs.push({ex:'rest',label:'Βαθιές ανάσες',sub:'Περπάτα στον χώρο',dur:60,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'rest',label:'60" ανάσες',sub:'Περπάτημα στον χώρο'})}
-  segs.push({ex:'fold',label:'Forward Fold',sub:EXM.fold.gr,dur:40,info:'ΑΠΟΘΕΡΑΠΕΙΑ'},{ex:'quad',label:'Quad Stretch',sub:'20" κάθε πόδι',dur:40,info:'ΑΠΟΘΕΡΑΠΕΙΑ'},{ex:'rest',label:'Ανάσες',sub:'4" εισπνοή, 6" εκπνοή',dur:30,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});
-  list.push({ex:'fold',label:'40" Forward Fold',sub:EXM.fold.gr},{ex:'quad',label:'40" Quad Stretch',sub:'20" κάθε πόδι'});
-  return {name:'ΑΠΟΘΕΡΑΠΕΙΑ',type:'timeline',segs,list,desc:'Χαλάρωση και διατάσεις.',min:segs.reduce((s,x)=>s+x.dur,0)/60,met:2.5};
+const STR={glutes:['glute_stretch','hip_flexor'],quads:['quad','hip_flexor'],hams:['fold','calf_stretch'],chest:['chest_stretch'],back:['child_pose','fold'],shoulders:['shoulder_stretch','child_pose'],biceps:['chest_stretch'],triceps:['triceps_stretch'],core:['sphinx'],cardio:['calf_stretch','quad']};
+function buildCool(worked){
+  const segs=[],list=[];const per=ST.dur===20?30:40;
+  if(ST.eq.tread){segs.push({ex:'incline_walk',label:'Χαλαρό περπάτημα',sub:'4 km/h, χωρίς κλίση',dur:60,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'incline_walk',label:'60" χαλαρό περπάτημα',sub:'4 km/h'})}
+  else{segs.push({ex:'rest',label:'Βαθιές ανάσες',sub:'Περπάτα στον χώρο',dur:45,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'rest',label:'45" ανάσες',sub:'Περπάτημα στον χώρο'})}
+  const ids=[];(worked||[]).forEach(m=>(STR[m]||[]).forEach(id=>{if(!ids.includes(id))ids.push(id)}));
+  ['fold','quad','child_pose'].forEach(id=>{if(ids.length<3&&!ids.includes(id))ids.push(id)});
+  const pick=ids.slice(0,ST.dur>=45?6:5);const n=pick.length;
+  pick.forEach((id,i)=>{const e=EXM[id];const sub=e.side?`${per/2}" κάθε πλευρά · ${e.gr}`:e.gr;
+    segs.push({ex:id,label:e.name,sub,dur:per,info:`ΔΙΑΤΑΣΕΙΣ · ${i+1}/${n}`,rest:true});list.push({ex:id,label:`${per}" ${e.name}`,sub})});
+  segs.push({ex:'rest',label:'Ανάσες',sub:'4" εισπνοή, 6" εκπνοή',dur:30,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});
+  const names=(worked||[]).filter(m=>m!=='cardio').map(m=>MUN[m]);
+  return {name:'ΑΠΟΘΕΡΑΠΕΙΑ',type:'timeline',segs,list,desc:names.length?`Διατάσεις για τις περιοχές που δούλεψες: ${names.join(', ')}.`:'Χαλάρωση και διατάσεις για όλο το σώμα.',min:segs.reduce((s,x)=>s+x.dur,0)/60,met:2.5};
 }
 function buildFinisher(){
   const segs=[],list=[];let desc;
@@ -697,12 +813,12 @@ function buildMain(fmt,M){
     return [{name:`EMOM ${tot}'`,type:'timeline',segs,list:mv.map(e=>({ex:e.id,label:amount(e,.75),sub:load(e)})),desc:`Στην αρχή κάθε λεπτού κάνε τον σταθμό. Ό,τι περισσεύει από το λεπτό είναι ξεκούραση. ${tot/k} γύροι.`,min:tot,met:8,fmt:'EMOM'}];
   }
   if(fmt==='fortime'){
-    const mv=pickMoves(k,{machine:true});let R=[3,4,5][L];if(M<14)R=Math.max(2,R-1);if(M>22)R+=1;const items=[];
+    const mv=pickMoves(k,{machine:true});let R=[3,4,5][L];if(M<14)R=Math.max(2,R-1);if(M>22)R+=1;if(M>30)R+=1;const items=[];
     for(let r=0;r<R;r++)mv.forEach(e=>items.push(Object.assign(item(e,1),{info:`ΓΥΡΟΣ ${r+1}/${R}`})));
     return [{name:'FOR TIME',type:'fortime',cap:M*60,items,list:mv.map(e=>item(e,1)),desc:`${R} γύροι όσο πιο γρήγορα μπορείς. Time cap ${M}'.`,min:M,met:8.5,fmt:'FOR TIME'}];
   }
   if(fmt==='tabata'){
-    const n=Math.min(5,Math.max(2,Math.floor((M+1)/5)));const mv=pickMoves(n,{machine:true});const segs=[];
+    const n=Math.min(7,Math.max(2,Math.floor((M+1)/5)));const mv=pickMoves(n,{machine:true});const segs=[];
     mv.forEach((e,i)=>{for(let r=0;r<8;r++){segs.push({ex:e.id,label:e.name,sub:e.unit==='cal'?'Max θερμίδες':e.id==='run'?'Γρήγορο τρέξιμο':'Max επαναλήψεις · '+load(e),dur:20,info:`TABATA ${i+1}/${n} · ΓΥΡΟΣ ${r+1}/8`});
       if(r<7)segs.push({ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'',dur:10,info:`TABATA ${i+1}/${n} · ΓΥΡΟΣ ${r+1}/8`,rest:true});
       else if(i<n-1)segs.push({ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'Ετοίμασε τον επόμενο σταθμό',dur:60,info:'1 ΛΕΠΤΟ',rest:true});}});
@@ -718,20 +834,22 @@ function buildMain(fmt,M){
 }
 let WOD=null;
 function generate(){
-  const M={20:12,30:17,45:26}[ST.dur];const hasM=ST.eq.bike||ST.eq.tread;
+  const M={20:12,30:17,45:26,60:40}[ST.dur]||17;const hasM=ST.eq.bike||ST.eq.tread;
   let fmt=ST.fmt;if(fmt==='random'){const o=['amrap','emom','fortime','tabata'];if(hasM)o.push('intervals','intervals');fmt=rand(o)}
   if(fmt==='intervals'&&!hasM)fmt='amrap';
-  const blocks=[buildWarm(),...buildMain(fmt,M)];if(ST.dur>=30)blocks.push(buildFinisher());blocks.push(buildCool());
+  const main=buildMain(fmt,M);let worked=ST.focus.slice();
+  if(!worked.length){const cnt={};main.forEach(b=>(b.list||[]).forEach(i=>{const e=EXM[i.ex];(e&&e.m||[]).forEach((m,j)=>{cnt[m]=(cnt[m]||0)+(j===0?2:1)})}));worked=Object.keys(cnt).filter(m=>m!=='cardio').sort((a,b)=>cnt[b]-cnt[a]).slice(0,4)}
+  const blocks=[buildWarm(),...main];if(ST.dur>=30)blocks.push(buildFinisher());blocks.push(buildCool(worked));
   const bw=parseFloat(ST.bw)||75;const kcal=blocks.reduce((s,b)=>s+b.min*b.met*3.5*bw/200,0);
   const total=Math.round(blocks.reduce((s,b)=>s+b.min,0)+blocks.length*10/60);
-  const main=blocks.find(b=>b.fmt);
-  WOD={name:rand(NAMES),blocks,total,kcal:Math.round(kcal/10)*10,fmt:main?main.fmt:fmt.toUpperCase(),bw:!!parseFloat(ST.bw)};
+  const mainB=blocks.find(b=>b.fmt);
+  WOD={focus:ST.focus.slice(),name:rand(NAMES),blocks,total,kcal:Math.round(kcal/10)*10,fmt:mainB?mainB.fmt:fmt.toUpperCase(),bw:!!parseFloat(ST.bw)};
   renderWod();
 }
 function renderWod(){
   const w=WOD,d=new Date();
   $('#wodOut').innerHTML=`<div class="wod"><div class="wod-head"><div class="tag">WOD της ημέρας · ${d.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'})}</div><h2>${w.name}</h2>
-   <div class="meta"><span>${w.fmt}</span><span>~${w.total} λεπτά</span><span>~${w.kcal} kcal${w.bw?'':' · 75 kg'}</span><span>${LVL[ST.lvl]}</span></div></div>
+   <div class="meta"><span>${w.fmt}</span><span>~${w.total} λεπτά</span><span>~${w.kcal} kcal${w.bw?'':' · 75 kg'}</span><span>${LVL[ST.lvl]}</span>${w.focus&&w.focus.length?`<span>Εστίαση: ${w.focus.map(m=>MUN[m]).join(', ')}</span>`:''}</div></div>
    <div class="wod-body">${w.blocks.map(b=>`<div class="blk"><div class="blk-h"><span>${b.name}</span><span>${b.type==='fortime'?'cap ':''}${Math.round(b.min)}'</span></div>${b.desc?`<p>${b.desc}</p>`:''}
    <ul>${b.list.map(i=>`<li data-ex="${i.ex}"><svg class="mini" data-ex="${i.ex}"></svg><div><b>${i.label}</b><small>${i.sub||''}</small></div></li>`).join('')}</ul></div>`).join('')}</div>
    <div class="wod-actions"><button class="btn primary" id="goBtn">Ξεκίνα ▶</button><button class="btn" id="rerollBtn">Άλλο ↻</button></div></div>`;
@@ -742,13 +860,15 @@ function renderWod(){
 }
 
 /* ================= LIBRARY ================= */
-let libF='all';
+let libF='all',libM='all';
 function renderLib(){
-  const fs=[['all','Όλες'],['bw','Bodyweight'],['kb','Kettlebell'],['db','Βαράκια'],['band','Λάστιχα'],['bike','Air Bike'],['tread','Διάδρομος']];
+  const fs=[['all','Όλες'],['bw','Bodyweight'],['kb','Kettlebell'],['db','Βαράκια'],['band','Λάστιχα'],['bike','Air Bike'],['tread','Διάδρομος'],['stretch','Διατάσεις']];
   $('#libFilters').innerHTML=fs.map(([k,l])=>`<button data-k="${k}" class="${k===libF?'on':''}">${l}</button>`).join('');
   $('#libFilters').onclick=e=>{const b=e.target.closest('button');if(!b)return;libF=b.dataset.k;renderLib()};
-  const list=EX.filter(e=>e.id!=='rest'&&(libF==='all'||e.eq===libF));
-  $('#libGrid').innerHTML=list.map(e=>`<div class="card" data-ex="${e.id}"><svg data-ex="${e.id}"></svg><b>${e.name}</b><small>${e.gr}</small><br><span class="tagx">${EQN[e.eq]}</span></div>`).join('');
+  $('#libMus').innerHTML=[['all','Όλες οι περιοχές'],...Object.entries(MUN)].map(([k,l])=>`<button data-k="${k}" class="${k===libM?'on':''}">${l}</button>`).join('');
+  $('#libMus').onclick=e=>{const b=e.target.closest('button');if(!b)return;libM=b.dataset.k;renderLib()};
+  const list=EX.filter(e=>e.id!=='rest'&&(libF==='all'||(libF==='stretch'?e.cat.includes('stretch'):e.eq===libF&&!e.cat.includes('stretch')))&&(libM==='all'||(e.m||[]).includes(libM)||(e.st||[]).includes(libM)));
+  $('#libGrid').innerHTML=list.map(e=>`<div class="card" data-ex="${e.id}"><svg data-ex="${e.id}"></svg><b>${e.name}</b><small>${e.gr}</small><br><span class="tagx">${e.cat.includes('stretch')?'Διάταση':EQN[e.eq]}</span></div>`).join('')||'<div class="empty" style="grid-column:1/-1">Δεν υπάρχουν ασκήσεις με αυτόν τον συνδυασμό.</div>';
   mountFigs($('#libGrid'));
   $('#libGrid').querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(c.dataset.ex));
 }
@@ -971,7 +1091,7 @@ $('#ckClose').onclick=()=>{if(C&&C.cfg.up&&C.tot>=60&&C.el>0){const h=LS.get('hw
 document.addEventListener('keydown',e=>{if(!C||$('#clock').hidden)return;if(e.code==='Space'){e.preventDefault();$('#ckMain').click()}if(e.code==='ArrowRight')$('#ckAlt').click()});
 
 /* ================= INIT ================= */
-$('#yr').textContent=new Date().getFullYear();
+$('#yr').textContent=new Date().getFullYear();$('#exCount').textContent=EX.filter(e=>e.id!=='rest').length;
 (()=>{const hf=new Fig($('#heroFig'));const L=['kb_swing','burpee','db_thruster','bike','goblet_squat','run','mountain_climber','band_row','db_snatch'];let i=0;
   const show=()=>{const e=EXM[L[i%L.length]];hf.set(e.id);$('#heroName').textContent=e.name;$('#heroGr').textContent=e.gr+' · '+EQN[e.eq];i++};show();setInterval(show,4200)})();
 refreshMusic();
