@@ -313,6 +313,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
     <h3 class="lbl">Μουσική</h3>
     <button class="btn musicCfg" style="font-size:15px;padding:15px">♫ Μουσική <span class="svcName"></span></button>
     <button class="btn primary mt big" id="genBtn">Φτιάξε το WOD →</button>
+    <button class="btn" id="stretchBtn" style="margin-top:10px">Μόνο διατάσεις (15') για τις περιοχές σου</button>
     </div></div>
     <p class="note tipline">Για απώλεια κιλών μετράει πρώτα το έλλειμμα θερμίδων από τη διατροφή. Η προπόνηση το μεγαλώνει και κρατάει τη μυϊκή μάζα. Στόχος: 3 έως 5 WOD την εβδομάδα.</p>
     <div id="wodOut"></div>
@@ -657,6 +658,32 @@ const EX=[
   frames:[{t:100,hd:10,a1:70,a2:75,l1:50,l2:-90,pf:1},{t:98,hd:10,a1:70,a2:75,l1:50,l2:-90,pf:1}],cues:['Κάθισε στις φτέρνες','Τέντωσε τα χέρια μπροστά στο πάτωμα','Αργές ανάσες στην πλάτη'],mu:'Πλάτη, ώμοι'},
  {id:'sphinx',m:[],st:['core','back'],name:'Sphinx / Cobra',gr:'Διάταση κοιλιακών',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
   frames:[{t:60,a1:0,a2:90,l1:-90,l2:-90,pf:1},{t:57,a1:0,a2:90,l1:-90,l2:-90,pf:1}],cues:['Πήχεις στο πάτωμα κάτω από τους ώμους','Σήκωσε απαλά το στήθος','Λεκάνη στο πάτωμα'],mu:'Κοιλιακοί, μέση'},
+ {id:'standing_hamstring',m:[],st:['hams'],side:true,name:'Standing Hamstring',gr:'Διάταση οπίσθιων όρθια',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'bfoot',hide:true,
+  frames:[{t:45,a1:30,a2:30,l1:30,l2:30,m1:-5,m2:-25},{t:52,a1:32,a2:32,l1:30,l2:30,m1:-6,m2:-27}],cues:['Μπροστινό πόδι τεντωμένο, φτέρνα στο πάτωμα','Λύγισε το πίσω γόνατο και σπρώξε τη λεκάνη πίσω','Πλάτη ίσια'],mu:'Οπίσθιοι μηριαίοι'},
+ {id:'seated_fold',m:[],st:['hams','back'],name:'Seated Forward Fold',gr:'Καθιστή έκταση προς τα δάχτυλα',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:55,hd:10,a1:75,a2:80,l1:90,l2:90},{t:62,hd:12,a1:78,a2:84,l1:90,l2:90}],cues:['Πόδια τεντωμένα μπροστά','Σκύψε από τη λεκάνη προς τα δάχτυλα','Μην τραβάς, άφησε το βάρος να σε φέρει'],mu:'Οπίσθιοι μηριαίοι, μέση'},
+ {id:'butterfly',m:[],st:['glutes'],name:'Butterfly',gr:'Πεταλούδα (προσαγωγοί)',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:10,a1:60,a2:40,l1:110,l2:-56},{t:22,a1:66,a2:44,l1:104,l2:-56}],cues:['Πέλματα ενωμένα, γόνατα προς τα έξω','Κράτα τα πόδια και γείρε ελαφρά μπροστά','Πίεσε απαλά τα γόνατα προς τα κάτω'],mu:'Προσαγωγοί, ισχία'},
+ {id:'pigeon',m:[],st:['glutes'],side:true,name:'Pigeon Pose',gr:'Στάση περιστεριού',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:5,a1:15,a2:15,l1:80,l2:-90,m1:-90,m2:-90,pfb:1},{t:45,hd:10,a1:40,a2:40,l1:80,l2:-90,m1:-90,m2:-90,pfb:1}],cues:['Μπροστινό γόνατο λυγισμένο, κνήμη μπροστά σου','Πίσω πόδι τεντωμένο','Γείρε μπροστά για βαθύτερη διάταση'],mu:'Γλουτοί, ισχία'},
+ {id:'figure4',m:[],st:['glutes'],side:true,name:'Figure 4 Stretch',gr:'Διάταση «τέσσερα» ξαπλωτά',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hip',hide:true,
+  frames:[{t:-92,hd:15,a1:150,a2:130,l1:150,l2:50,m1:130,m2:35},{t:-92,hd:15,a1:154,a2:134,l1:156,l2:54,m1:136,m2:38}],cues:['Αστράγαλος πάνω στο αντίθετο γόνατο','Τράβα το κάτω πόδι προς το στήθος','Κεφάλι και ώμοι χαλαροί στο πάτωμα'],mu:'Γλουτοί, απιοειδής'},
+ {id:'cat_cow',m:[],st:['back','core'],name:'Cat-Cow',gr:'Γάτα-αγελάδα',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hand',hide:true,
+  frames:[{t:66,hd:35,a1:0,a2:0,l1:0,l2:-100,pf:1},{t:80,hd:-30,a1:0,a2:0,l1:0,l2:-100,pf:1}],cues:['Στα τέσσερα, χέρια κάτω από τους ώμους','Εισπνοή: κοιλιά κάτω, βλέμμα πάνω','Εκπνοή: στρογγύλεψε την πλάτη'],mu:'Πλάτη, κοιλιακοί'},
+ {id:'lying_twist',m:[],st:['back','glutes','core'],side:true,name:'Lying Spinal Twist',gr:'Στροφή σπονδυλικής ξαπλωτά',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:-92,hd:15,a1:-90,a2:-90,l1:115,l2:40},{t:-92,hd:15,a1:-92,a2:-92,l1:108,l2:38}],cues:['Γόνατα μαζί πέφτουν στο πλάι','Ώμοι κολλητά στο πάτωμα','Κοίτα προς την αντίθετη πλευρά'],mu:'Πλάτη, γλουτοί, πλάγιοι'},
+ {id:'single_chest',m:[],st:['chest','biceps'],side:true,name:'Wall Chest & Biceps',gr:'Διάταση στήθους-δικεφάλων στον τοίχο',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'foot',hide:true,
+  frames:[{t:0,a1:-88,a2:-88,b1:5,b2:5},{t:-3,hd:-8,a1:-92,a2:-92,b1:5,b2:5}],cues:['Παλάμη στον τοίχο, χέρι τεντωμένο πίσω','Γύρνα τον κορμό αντίθετα από τον τοίχο','20" κάθε πλευρά'],mu:'Στήθος, δικέφαλοι'},
+ {id:'overhead_reach',m:[],st:['shoulders','core','triceps'],name:'Overhead Reach',gr:'Τέντωμα προς τα πάνω',eq:'bw',cat:['stretch'],unit:'sec',base:30,period:4,anchor:'foot',hide:true,
+  frames:[{t:0,a1:176,a2:178,air:0},{t:-8,hd:-10,a1:184,a2:186}],cues:['Πλέξε τα δάχτυλα και τέντωσε προς τα πάνω','Μακραίνεις τον κορμό','Ανάσες βαθιές'],mu:'Ώμοι, κορμός'},
+ {id:'puppy',m:[],st:['shoulders','chest','back'],name:'Puppy Pose',gr:'Στάση κουταβιού',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hip',hide:true,
+  frames:[{t:110,hd:10,a1:70,a2:70,l1:0,l2:-90,pf:1},{t:113,hd:12,a1:72,a2:72,l1:0,l2:-90,pf:1}],cues:['Γόνατα κάτω από τη λεκάνη','Χέρια μπροστά, στήθος προς το πάτωμα','Νιώσε το τέντωμα σε ώμους και μασχάλες'],mu:'Ώμοι, στήθος, πλάτη'},
+ {id:'deep_squat',m:[],st:['glutes','quads'],name:'Deep Squat Hold',gr:'Βαθύ κάθισμα (malasana)',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'foot',hide:true,
+  frames:[{t:20,a1:60,a2:150,l1:95,l2:-40},{t:24,a1:62,a2:152,l1:97,l2:-42}],cues:['Πέλματα ανοιχτά, φτέρνες κάτω','Αγκώνες σπρώχνουν τα γόνατα έξω','Στήθος ψηλά'],mu:'Ισχία, γλουτοί, αστράγαλοι'},
+ {id:'runners_lunge',m:[],st:['quads','hams','glutes','cardio'],side:true,name:"Runner's Lunge",gr:'Χαμηλή προβολή με χέρια κάτω',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'foot',hide:true,
+  frames:[{t:70,hd:10,a1:5,a2:5,l1:95,l2:-10,m1:-55,m2:-55},{t:72,hd:10,a1:6,a2:6,l1:97,l2:-10,m1:-57,m2:-57}],cues:['Χέρια στο πάτωμα δίπλα στο μπροστινό πόδι','Πίσω πόδι τεντωμένο','Λεκάνη χαμηλά'],mu:'Καμπτήρες ισχίου, οπίσθιοι, γλουτοί'},
+ {id:'down_dog',m:[],st:['hams','shoulders','cardio','back'],name:'Downward Dog',gr:'Σκύλος με το κεφάλι κάτω',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:5,anchor:'hand',hide:true,
+  frames:[{t:130,hd:15,a1:50,a2:50,l1:-35,l2:-35},{t:133,hd:15,a1:52,a2:52,l1:-37,l2:-37}],cues:['Λεκάνη ψηλά, σώμα σαν ανάποδο V','Φτέρνες προς το πάτωμα','Λύγισε λίγο τα γόνατα αν χρειάζεται'],mu:'Οπίσθιοι, γάμπες, ώμοι'},
  {id:'fold',m:[],st:['hams','back'],name:'Forward Fold',gr:'Διάταση οπίσθιων μηριαίων',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:6,anchor:'foot',hide:true,
   frames:[{...STAND,d:.6},{t:105,a1:-4,a2:-4,l1:2,l2:-2},{t:108,a1:-4,a2:-4,l1:2,l2:-2,d:1.6}],cues:['Γόνατα ελαφρώς λυγισμένα','Άφησε το κεφάλι να κρέμεται','Αργές βαθιές ανάσες'],mu:'Οπίσθιοι μηριαίοι, μέση'},
  {id:'quad',m:[],st:['quads'],side:true,name:'Quad Stretch',gr:'Διάταση τετρακεφάλου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hip',hide:true,
@@ -664,6 +691,32 @@ const EX=[
  {id:'rest',name:'Rest',gr:'Ξεκούραση',eq:'bw',cat:['rest'],unit:'sec',base:30,period:3.6,anchor:'hip',hide:true,
   gen:p=>{const s=Math.sin(2*Math.PI*p);return {t:2+1.5*s,hd:-3*s,a1:-32,a2:48,l1:3,l2:-3,m1:-3,m2:3}},cues:['Βαθιές ανάσες από τη μύτη','Χέρια στη μέση, όχι σκυμμένος'],mu:''}
 ];
+/* stretch motion: entry -> stretch -> deeper (hold) -> release */
+const STRETCH_ENTRY={
+ quad:{a1:4,a2:4,b1:4,b2:4,l1:0,l2:0,m1:0,m2:0},
+ glute_stretch:{t:-92,hd:15,a1:90,a2:90,l1:130,l2:35,m1:88,m2:88,pfb:1},
+ hip_flexor:{t:-2,a1:30,a2:60,l1:88,l2:0,m1:6,m2:-90,pfb:1},
+ calf_stretch:{t:5,a1:80,a2:80,l1:10,l2:-5,m1:-10,m2:-10},
+ chest_stretch:{a1:4,a2:4},
+ shoulder_stretch:{a1:4,a2:4,b1:4,b2:4},
+ triceps_stretch:{a1:4,a2:4,b1:4,b2:4},
+ child_pose:{t:0,hd:0,a1:175,a2:178,l1:60,l2:-90,pf:1},
+ sphinx:{t:88,a1:90,a2:90,l1:-90,l2:-90,pf:1},
+ standing_hamstring:{a1:4,a2:4,l1:0,l2:0,m1:0,m2:0},
+ seated_fold:{t:0,a1:170,a2:175,l1:90,l2:90},
+ butterfly:{t:0,a1:60,a2:40,l1:125,l2:-50},
+ pigeon:{t:-5,a1:5,a2:5,l1:80,l2:-90,m1:-90,m2:-90,pfb:1},
+ figure4:{t:-92,hd:15,a1:90,a2:90,l1:130,l2:35,m1:130,m2:35},
+ lying_twist:{t:-92,hd:15,a1:-90,a2:-90,l1:150,l2:50},
+ single_chest:{a1:4,a2:4,b1:5,b2:5},
+ overhead_reach:{a1:4,a2:4},
+ puppy:{t:72,a1:0,a2:0,l1:0,l2:-90,pf:1},
+ deep_squat:{a1:4,a2:4},
+ runners_lunge:{t:20,a1:40,a2:40,l1:85,l2:0,m1:-40,m2:-40},
+ down_dog:{t:75,a1:0,a2:0,l1:-65,l2:-65}
+};
+EX.forEach(e=>{const en=STRETCH_ENTRY[e.id];if(!en||!e.frames)return;const A=e.frames[0],B=e.frames[e.frames.length-1];
+  e.frames=[Object.assign({},en,{d:1}),Object.assign({},A,{d:1.3}),Object.assign({},B,{d:1.6}),Object.assign({},A,{d:.5})];e.period=7});
 const EXM={};EX.forEach(e=>{EXM[e.id]=e;prepEx(e)});
 
 /* ================= STATE ================= */
@@ -775,14 +828,21 @@ function buildWarm(){
   const sec=segs.reduce((s,x)=>s+x.dur,0);
   return {name:'ΖΕΣΤΑΜΑ',type:'timeline',segs,list,desc:`${r} ${r>1?'γύροι':'γύρος'} χωρίς διάλειμμα, ήπια ένταση.`,min:sec/60,met:5};
 }
-const STR={glutes:['glute_stretch','hip_flexor'],quads:['quad','hip_flexor'],hams:['fold','calf_stretch'],chest:['chest_stretch'],back:['child_pose','fold'],shoulders:['shoulder_stretch','child_pose'],biceps:['chest_stretch'],triceps:['triceps_stretch'],core:['sphinx'],cardio:['calf_stretch','quad']};
+const STR={glutes:['glute_stretch','figure4','pigeon','hip_flexor','butterfly','deep_squat'],quads:['quad','hip_flexor','runners_lunge','deep_squat'],hams:['fold','standing_hamstring','seated_fold','down_dog','calf_stretch'],chest:['chest_stretch','single_chest','puppy'],back:['child_pose','cat_cow','lying_twist','seated_fold'],shoulders:['shoulder_stretch','puppy','overhead_reach','down_dog'],biceps:['single_chest','chest_stretch'],triceps:['triceps_stretch','overhead_reach'],core:['sphinx','cat_cow','lying_twist','overhead_reach'],cardio:['calf_stretch','quad','down_dog','runners_lunge']};
+const STR_ALL=['down_dog','cat_cow','child_pose','fold','quad','figure4','chest_stretch','shoulder_stretch','sphinx','hip_flexor','seated_fold','lying_twist','calf_stretch','triceps_stretch'];
+function pickStretches(worked,n){
+  const ws=(worked&&worked.length?worked:Object.keys(STR)).filter(m=>STR[m]);const lists=ws.map(m=>shuffle(STR[m]));const ids=[];
+  let round=0;while(ids.length<n&&round<8){lists.forEach(l=>{const id=l[round];if(id&&ids.length<n&&!ids.includes(id))ids.push(id)});round++}
+  shuffle(STR_ALL).forEach(id=>{if(ids.length<n&&!ids.includes(id))ids.push(id)});
+  // floor-friendly order: standing first, then floor
+  const standing=['quad','chest_stretch','single_chest','shoulder_stretch','triceps_stretch','overhead_reach','calf_stretch','standing_hamstring','fold','deep_squat'];
+  return ids.sort((a,b)=>(standing.includes(b)?1:0)-(standing.includes(a)?1:0));
+}
 function buildCool(worked){
   const segs=[],list=[];const per=ST.dur===20?30:40;
   if(ST.eq.tread){segs.push({ex:'incline_walk',label:'Χαλαρό περπάτημα',sub:'4 km/h, χωρίς κλίση',dur:60,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'incline_walk',label:'60" χαλαρό περπάτημα',sub:'4 km/h'})}
   else{segs.push({ex:'rest',label:'Βαθιές ανάσες',sub:'Περπάτα στον χώρο',dur:45,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'rest',label:'45" ανάσες',sub:'Περπάτημα στον χώρο'})}
-  const ids=[];(worked||[]).forEach(m=>(STR[m]||[]).forEach(id=>{if(!ids.includes(id))ids.push(id)}));
-  ['fold','quad','child_pose'].forEach(id=>{if(ids.length<3&&!ids.includes(id))ids.push(id)});
-  const pick=ids.slice(0,ST.dur>=45?6:5);const n=pick.length;
+  const pick=pickStretches(worked,{20:5,30:7,45:8,60:10}[ST.dur]||7);const n=pick.length;
   pick.forEach((id,i)=>{const e=EXM[id];const sub=e.side?`${per/2}" κάθε πλευρά · ${e.gr}`:e.gr;
     segs.push({ex:id,label:e.name,sub,dur:per,info:`ΔΙΑΤΑΣΕΙΣ · ${i+1}/${n}`,rest:true});list.push({ex:id,label:`${per}" ${e.name}`,sub})});
   segs.push({ex:'rest',label:'Ανάσες',sub:'4" εισπνοή, 6" εκπνοή',dur:30,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});
@@ -1097,6 +1157,12 @@ $('#yr').textContent=new Date().getFullYear();$('#exCount').textContent=EX.filte
 refreshMusic();
 renderSetup();
 $('#genBtn').onclick=generate;
+$('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[{ex:'rest',label:'Βαθιές ανάσες',sub:'Χαλάρωσε τους ώμους',dur:45,info:'STRETCHING'}],list=[];
+  pick.forEach((id,i)=>{const e=EXM[id];const d=e.side?60:50;const sub=e.side?`30" κάθε πλευρά · ${e.gr}`:e.gr;segs.push({ex:id,label:e.name,sub,dur:d,info:`ΔΙΑΤΑΣΗ ${i+1}/${pick.length}`,rest:true});list.push({ex:id,label:`${d}" ${e.name}`,sub})});
+  const min=segs.reduce((s,x)=>s+x.dur,0)/60;const names=ST.focus.map(m=>MUN[m]);
+  WOD={name:'STRETCH',focus:ST.focus.slice(),fmt:'STRETCHING',total:Math.round(min),kcal:Math.round(min*2.5*3.5*(parseFloat(ST.bw)||75)/200/5)*5,bw:!!parseFloat(ST.bw),
+    blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
+  renderWod()};
 requestAnimationFrame(loop);
 if('serviceWorker' in navigator&&location.protocol==='https:'){let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(rl)return;rl=true;location.reload()});
   navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})}
