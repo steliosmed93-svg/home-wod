@@ -1256,7 +1256,7 @@ function renderProgress(){
 
 /* ================= TABS ================= */
 function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
-  if(v!=='scan')stopScan();if(v==='scan')renderScanRecent();
+  if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();getDecoder().catch(()=>{})}
   ['train','timer','library','scan','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
@@ -1469,38 +1469,72 @@ renderSetup();
 $('#genBtn').onclick=generate;
 
 /* ===== Food scanner ===== */
-const SCAN_LIB='https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js';
-let scanner=null,scanBusy=false;
-function loadScript(src){return new Promise((res,rej)=>{if(window.Html5Qrcode)return res();const s=document.createElement('script');s.src=src;s.onload=()=>res();s.onerror=()=>rej(new Error('lib'));document.head.appendChild(s)})}
-function scanFormats(){const F=window.Html5QrcodeSupportedFormats;return [F.EAN_13,F.EAN_8,F.UPC_A,F.UPC_E,F.CODE_128]}
+const ZX_LIB='https://cdn.jsdelivr.net/npm/zxing-wasm@3.1.7/dist/iife/reader/index.js';
+const ZX_OPT={formats:['EAN13','EAN8','UPCA','UPCE'],tryHarder:true,maxNumberOfSymbols:1};
+let cam=null,scanBusy=false,DECODE=null;
+function loadJS(src,test){return new Promise((res,rej)=>{if(test())return res();const s=document.createElement('script');s.src=src;s.onload=()=>res();s.onerror=()=>rej(new Error('lib'));document.head.appendChild(s)})}
+async function getDecoder(){
+  if(DECODE)return DECODE;
+  try{if('BarcodeDetector' in window&&typeof BarcodeDetector.getSupportedFormats==='function'){const f=await BarcodeDetector.getSupportedFormats();
+    if(f.includes('ean_13')){const bd=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e'].filter(x=>f.includes(x))});
+      DECODE=async c=>{const r=await bd.detect(c);return r&&r[0]?r[0].rawValue:null};return DECODE}}}catch(e){}
+  await loadJS(ZX_LIB,()=>window.ZXingWASM);
+  DECODE=async c=>{const id=c.getContext('2d').getImageData(0,0,c.width,c.height);const r=await ZXingWASM.readBarcodesFromImageData(id,ZX_OPT);const ok=r.find(x=>x.isValid&&x.text);return ok?ok.text:null};
+  await DECODE(Object.assign(document.createElement('canvas'),{width:8,height:8})).catch(()=>{});
+  return DECODE;
+}
 function gotCode(code){if(scanBusy)return;scanBusy=true;try{navigator.vibrate&&navigator.vibrate(60)}catch(_){}stopScan();$('#scanCode').value=code;lookupFood(code).finally(()=>{scanBusy=false})}
 async function startScan(){
-  if(scanner)return;
-  try{await loadScript(SCAN_LIB)}catch(e){toast('Δεν φόρτωσε ο σαρωτής. Έλεγξε τη σύνδεση στο internet.');return}
+  if(cam)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Η κάμερα δεν υποστηρίζεται εδώ. Πάτα «Φωτογράφισε το barcode».');return}
   $('#scanPh').hidden=true;$('#scanStop').hidden=false;$('#scanCam').classList.add('live');
-  let hint=document.createElement('div');hint.className='scan-hint';hint.id='scanHint';hint.textContent='Κράτα το barcode οριζόντια, 10 έως 20 εκ. από την κάμερα';$('#scanCam').appendChild(hint);
+  const hint=document.createElement('div');hint.className='scan-hint';hint.id='scanHint';hint.textContent='Φόρτωση σαρωτή…';$('#scanCam').appendChild(hint);
+  const me={stopped:false};cam=me;
   try{
-    scanner=new Html5Qrcode('scanReader',{formatsToSupport:scanFormats(),experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false});
-    await scanner.start({facingMode:'environment'},{fps:15,disableFlip:true,
-      videoConstraints:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080},advanced:[{focusMode:'continuous'}]}},
-      code=>gotCode(code),()=>{});
+    const [dec,stream]=await Promise.all([getDecoder(),navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}})]);
+    if(me.stopped){stream.getTracks().forEach(t=>t.stop());return}
+    me.stream=stream;
+    const v=document.createElement('video');v.setAttribute('playsinline','');v.muted=true;v.autoplay=true;v.srcObject=stream;me.video=v;
+    $('#scanReader').innerHTML='';$('#scanReader').appendChild(v);await v.play().catch(()=>{});
+    const tr=stream.getVideoTracks()[0];try{const caps=tr.getCapabilities?tr.getCapabilities():{};if(caps.focusMode&&caps.focusMode.includes('continuous'))await tr.applyConstraints({advanced:[{focusMode:'continuous'}]})}catch(e){}
+    hint.textContent='Βάλε το barcode μέσα στο πλαίσιο, οριζόντια';
+    const cv=document.createElement('canvas');const g=cv.getContext('2d',{willReadFrequently:true});let n=0;
+    const tick=async()=>{
+      if(me.stopped)return;
+      try{
+        if(v.readyState>=2&&v.videoWidth){
+          const vw=v.videoWidth,vh=v.videoHeight;n++;
+          let sx,sy,sw,sh;
+          if(n%3===0){sx=0;sy=0;sw=vw;sh=vh}else{sw=vw*.86;sh=vh*(n%3===1?.38:.6);sx=(vw-sw)/2;sy=(vh-sh)/2}
+          const k=Math.min(1,1280/sw);cv.width=Math.round(sw*k);cv.height=Math.round(sh*k);g.drawImage(v,sx,sy,sw,sh,0,0,cv.width,cv.height);
+          const code=await dec(cv);if(code&&!me.stopped){gotCode(code);return}
+        }
+      }catch(e){}
+      me.t=setTimeout(tick,60);
+    };
+    tick();
   }catch(e){console.warn(e);await stopScan();
-    toast(/Permission|NotAllowed/i.test(String(e))?'Δεν δόθηκε άδεια για την κάμερα. Ενεργοποίησέ την από τις ρυθμίσεις του κινητού.':'Δεν άνοιξε η ζωντανή κάμερα. Πάτα «Φωτογράφισε το barcode».')}
+    toast(/Permission|NotAllowed/i.test(String(e&&e.name||e))?'Δεν δόθηκε άδεια για την κάμερα. Ενεργοποίησέ την από τις ρυθμίσεις του κινητού.':'Δεν άνοιξε η ζωντανή κάμερα. Πάτα «Φωτογράφισε το barcode».')}
 }
-async function stopScan(){const sc=scanner;scanner=null;if(sc){try{if(sc.isScanning)await sc.stop()}catch(e){}try{sc.clear()}catch(e){}}
+async function stopScan(){const me=cam;cam=null;if(me){me.stopped=true;clearTimeout(me.t);try{me.stream&&me.stream.getTracks().forEach(t=>t.stop())}catch(e){}try{if(me.video){me.video.srcObject=null;me.video.remove()}}catch(e){}}
   const ph=$('#scanPh');if(ph)ph.hidden=false;const st=$('#scanStop');if(st)st.hidden=true;const c=$('#scanCam');if(c)c.classList.remove('live');const h=$('#scanHint');if(h)h.remove()}
-function shrinkImage(file,max){return new Promise((res,rej)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);c.toBlob(b=>b?res({blob:b,canvas:c}):rej(new Error('blob')),'image/jpeg',.92)};img.onerror=rej;img.src=url})}
+function loadImg(file){return new Promise((res,rej)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{URL.revokeObjectURL(url);res(img)};img.onerror=rej;img.src=url})}
 async function scanPhoto(file){
   if(!file)return;await stopScan();
   $('#scanOut').innerHTML='<div class="fcard"><p style="margin:0;color:var(--mut)">Διαβάζω τη φωτογραφία…</p></div>';
   try{
-    if('BarcodeDetector' in window){try{const bd=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128']});const bm=await createImageBitmap(file);const r=await bd.detect(bm);if(r&&r[0])return gotCode(r[0].rawValue)}catch(e){}}
-    await loadScript(SCAN_LIB);
-    const h=new Html5Qrcode('scanFileTmp',{formatsToSupport:scanFormats(),verbose:false});
-    for(const max of [1600,1000,2400]){
-      try{const {blob}=await shrinkImage(file,max);const f=new File([blob],'b.jpg',{type:'image/jpeg'});const code=await h.scanFile(f,false);try{h.clear()}catch(_){}return gotCode(code)}catch(e){}
+    const dec=await getDecoder();const img=await loadImg(file);
+    const cv=document.createElement('canvas'),g=cv.getContext('2d',{willReadFrequently:true});
+    const W=img.naturalWidth||img.width,H=img.naturalHeight||img.height;
+    const tries=[[0,0,W,H,2000],[0,0,W,H,1200],[W*.1,H*.25,W*.8,H*.5,1600],[0,0,W,H,3000]];
+    for(const [sx,sy,sw,sh,max] of tries){
+      for(const rot of [0,90]){
+        const k=Math.min(1,max/Math.max(sw,sh));const w=Math.round(sw*k),h=Math.round(sh*k);
+        if(rot){cv.width=h;cv.height=w;g.save();g.translate(h,0);g.rotate(Math.PI/2);g.drawImage(img,sx,sy,sw,sh,0,0,w,h);g.restore()}
+        else{cv.width=w;cv.height=h;g.drawImage(img,sx,sy,sw,sh,0,0,w,h)}
+        const code=await dec(cv).catch(()=>null);if(code)return gotCode(code);
+      }
     }
-    try{h.clear()}catch(_){}
     $('#scanOut').innerHTML='<div class="fcard"><p style="margin:0;line-height:1.55">Δεν διαβάστηκε το barcode από τη φωτογραφία. Βγάλε την πιο κοντά, με το barcode οριζόντιο, καθαρό και με καλό φως. Ή γράψε τους αριθμούς που είναι κάτω από τις γραμμές.</p></div>';
   }catch(e){console.warn(e);$('#scanOut').innerHTML='';toast('Δεν φόρτωσε ο σαρωτής. Έλεγξε τη σύνδεση στο internet.')}
   finally{const i=$('#scanPhoto');if(i)i.value=''}
@@ -1680,7 +1714,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='9';
+const APP_VER='10';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
