@@ -143,7 +143,7 @@ select.inp{appearance:none;-webkit-appearance:none;background:var(--card2) url("
 }
 @media (max-width:640px){
  .wrap{padding:0 18px 40px}
- .hd{padding:12px 18px;gap:12px;flex-wrap:wrap}
+ .hd{padding:12px 14px;gap:8px;flex-wrap:nowrap}
  .tabs{order:3;flex-basis:100%;overflow-x:auto;scrollbar-width:none}
  .tabs::-webkit-scrollbar{display:none}
  .tabs button{padding:8px 12px;font-size:14px;white-space:nowrap}
@@ -320,7 +320,6 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
  .mbar .mscan .ic{width:56px;height:56px;margin-top:-28px;border-radius:19px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);display:grid;place-items:center;box-shadow:0 10px 30px rgba(255,110,100,.35);border:4px solid var(--bg)}
  .mbar .mscan .ic svg{width:26px;height:26px}
  .mbar .mscan.on b{color:var(--acc)}
- header .tabs{display:none!important}
  header .navcta{display:none!important}
  body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
  #toast{bottom:calc(100px + env(safe-area-inset-bottom))!important}
@@ -477,12 +476,24 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .srec li div{flex:1;min-width:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .srec li small{color:var(--mut);font-size:12px}
 .acct.in span:last-child{}
+
+.navdd{position:relative;flex:1;display:flex}
+.navdd-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.navdd-btn svg{width:18px;height:18px}
+.navdd-btn .car{font-style:normal;font-size:11px;color:var(--mut);transition:transform .2s}
+.navdd.open .navdd-btn .car{transform:rotate(180deg)}
+header .navdd .tabs{position:absolute!important;top:calc(100% + 8px);left:0;z-index:40;display:none!important;flex-direction:column;gap:2px;min-width:220px;padding:8px;background:rgba(20,20,24,.98);border:1px solid var(--line2);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.55);order:0!important;flex-basis:auto!important;overflow:visible!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+header .navdd.open .tabs{display:flex!important}
+header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size:15px!important;border-radius:12px;width:100%;white-space:nowrap}
+@media (max-width:640px){.navdd{flex:1;min-width:0}.navdd-btn{padding:9px 10px;gap:6px;min-width:0}.navdd-btn span{overflow:hidden;text-overflow:ellipsis;min-width:0}.logo{font-size:20px!important;flex:none}.langsw{margin-right:0!important;min-width:36px!important;padding:0 8px!important}.acct{flex:none}}
+@media (max-width:380px){.navdd-btn span{display:none}}
 </style>
 </head>
 <body>
 <header>
   <div class="hd">
     <a class="logo" href="#" data-go="train">Home<span>WOD</span></a>
+    <div class="navdd" id="navdd"><button class="navdd-btn" id="navBtn" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span id="navCur">Αρχική</span><i class="car">▾</i></button>
     <nav class="tabs">
       <button data-v="train" class="on">Αρχική</button>
       <button data-v="timer">Timer</button>
@@ -490,7 +501,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
       <button data-v="scan">Σαρωτής</button>
       <button data-v="library">Ασκήσεις</button>
       <button data-v="history">Πρόοδος</button>
-    </nav>
+    </nav></div>
     <a class="langsw" href="en.html" id="langSw" data-lang="en">EN</a><button class="acct" id="acctBtn"><span class="av" id="acctAv" hidden></span><span id="acctName">Σύνδεση</span></button>
     <a class="btn primary navcta" href="#builder" data-go="builder">Φτιάξε WOD</a>
   </div>
@@ -1362,10 +1373,12 @@ function renderProgress(){
 }
 
 /* ================= TABS ================= */
-function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));{const tb=document.querySelector('.tabs button[data-v="'+v+'"]');if(tb)$('#navCur').textContent=tb.textContent;const dd=$('#navdd');if(dd){dd.classList.remove('open');$('#navBtn').setAttribute('aria-expanded','false')}}
   if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();renderMealDay();getDecoder().catch(()=>{});window.MealAI&&MealAI.warm()}
   ['train','timer','library','fast','scan','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='fast')renderFast();if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
+$('#navBtn').onclick=e=>{e.stopPropagation();const dd=$('#navdd');const o=!dd.classList.contains('open');dd.classList.toggle('open',o);$('#navBtn').setAttribute('aria-expanded',String(o))};
+document.addEventListener('click',e=>{const dd=$('#navdd');if(dd&&dd.classList.contains('open')&&!dd.contains(e.target))dd.classList.remove('open')});
 document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();const g=a.dataset.go;
   if(g==='builder'){showView('train');setTimeout(()=>$('#builder').scrollIntoView({behavior:'smooth'}),30)}else showView(g)});
@@ -1990,7 +2003,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='14';
+const APP_VER='15';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
