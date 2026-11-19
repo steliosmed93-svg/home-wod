@@ -1481,7 +1481,7 @@ const CARC=[
  {g:'2A',pen:.75,name:'Nitrites / nitrates (E249 to E252)',txt:'Preservatives mostly in cured meats. In the stomach they can form nitrosamines. IARC classifies their intake under these conditions in Group 2A (probably carcinogenic).',
   t:(p,x)=>x.add(['e249','e250','e251','e252'])},
  {g:'1',pen:1.5,name:'Alcohol',txt:'Alcohol is in IARC Group 1 (cancers of the mouth, oesophagus, liver, breast, bowel). There is no level of drinking with no risk at all.',
-  t:(p,x)=>(x.n('alcohol')||0)>0.5||x.cat(/alcoholic-beverages|\bwines?\b|\bbeers?\b|spirits|liqueurs/)},
+  t:(p,x)=>(x.n('alcohol')||0)>0.5||x.cat(/(?:^|\s)en:(?:alcoholic-beverages|(?:[a-z]+-)*(?:wines?|beers?|spirits|liqueurs|ciders?))(?:\s|$)/)},
  {g:'2B',pen:.4,name:'Titanium dioxide (E171)',txt:'Banned in food in the EU since 2022, because EFSA could not rule out DNA damage. IARC lists it in Group 2B (based on inhalation).',
   t:(p,x)=>x.add(['e171'])},
  {g:'2B',pen:.25,name:'Aspartame (E951)',txt:'IARC classified it in Group 2B in 2023 (possibly carcinogenic, with limited evidence). The WHO’s JECFA committee kept the acceptable intake at 40 mg per kg of body weight a day.',
@@ -1528,7 +1528,7 @@ function rateFood(p){
     else if(!drink&&v.kcal<=120)P(`Low calories: ${Math.round(v.kcal)} kcal / 100 g`)}
   if(v.pro!==null&&v.kcal){known++;const pp=v.pro*400/Math.max(v.kcal,1);
     if(v.pro>=10&&pp>=20){s+=.75;P(`High protein: ${fmtN(v.pro)} g, filling and protects muscle`)}
-    else if(v.pro>=6){s+=.25;P(`Good protein: ${fmtN(v.pro)} g`)}}
+    else if(v.pro>=6&&pp>=12){s+=.25;P(`Good protein: ${fmtN(v.pro)} g`)}}
   if(v.fib!==null&&v.fib>=6){s+=.5;P(`High fibre: ${fmtN(v.fib)} g`)}
   const carc=CARC.filter(c=>{try{return c.t(p,x)}catch(e){return false}});
   carc.forEach(c=>{s-=c.pen});
