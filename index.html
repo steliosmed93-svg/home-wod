@@ -21,20 +21,81 @@ html,body{margin:0;background:var(--bg);color:var(--fg)}
 body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;letter-spacing:-.011em}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 380px at 15% -10%,rgba(255,138,91,.13),transparent 70%),radial-gradient(600px 380px at 95% 0%,rgba(111,214,184,.08),transparent 70%);z-index:0}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:0 20px 130px}
+.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 28px 60px}
 header{position:sticky;top:0;z-index:6;background:rgba(11,11,14,.66);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);border-bottom:1px solid var(--line)}
-.hd{max-width:560px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:900;font-size:21px;letter-spacing:-.045em;line-height:1}
+.hd{max-width:1160px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:28px}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.045em;line-height:1;color:var(--fg);text-decoration:none;flex:none}
 .logo span{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-radius:8px;padding:2px 7px;margin-left:5px}
-.hdate{font-size:12px;font-weight:500;color:var(--mut);border:1px solid var(--line2);border-radius:99px;padding:6px 12px}
-.tabs{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100% - 28px));display:flex;gap:4px;padding:6px;z-index:8;background:rgba(24,24,27,.72);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid var(--line2);border-radius:26px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
-.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:20px;font-size:11px;font-weight:600;color:var(--mut);transition:.2s}
-.tabs button svg{width:21px;height:21px}
-.tabs button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink)}
+.tabs{display:flex;gap:4px;flex:1}
+.tabs button{padding:9px 14px;border-radius:12px;font-size:14.5px;font-weight:600;color:var(--mut);transition:.2s}
+.tabs button:hover{color:var(--fg);background:rgba(255,255,255,.05)}
+.tabs button.on{color:var(--fg);background:rgba(255,255,255,.08)}
+.navcta{width:auto!important;padding:11px 18px!important;font-size:14px!important;border-radius:14px!important;box-shadow:none!important}
 section{animation:rise .35s ease}
 section[hidden]{display:none}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .hero{padding:30px 0 4px}
+.landing{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center;padding:64px 0 40px}
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.landing h1{font-size:clamp(40px,5.4vw,68px);font-weight:900;letter-spacing:-.055em;line-height:1;margin:14px 0 18px}
+.landing h1 em{font-style:normal;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:18px;line-height:1.6;color:#b9b9c0;margin:0;max-width:560px}
+.cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.cta .btn{width:auto;padding:16px 24px}
+.kpis{display:flex;gap:36px;margin-top:36px;flex-wrap:wrap}
+.kpis b{display:block;font-size:30px;font-weight:900;letter-spacing:-.04em}
+.kpis span{font-size:13px;color:var(--mut)}
+.l-visual{position:relative}
+.stage{aspect-ratio:1;border-radius:32px;background:radial-gradient(circle at 50% 58%,#2a1d1b 0,#121214 66%);border:1px solid var(--line);overflow:hidden}
+.stage svg{width:100%;height:100%;filter:drop-shadow(0 0 28px rgba(255,138,91,.2))}
+.hero-cap{position:absolute;left:20px;top:20px;background:rgba(14,14,16,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line2);border-radius:16px;padding:10px 16px}
+.hero-cap b{display:block;font-size:16px}.hero-cap span{font-size:12.5px;color:var(--mut)}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:24px 0 10px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.feat i{font-style:normal;font-size:12px;font-weight:800;color:var(--acc)}
+.feat h4{margin:10px 0 8px;font-size:17px;font-weight:800;letter-spacing:-.03em}
+.feat p{margin:0;font-size:14px;line-height:1.55;color:var(--mut)}
+.sec-head{padding:72px 0 8px;max-width:680px;scroll-margin-top:80px}
+.sec-head.top{padding-top:56px}
+.sec-head h2{font-size:clamp(32px,4vw,46px);font-weight:900;letter-spacing:-.05em;margin:10px 0 10px;line-height:1.05}
+.sec-head p{margin:0;color:var(--mut);font-size:16px;line-height:1.55}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:10px 32px 32px}
+.builder h3.lbl:first-child{margin-top:24px}
+.btn.big{padding:19px;font-size:17px}
+.tipline{margin-top:14px;max-width:760px}
+.timer-card{max-width:720px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:10px 28px 28px;margin-top:24px}
+.timer-card .field{background:var(--card2)}
+.foot{border-top:1px solid var(--line);margin-top:40px;position:relative;z-index:1}
+.fin-in{max-width:1160px;margin:0 auto;padding:44px 28px 24px;display:grid;grid-template-columns:1.3fr 1fr 1.3fr;gap:40px}
+.foot p{color:var(--mut);font-size:14px;line-height:1.6;margin:14px 0 0;max-width:340px}
+.flinks{display:flex;flex-direction:column;gap:9px;font-size:14px}
+.flinks b{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg);margin-bottom:4px}
+.flinks a{color:var(--mut);text-decoration:none}.flinks a:hover{color:var(--acc)}
+.flinks span{color:var(--mut);line-height:1.55}
+.copy{max-width:1160px;margin:0 auto;padding:16px 28px 30px;font-size:12.5px;color:var(--mut2)}
+#wodOut .wod{max-width:none}
+.wod-body{display:grid;grid-template-columns:1fr 1fr}
+.wod-body .blk{border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.wod-body .blk:nth-child(odd){border-left:0}
+@media (max-width:900px){
+ .landing{grid-template-columns:1fr;padding:36px 0 20px;gap:28px}
+ .l-visual{max-width:440px}
+ .features{grid-template-columns:1fr 1fr}
+ .builder{grid-template-columns:1fr;gap:0;padding:6px 20px 24px}
+ .fin-in{grid-template-columns:1fr;gap:26px}
+ .wod-body{grid-template-columns:1fr}.wod-body .blk{border-left:0}
+}
+@media (max-width:640px){
+ .wrap{padding:0 18px 40px}
+ .hd{padding:12px 18px;gap:12px;flex-wrap:wrap}
+ .tabs{order:3;flex-basis:100%;overflow-x:auto;scrollbar-width:none}
+ .tabs::-webkit-scrollbar{display:none}
+ .tabs button{padding:8px 12px;font-size:14px;white-space:nowrap}
+ .navcta{margin-left:auto}
+ .features{grid-template-columns:1fr}
+ .kpis{gap:22px}
+ .sec-head{padding-top:52px}
+}
 .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero h1{margin:0;font-size:38px;font-weight:900;letter-spacing:-.05em;line-height:1.02}
 .hero p{margin:10px 0 0;color:var(--mut);font-size:15px}
@@ -48,7 +109,7 @@ h3.lbl{font-size:13px;font-weight:600;color:var(--mut);margin:28px 0 10px;letter
 .eq.fixed::after{display:none}
 .seg{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:17px}
 .seg.wrap{display:grid;grid-template-columns:repeat(3,1fr)}
-.seg.wrap4{display:grid;grid-template-columns:repeat(4,1fr)}
+.seg.wrap4{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
 .seg button{flex:1;padding:11px 4px;border-radius:13px;font-weight:600;font-size:13.5px;color:#bdbdc3;transition:.2s;white-space:nowrap}
 .seg button.on{background:var(--fg);color:#111;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .row{display:flex;gap:12px;align-items:center}
@@ -59,7 +120,7 @@ h3.lbl{font-size:13px;font-weight:600;color:var(--mut);margin:28px 0 10px;letter
 .btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent;box-shadow:0 12px 40px rgba(255,110,100,.25)}
 .btn:active{transform:scale(.98)}
 .mt{margin-top:24px}
-.wod{margin-top:28px;border-radius:28px;background:var(--card);border:1px solid var(--line);overflow:hidden;animation:rise .4s ease}
+.wod{margin-top:40px;border-radius:28px;background:var(--card);border:1px solid var(--line);overflow:hidden;animation:rise .4s ease}
 .wod-head{padding:24px 22px 22px;background:linear-gradient(135deg,#ffa274,var(--acc) 45%,var(--acc2));color:var(--ink)}
 .wod-head .tag{font-size:12px;font-weight:600;opacity:.55}
 .wod-head h2{font-size:46px;font-weight:900;letter-spacing:-.05em;line-height:1;margin:6px 0 14px}
@@ -84,12 +145,13 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .fig .tor{stroke-width:12}
 .fig .hd{fill:#ececef}
 .fig .floor{stroke:rgba(255,255,255,.12);stroke-width:2}
-.wod-actions{padding:18px 20px 22px;display:grid;grid-template-columns:1.7fr 1fr;gap:10px;border-top:1px solid var(--line)}
+.wod-actions{padding:20px 24px 24px;display:grid;grid-template-columns:1.7fr 1fr;max-width:560px;gap:10px;border-top:1px solid var(--line)}
 .filters{display:flex;gap:8px;overflow-x:auto;padding:24px 0 4px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .filters button{flex:none;padding:9px 15px;border-radius:99px;border:1px solid var(--line2);font-weight:600;font-size:13px;color:#cfcfd4}
 .filters button.on{background:var(--accSoft);color:var(--acc);border-color:rgba(255,138,91,.55)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:18px}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}}
 .card{border:1px solid var(--line);background:var(--card);border-radius:22px;padding:8px 8px 14px;cursor:pointer;transition:.2s}
 .card:hover{border-color:var(--line2);transform:translateY(-2px)}
 .card svg{width:100%;aspect-ratio:1;border-radius:16px;background:#141417}
@@ -98,12 +160,12 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .card .tagx{margin-left:6px}
 .tagx.acc{color:var(--acc);border-color:rgba(255,138,91,.35);background:var(--accSoft)}
 .tagx{display:inline-block;font-size:10.5px;font-weight:600;border-radius:99px;background:var(--card2);border:1px solid var(--line);color:#bdbdc3;padding:3px 9px;margin-top:8px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px;max-width:860px}
 .stats div{padding:18px 10px;text-align:center;border-radius:20px;background:var(--card);border:1px solid var(--line)}
 .stats div:first-child{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent}
 .stats b{display:block;font-weight:900;font-size:32px;letter-spacing:-.05em}
 .stats small{font-size:11px;font-weight:600;opacity:.6}
-.hist{list-style:none;padding:0;margin:16px 0 0}
+.hist{list-style:none;padding:0;margin:16px 0 0;max-width:860px}
 .hist li{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px 16px;margin-bottom:10px}
 .hist li b{font-size:17px;font-weight:800;letter-spacing:-.03em}
 .hist li .tagx{margin:0 0 0 6px;vertical-align:2px}
@@ -194,26 +256,44 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 <body>
 <header>
   <div class="hd">
-    <div class="logo">Home<span>WOD</span></div>
-    <div class="hdate" id="hdate"></div>
+    <a class="logo" href="#" data-go="train">Home<span>WOD</span></a>
+    <nav class="tabs">
+      <button data-v="train" class="on">Αρχική</button>
+      <button data-v="timer">Timer</button>
+      <button data-v="library">Ασκήσεις</button>
+      <button data-v="history">Ιστορικό</button>
+    </nav>
+    <a class="btn primary navcta" href="#builder" data-go="builder">Φτιάξε WOD</a>
   </div>
 </header>
-<nav class="tabs">
-  <button data-v="train" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>WOD</button>
-  <button data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="14" r="8"/><path d="M12 10v4l2.5 2M9 2h6M12 2v4"/></svg>Timer</button>
-  <button data-v="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Ασκήσεις</button>
-  <button data-v="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Ιστορικό</button>
-</nav>
 
 <div class="wrap">
   <section id="v-train">
-    <div class="hero"><h1>Έτοιμος για<br>το σημερινό <em>WOD;</em></h1><p>Διάλεξε εξοπλισμό, ένταση και χρόνο. Τα υπόλοιπα τα αναλαμβάνω.</p></div>
+    <div class="landing">
+      <div class="l-text">
+        <div class="eyebrow">CrossFit · Στο σπίτι · Για απώλεια βάρους</div>
+        <h1>Κάψε θερμίδες στο σπίτι με το <em>WOD της ημέρας</em>.</h1>
+        <p class="lead">Διάλεξε τον εξοπλισμό που έχεις, την ένταση και τον χρόνο σου. Το Home WOD φτιάχνει την προπόνηση, σου δείχνει κάθε άσκηση και μετράει τον χρόνο για σένα.</p>
+        <div class="cta"><a class="btn primary" href="#builder" data-go="builder">Φτιάξε το WOD σου</a><button class="btn" data-go="timer">Άνοιξε το Timer</button></div>
+        <div class="kpis"><div><b>31</b><span>ασκήσεις με animation</span></div><div><b>7</b><span>τύποι timer</span></div><div><b>20–45'</b><span>διάρκεια προπόνησης</span></div></div>
+      </div>
+      <div class="l-visual"><div class="stage"><svg id="heroFig"></svg></div><div class="hero-cap"><b id="heroName"></b><span id="heroGr"></span></div></div>
+    </div>
+    <div class="features">
+      <div class="feat"><i>01</i><h4>Με τον δικό σου εξοπλισμό</h4><p>Kettlebell, air bike, διάδρομος, βαράκια ή λάστιχα. Κάθε WOD φτιάχνεται με ό,τι έχεις.</p></div>
+      <div class="feat"><i>02</i><h4>Βλέπεις κάθε κίνηση</h4><p>Animated φιγούρα και οδηγίες τεχνικής για κάθε άσκηση, την ώρα που την κάνεις.</p></div>
+      <div class="feat"><i>03</i><h4>Timer όπως στο box</h4><p>AMRAP, EMOM, For Time, Tabata και intervals, με ηχητικά σήματα και μετρητή γύρων.</p></div>
+      <div class="feat"><i>04</i><h4>Πρόοδος και μουσική</h4><p>Ιστορικό προπονήσεων, εκτίμηση θερμίδων και γρήγορη σύνδεση με Spotify ή YouTube.</p></div>
+    </div>
+    <div class="sec-head" id="builder"><div class="eyebrow">Βήμα 1</div><h2>Φτιάξε το WOD σου</h2><p>Ρύθμισε τις επιλογές και πάτα «Φτιάξε το WOD». Οι ρυθμίσεις σου αποθηκεύονται.</p></div>
+    <div class="builder"><div class="col">
     <h3 class="lbl">Ο εξοπλισμός σου</h3>
     <div class="chips" id="eqChips"></div>
     <div id="kbBox">
       <h3 class="lbl">Βάρος kettlebell</h3>
       <div class="seg" id="kbSeg"></div>
     </div>
+    </div><div class="col">
     <h3 class="lbl">Επίπεδο</h3>
     <div class="seg" id="lvlSeg"></div>
     <h3 class="lbl">Διάρκεια</h3>
@@ -224,13 +304,15 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
     <div class="row"><input class="inp" id="bw" type="number" inputmode="decimal" min="35" max="250" placeholder="kg"><div class="note">Προαιρετικό. Χρησιμοποιείται μόνο για εκτίμηση θερμίδων.</div></div>
     <h3 class="lbl">Μουσική</h3>
     <button class="btn musicCfg" style="font-size:15px;padding:15px">♫ Μουσική <span class="svcName"></span></button>
-    <button class="btn primary mt" id="genBtn">Φτιάξε το WOD</button>
-    <p class="note" style="margin-top:12px">Για απώλεια κιλών μετράει πρώτα το έλλειμμα θερμίδων από τη διατροφή. Η προπόνηση το μεγαλώνει και κρατάει τη μυϊκή μάζα. Στόχος: 3 έως 5 WOD την εβδομάδα.</p>
+    <button class="btn primary mt big" id="genBtn">Φτιάξε το WOD →</button>
+    </div></div>
+    <p class="note tipline">Για απώλεια κιλών μετράει πρώτα το έλλειμμα θερμίδων από τη διατροφή. Η προπόνηση το μεγαλώνει και κρατάει τη μυϊκή μάζα. Στόχος: 3 έως 5 WOD την εβδομάδα.</p>
     <div id="wodOut"></div>
   </section>
 
   <section id="v-timer" hidden>
-    <div class="hero"><h1>Timer</h1><p>AMRAP, EMOM, For Time, Tabata και δικά σου intervals.</p></div>
+    <div class="sec-head top"><div class="eyebrow">Εργαλεία</div><h2>CrossFit Timer</h2><p>AMRAP, EMOM, For Time, Tabata και δικά σου intervals, με ηχητικά σήματα.</p></div>
+    <div class="timer-card">
     <h3 class="lbl">Τύπος χρονομέτρου</h3>
     <div class="seg wrap4" id="tmSeg"></div>
     <p class="note" id="tmDesc" style="margin-top:12px"></p>
@@ -240,21 +322,28 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
       <a class="btn" id="tmMusic" target="_blank" rel="noopener" style="font-size:15px;padding:14px">♫ Μουσική ↗</a>
       <button class="btn musicCfg" style="font-size:15px;padding:14px">Ρυθμίσεις ♫</button>
     </div>
+    </div>
   </section>
 
   <section id="v-library" hidden>
-    <div class="hero"><h1>Ασκήσεις</h1><p>Πάτα μια άσκηση για τεχνική και οδηγίες.</p></div>
+    <div class="sec-head top"><div class="eyebrow">Βιβλιοθήκη</div><h2>Ασκήσεις</h2><p>31 ασκήσεις με animation. Πάτα μία για τεχνική και οδηγίες.</p></div>
     <div class="filters" id="libFilters"></div>
     <div class="grid" id="libGrid"></div>
   </section>
 
   <section id="v-history" hidden>
-    <div class="hero"><h1>Ιστορικό</h1><p>Η συνέπεια φέρνει το αποτέλεσμα.</p></div>
+    <div class="sec-head top"><div class="eyebrow">Η πρόοδός σου</div><h2>Ιστορικό</h2><p>Η συνέπεια φέρνει το αποτέλεσμα. Τα δεδομένα μένουν μόνο σε αυτή τη συσκευή.</p></div>
     <div class="stats" id="hStats"></div>
     <ul class="hist" id="hList"></ul>
-    <button class="btn mt" id="hClear" style="font-size:14px;padding:13px;color:#8b8b92">Διαγραφή ιστορικού</button>
+    <button class="btn mt" id="hClear" style="font-size:14px;padding:13px;color:#8b8b92;max-width:860px">Διαγραφή ιστορικού</button>
   </section>
 </div>
+
+<footer class="foot"><div class="fin-in">
+  <div><a class="logo" href="#" data-go="train">Home<span>WOD</span></a><p>CrossFit προπονήσεις στο σπίτι για απώλεια βάρους. Δωρεάν, χωρίς λογαριασμό.</p></div>
+  <div class="flinks"><b>Σελίδες</b><a href="#" data-go="train">Αρχική</a><a href="#" data-go="builder">Φτιάξε WOD</a><a href="#" data-go="timer">Timer</a><a href="#" data-go="library">Ασκήσεις</a><a href="#" data-go="history">Ιστορικό</a></div>
+  <div class="flinks"><b>Σημείωση</b><span>Αν έχεις πρόβλημα υγείας ή τραυματισμό, συμβουλέψου γιατρό πριν ξεκινήσεις νέο πρόγραμμα άσκησης.</span></div>
+</div><div class="copy">© <span id="yr"></span> Home WOD</div></footer>
 
 <div id="player" hidden>
   <div class="pl-top">
@@ -643,8 +732,8 @@ function renderWod(){
   const w=WOD,d=new Date();
   $('#wodOut').innerHTML=`<div class="wod"><div class="wod-head"><div class="tag">WOD της ημέρας · ${d.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'})}</div><h2>${w.name}</h2>
    <div class="meta"><span>${w.fmt}</span><span>~${w.total} λεπτά</span><span>~${w.kcal} kcal${w.bw?'':' · 75 kg'}</span><span>${LVL[ST.lvl]}</span></div></div>
-   ${w.blocks.map(b=>`<div class="blk"><div class="blk-h"><span>${b.name}</span><span>${b.type==='fortime'?'cap ':''}${Math.round(b.min)}'</span></div>${b.desc?`<p>${b.desc}</p>`:''}
-   <ul>${b.list.map(i=>`<li data-ex="${i.ex}"><svg class="mini" data-ex="${i.ex}"></svg><div><b>${i.label}</b><small>${i.sub||''}</small></div></li>`).join('')}</ul></div>`).join('')}
+   <div class="wod-body">${w.blocks.map(b=>`<div class="blk"><div class="blk-h"><span>${b.name}</span><span>${b.type==='fortime'?'cap ':''}${Math.round(b.min)}'</span></div>${b.desc?`<p>${b.desc}</p>`:''}
+   <ul>${b.list.map(i=>`<li data-ex="${i.ex}"><svg class="mini" data-ex="${i.ex}"></svg><div><b>${i.label}</b><small>${i.sub||''}</small></div></li>`).join('')}</ul></div>`).join('')}</div>
    <div class="wod-actions"><button class="btn primary" id="goBtn">Ξεκίνα ▶</button><button class="btn" id="rerollBtn">Άλλο ↻</button></div></div>`;
   mountFigs($('#wodOut'));
   $('#goBtn').onclick=startWorkout;$('#rerollBtn').onclick=generate;
@@ -686,6 +775,8 @@ $('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='
 function showView(v){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   ['train','timer','library','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
+document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();const g=a.dataset.go;
+  if(g==='builder'){showView('train');setTimeout(()=>$('#builder').scrollIntoView({behavior:'smooth'}),30)}else showView(g)});
 
 /* ================= PLAYER ================= */
 let P=null,AC=null,SOUND=true,timer=null,last=0,wake=null;
@@ -880,7 +971,9 @@ $('#ckClose').onclick=()=>{if(C&&C.cfg.up&&C.tot>=60&&C.el>0){const h=LS.get('hw
 document.addEventListener('keydown',e=>{if(!C||$('#clock').hidden)return;if(e.code==='Space'){e.preventDefault();$('#ckMain').click()}if(e.code==='ArrowRight')$('#ckAlt').click()});
 
 /* ================= INIT ================= */
-$('#hdate').textContent=new Date().toLocaleDateString('el-GR',{weekday:'short',day:'numeric',month:'short'});
+$('#yr').textContent=new Date().getFullYear();
+(()=>{const hf=new Fig($('#heroFig'));const L=['kb_swing','burpee','db_thruster','bike','goblet_squat','run','mountain_climber','band_row','db_snatch'];let i=0;
+  const show=()=>{const e=EXM[L[i%L.length]];hf.set(e.id);$('#heroName').textContent=e.name;$('#heroGr').textContent=e.gr+' · '+EQN[e.eq];i++};show();setInterval(show,4200)})();
 refreshMusic();
 renderSetup();
 $('#genBtn').onclick=generate;
