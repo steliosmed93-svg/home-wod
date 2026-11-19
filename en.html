@@ -389,6 +389,47 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .mday li button{background:none;border:0;color:var(--mut2);font-size:16px;cursor:pointer;padding:0 0 0 8px}
 .spin{display:inline-block;width:18px;height:18px;border:2px solid var(--line2);border-top-color:var(--acc);border-radius:50%;animation:sp 0.8s linear infinite;vertical-align:-4px;margin-right:8px}
 @keyframes sp{to{transform:rotate(360deg)}}
+
+.hero-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px}
+.hero-links a{color:var(--mut);font-size:14px;text-decoration:none;font-weight:600}
+.hero-links a:hover{color:var(--fg)}
+.fast-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:860px){.fast-wrap{grid-template-columns:1fr}}
+.fast-main{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;text-align:center}
+.fast-ring{position:relative;width:min(300px,78vw);margin:0 auto 18px}
+.fast-ring svg{width:100%;display:block;transform:rotate(-90deg)}
+.fast-ring .trk{fill:none;stroke:var(--card2);stroke-width:14}
+.fast-ring .prg{fill:none;stroke:url(#none);stroke:var(--acc);stroke-width:14;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.fast-ring .prg.done{stroke:var(--mint)}
+.fast-ring .dot{fill:var(--line2)}.fast-ring .dot.on{fill:var(--mint)}
+.fast-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.fast-c small{font-size:12.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.fast-c b{font-size:clamp(34px,9vw,46px);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fast-c span{font-size:13.5px;color:#c4c4ca;max-width:70%}
+.fast-plans{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
+.fast-plans button{padding:9px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.fast-plans button.on{background:var(--fg);color:#111;border-color:transparent}
+.fast-plans button:disabled{opacity:.45;cursor:default}
+.fctl{display:grid;gap:10px}
+.fctl .row{display:flex;gap:10px;align-items:center;justify-content:center;font-size:13.5px;color:var(--mut)}
+.fctl input{background:var(--card2);border:1px solid var(--line2);color:var(--fg);border-radius:12px;padding:9px 10px;font:inherit;font-size:15px}
+.fnote{margin-top:14px;padding:13px 15px;border-radius:16px;background:var(--card2);font-size:13.5px;color:#c4c4ca;line-height:1.5;text-align:left}
+.fnote .btn{margin-top:10px;font-size:14px;padding:12px}
+.fstages{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.fstages li{display:grid;grid-template-columns:48px 1fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 15px;opacity:.55}
+.fstages li.done{opacity:1;border-color:rgba(111,214,184,.35)}
+.fstages li.now{opacity:1;border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.fstages li i{font-style:normal;font-weight:800;font-size:15px;color:var(--mut);padding-top:2px}
+.fstages li.done i{color:var(--mint)}.fstages li.now i{color:var(--acc)}
+.fstages li b{display:block;font-size:14.5px;margin-bottom:3px}
+.fstages li p{margin:0;font-size:13px;color:#bdbdc3;line-height:1.5}
+.fstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.fstats div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+.fstats small{display:block;color:var(--mut);font-size:11.5px}.fstats b{font-size:18px}
+.fbanner{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top));transform:translate(-50%,-140%);z-index:70;width:min(440px,92vw);background:var(--card2);border:1px solid rgba(111,214,184,.45);border-radius:20px;padding:14px 16px;box-shadow:0 20px 60px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,.9,.3,1.2);display:grid;grid-template-columns:40px 1fr;gap:12px;cursor:pointer}
+.fbanner.show{transform:translate(-50%,0)}
+.fbanner .ic{width:40px;height:40px;border-radius:12px;background:rgba(111,214,184,.15);color:var(--mint);display:grid;place-items:center;font-size:20px}
+.fbanner b{display:block;font-size:15px;margin-bottom:2px}.fbanner p{margin:0;font-size:13px;color:#c4c4ca;line-height:1.45}
 .scan-note{color:var(--mut2);font-size:12.5px;line-height:1.55;margin-top:22px}
 .fcard{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;margin-bottom:22px}
 .fhead{display:flex;gap:16px;align-items:center}
@@ -445,6 +486,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
     <nav class="tabs">
       <button data-v="train" class="on">Home</button>
       <button data-v="timer">Timer</button>
+      <button data-v="fast">Fasting</button>
       <button data-v="scan">Scanner</button>
       <button data-v="library">Exercises</button>
       <button data-v="history">Progress</button>
@@ -462,6 +504,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
         <h1>Burn calories at home with the <em>WOD of the day</em>.</h1>
         <p class="lead">Pick the equipment you have, your intensity and your time. Home WOD builds the workout, shows you every exercise and keeps the time for you.</p>
         <div class="cta"><a class="btn primary" href="#builder" data-go="builder">Build your WOD</a><button class="btn" data-go="timer">Open the Timer</button></div>
+        <div class="hero-links"><a href="#" data-go="library">Exercise library →</a><a href="#" data-go="fast">Fasting timer →</a></div>
         <div class="kpis"><div><b id="exCount">70</b><span>exercises and stretches</span></div><div><b>7</b><span>timer types</span></div><div><b>20–60'</b><span>workout length</span></div></div>
       </div>
       <div class="l-visual"><div class="stage"><svg id="heroFig"></svg></div><div class="hero-cap"><b id="heroName"></b><span id="heroGr"></span></div></div>
@@ -524,6 +567,26 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
   </section>
 
 
+
+  <section id="v-fast" hidden>
+    <div class="sec-head top"><div class="eyebrow">Intermittent fasting</div><h2>Fasting timer</h2><p>Pick a plan and start. At every milestone you’ll see what’s happening in your body and get a notification.</p></div>
+    <div class="fast-wrap">
+      <div class="fast-main">
+        <div class="fast-ring"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" class="trk"/><circle cx="110" cy="110" r="96" class="prg" id="fRing"/><g id="fDots"></g></svg>
+          <div class="fast-c"><small id="fLbl">Ready to start</small><b id="fTime">00:00:00</b><span id="fSub"></span></div></div>
+        <div class="seg fast-plans" id="fPlans"></div>
+        <div id="fCtl"></div>
+        <div id="fNotif"></div>
+      </div>
+      <div class="fast-side">
+        <div class="fsub" style="margin-top:0">Stages</div>
+        <ul class="fstages" id="fStages"></ul>
+        <div id="fStats"></div>
+        <p class="scan-note">Not recommended during pregnancy or breastfeeding, with diabetes treated with insulin or glucose-lowering drugs, with a history of eating disorders, or under 18. Drink water. If you feel dizzy, unwell or have palpitations, stop the fast. For fasts longer than 24 hours, consult a doctor.</p>
+      </div>
+    </div>
+  </section>
+
   <section id="v-scan" hidden>
     <div class="sec-head top"><div class="eyebrow">Food scanner</div><h2>Scan a food</h2><p>Point at the barcode on the package. You’ll see whether it’s excellent, moderate or bad for weight loss, based on its ingredients and calories, and whether it contains ingredients considered possibly carcinogenic.</p></div>
     <div class="scan-wrap">
@@ -562,7 +625,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
   </section>
 </div>
 
-<nav class="mbar" id="mbar"><button data-v="train" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><b>Home</b></button><button data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg><b>Timer</b></button><button data-v="scan" class="mscan"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8"/></svg></span><b>Scan</b></button><button data-v="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><b>Exercises</b></button><button data-v="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><b>Progress</b></button></nav>
+<nav class="mbar" id="mbar"><button data-v="train" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><b>Home</b></button><button data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg><b>Timer</b></button><button data-v="scan" class="mscan"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8"/></svg></span><b>Scan</b></button><button data-v="fast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7v5l3 2"/><path d="M16 3h5v5"/></svg><b>Fasting</b></button><button data-v="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><b>Progress</b></button></nav>
 <footer class="foot"><div class="fin-in">
   <div><a class="logo" href="#" data-go="train">Home<span>WOD</span></a><p>CrossFit home workouts for weight loss. Free. An account is optional and keeps your progress on every device.</p></div>
   <div class="flinks"><b>Pages</b><a href="#" data-go="train">Home</a><a href="#" data-go="builder">Build WOD</a><a href="#" data-go="timer">Timer</a><a href="#" data-go="library">Exercises</a><a href="#" data-go="history">Progress</a></div>
@@ -1173,7 +1236,7 @@ $('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='
 const RECAPTCHA_KEY='6LfEXyguAAAAAHeLvpcsuDqlOHWdCY_DaGChHADY';window.RECAPTCHA_KEY=RECAPTCHA_KEY;
 const FB_CONFIG={apiKey:"AIzaSyD6X7ZmnNE1QQn_YXpHIrAH5FkBi31kPrU",authDomain:"home-wod-3fa81.firebaseapp.com",projectId:"home-wod-3fa81",storageBucket:"home-wod-3fa81.firebasestorage.app",messagingSenderId:"83347049614",appId:"1:83347049614:web:0fca3b57f0327d83e24ddf"}; /*FBCONFIG*/
 window.FB_PUB=FB_CONFIG;
-const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals'];
+const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals','hw_fast','hw_fasts'];
 const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
   init(){try{if(!FB_CONFIG||!window.firebase){this.updateUI();return}firebase.initializeApp(FB_CONFIG);this.auth=firebase.auth();this.db=firebase.firestore();this.ready=true;
     this.auth.getRedirectResult().catch(e=>{});
@@ -1185,7 +1248,7 @@ const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
       const hist=byKey(c.hist,l.hist,x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-400);
       const weights=byKey(c.weights,l.weights,x=>x.d).sort((a,b)=>a.d<b.d?-1:1);
       const favs=byKey(c.favs,l.favs,x=>x.key).sort((a,b)=>a.saved<b.saved?1:-1).slice(0,40);
-      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);LS.set('hw_meals',byKey(c.meals,l.meals,x=>x.id).sort((a,b)=>a.t<b.t?-1:1).slice(-300));LS.set('hw_food_custom',Object.assign({},c.food_custom||{},l.food_custom||{}));
+      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);{const lf=l.fast,cf=c.fast;const f=(lf&&cf)?((cf.upd||0)>(lf.upd||0)?cf:lf):(lf||cf||null);if(f)LS.set('hw_fast',f);LS.set('hw_fasts',byKey(c.fasts,l.fasts,x=>x.id).sort((a,b)=>a.start<b.start?-1:1).slice(-200))}LS.set('hw_meals',byKey(c.meals,l.meals,x=>x.id).sort((a,b)=>a.t<b.t?-1:1).slice(-300));LS.set('hw_food_custom',Object.assign({},c.food_custom||{},l.food_custom||{}));
       const prs=Object.assign({},c.prs||{});Object.entries(l.prs||{}).forEach(([k,v])=>{const o=prs[k];if(!o||(v.type==='amrap'?v.val>o.val:v.val<o.val))prs[k]=v});
       const settings=c.settings||l.settings,goals=Object.assign({},l.goals||{},c.goals||{}),profile=Object.assign({},l.profile||{},c.profile||{});
       LS.set('hw_hist',hist);LS.set('hw_weights',weights);LS.set('hw_favs',favs);LS.set('hw_prs',prs);LS.set('hw_goals',goals);LS.set('hw_profile',profile);
@@ -1301,7 +1364,7 @@ function renderProgress(){
 /* ================= TABS ================= */
 function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();renderMealDay();getDecoder().catch(()=>{});window.MealAI&&MealAI.warm()}
-  ['train','timer','library','scan','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
+  ['train','timer','library','fast','scan','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='fast')renderFast();if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();const g=a.dataset.go;
@@ -1818,6 +1881,101 @@ function renderMealDay(){
 }
 $('#mealPhoto').onchange=e=>mealPicked(e.target.files&&e.target.files[0]);
 
+
+/* ===== Fasting timer ===== */
+const FAST_PLANS=[12,14,16,18,20,24];
+const FSTAGES=[
+ {h:0,t:'Fast started',d:'Your body is still using energy from your last meal.'},
+ {h:4,t:'Blood sugar settles',d:'Digestion is well under way and insulin starts dropping toward fasting levels.'},
+ {h:8,t:'Using glycogen stores',d:'Your liver releases glucose from glycogen and your body starts shifting toward fat as well.'},
+ {h:12,t:'Fat burning increases',d:'Insulin is low and fat becomes a more important energy source. You completed 12:12.'},
+ {h:14,t:'14 hours',d:'You completed 14:10. Ketone bodies slowly start to rise.'},
+ {h:16,t:'16:8 complete',d:'The most popular form of intermittent fasting. Fat burning is elevated.'},
+ {h:18,t:'Ketones rising',d:'Many people feel less hungry from here on. Keep drinking water.'},
+ {h:20,t:'20:4',d:'Great endurance. If you feel dizzy or unwell, break the fast.'},
+ {h:24,t:'24 hours',d:'Liver glycogen is quite depleted and your body relies more on fat. Growth hormone rises. Break the fast with a light meal with protein.'},
+ {h:36,t:'36 hours',d:'Extended fast: watch your fluids and electrolytes (sodium, potassium, magnesium). Best with medical guidance.'},
+ {h:48,t:'48 hours',d:'Fasting beyond 48 hours should only be done under medical supervision.'},
+];
+const fGet=()=>LS.get('hw_fast',null);
+function fActive(){const f=fGet();return f&&f.active?f:null}
+function fmtHMS(ms){ms=Math.max(0,ms);const h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4),sec=Math.floor(ms%6e4/1e3);return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')}
+function fPlan(){const f=fGet();return (f&&f.plan)||+(LS.get('hw_fastplan',16))||16}
+function fSave(o){persist('hw_fast',Object.assign({},o,{upd:Date.now()}))}
+function localDT(d){const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,16)}
+function fStart(){const plan=fPlan();fSave({active:true,start:Date.now(),plan,notified:[0]});fAskNotif();renderFast();toast('Fast started')}
+function fEnd(){const f=fActive();if(!f)return;const end=Date.now();const hrs=(end-f.start)/36e5;
+  if(hrs>=0.25){const L=LS.get('hw_fasts',[])||[];L.push({id:f.start.toString(36),start:new Date(f.start).toISOString(),end:new Date(end).toISOString(),plan:f.plan,h:Math.round(hrs*10)/10,ok:hrs>=f.plan});persist('hw_fasts',L.slice(-200))}
+  fSave({active:false,plan:f.plan});renderFast();toast(hrs>=f.plan?`Well done! Fasted ${fmtHMS(end-f.start).slice(0,5)} hours, you hit your goal.`:`Fast stopped at ${fmtHMS(end-f.start).slice(0,5)}.`)}
+let fTimer=null;
+function renderFast(){
+  const f=fActive(),plan=fPlan();
+  $('#fPlans').innerHTML=FAST_PLANS.map(h=>`<button data-h="${h}" class="${h===plan?'on':''}">${h===24?'24 hours':h+':'+(24-h)}</button>`).join('');
+  $('#fPlans').querySelectorAll('button').forEach(b=>b.onclick=()=>{const h=+b.dataset.h;LS.set('hw_fastplan',h);const cur=fGet();if(cur&&cur.active){fSave(Object.assign({},cur,{plan:h}))}else fSave({active:false,plan:h});renderFast()});
+  if(f){
+    $('#fCtl').innerHTML=`<div class="fctl"><div class="row">Start <input type="datetime-local" id="fStartIn" value="${localDT(new Date(f.start))}"></div><button class="btn" id="fStop">End fast</button><button class="btn" id="fIcs" style="font-size:14px;padding:12px">Calendar reminders</button></div>`;
+    $('#fStop').onclick=fEnd;$('#fIcs').onclick=fIcs;
+    $('#fStartIn').onchange=e=>{const t=new Date(e.target.value).getTime();if(t&&t<=Date.now()){const cur=fActive();const el=(Date.now()-t)/36e5;fSave(Object.assign({},cur,{start:t,notified:FSTAGES.filter(x=>x.h<=el).map(x=>x.h)}));renderFast()}else toast('The start time can’t be in the future.')};
+  }else{
+    $('#fCtl').innerHTML=`<div class="fctl"><button class="btn primary" id="fGo">Start fast</button></div>`;$('#fGo').onclick=fStart;
+  }
+  fNotifUI();fStatsUI();fTick();
+  clearInterval(fTimer);fTimer=setInterval(()=>{if($('#v-fast').hidden){clearInterval(fTimer);return}fTick()},1000);
+}
+function fTick(){
+  const f=fActive(),plan=fPlan(),C=2*Math.PI*96,ring=$('#fRing');if(!ring)return;
+  ring.style.strokeDasharray=C;
+  const el=f?Date.now()-f.start:0,hrs=el/36e5,goal=plan*36e5;
+  ring.style.strokeDashoffset=C*(1-Math.min(1,el/goal));ring.classList.toggle('done',!!f&&el>=goal);
+  $('#fTime').textContent=fmtHMS(el);
+  $('#fLbl').textContent=f?(el>=goal?'Goal reached':'Fasting'):'Ready to start';
+  const cur=[...FSTAGES].reverse().find(x=>x.h<=hrs);
+  $('#fSub').textContent=f?(el<goal?`${fmtHMS(goal-el).slice(0,5)} left to reach ${plan} hours`:`+${fmtHMS(el-goal).slice(0,5)} past your goal`):`Goal: ${plan} hours`;
+  $('#fDots').innerHTML=FSTAGES.filter(x=>x.h>0&&x.h<=plan).map(x=>{const a=x.h/plan*2*Math.PI;return `<circle class="dot ${f&&hrs>=x.h?'on':''}" cx="${110+96*Math.cos(a)}" cy="${110+96*Math.sin(a)}" r="5"/>`}).join('');
+  const show=FSTAGES.filter(x=>x.h<=Math.max(plan,24)||(f&&hrs>=x.h-12));
+  const html=show.map(x=>{const st=!f?'':hrs>=x.h?(cur===x?'now':'done'):'';return `<li class="${st}"><i>${x.h}h</i><div><b>${x.t}</b><p>${x.d}</p></div></li>`}).join('');
+  if($('#fStages').dataset.h!==html){$('#fStages').innerHTML=html;$('#fStages').dataset.h=html}
+}
+function fStatsUI(){const L=LS.get('hw_fasts',[])||[];const el=$('#fStats');if(!L.length){el.innerHTML='';return}
+  const last=L.slice(-7);const avg=last.reduce((a,x)=>a+x.h,0)/last.length;const best=Math.max(...L.map(x=>x.h));const ok=last.filter(x=>x.ok).length;
+  el.innerHTML=`<div class="fstats"><div><small>Average (7)</small><b>${fmtN(avg)} h</b></div><div><small>Goal reached</small><b>${ok}/${last.length}</b></div><div><small>Longest</small><b>${fmtN(best)} h</b></div></div>`}
+/* notifications */
+function fNotifSupported(){return 'Notification' in window&&'serviceWorker' in navigator}
+function fNotifUI(){const el=$('#fNotif');if(!el)return;
+  if(!fNotifSupported()){el.innerHTML=`<div class="fnote">For notifications on iPhone, first add Home WOD to your Home Screen (Share → “Add to Home Screen”) and open it from there. For notifications while the app is closed, tap “Calendar reminders”.</div>`;return}
+  if(Notification.permission==='default'){el.innerHTML=`<div class="fnote">Want a notification at every milestone?<button class="btn primary" id="fNotifBtn">Turn on notifications</button></div>`;$('#fNotifBtn').onclick=()=>fAskNotif(true);return}
+  if(Notification.permission==='denied'){el.innerHTML=`<div class="fnote">Notifications are off. Turn them on in your phone’s Settings → Notifications → Home WOD.</div>`;return}
+  el.innerHTML=fActive()?`<div class="fnote">Notifications are on while the app is open or in the background. To get them even when it’s fully closed, tap “Calendar reminders”.</div>`:'';
+}
+async function fAskNotif(explicit){if(!fNotifSupported())return;try{if(Notification.permission==='default'){const r=await Notification.requestPermission();if(r==='granted')fShowNotif('Notifications turned on','I’ll tell you every milestone of your fast.')}}catch(e){}fNotifUI()}
+async function fShowNotif(title,body){
+  fBanner(title,body);
+  try{if(fNotifSupported()&&Notification.permission==='granted'){const r=await navigator.serviceWorker.ready;await r.showNotification(title,{body,icon:'icon-192.png',badge:'icon-192.png',tag:'homewod-fast-'+title,renotify:true})}}catch(e){}
+}
+function fBanner(title,body){let b=$('#fBanner');if(!b){b=document.createElement('div');b.id='fBanner';b.className='fbanner';document.body.appendChild(b);b.onclick=()=>{b.classList.remove('show');showView('fast')}}
+  b.innerHTML=`<div class="ic">✓</div><div><b>${escH(title)}</b><p>${escH(body)}</p></div>`;requestAnimationFrame(()=>b.classList.add('show'));clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('show'),9000)}
+function fCheckMilestones(){const f=fActive();if(!f)return;const hrs=(Date.now()-f.start)/36e5;const done=new Set(f.notified||[]);let changed=false;
+  const due=FSTAGES.filter(x=>x.h>0&&x.h<=hrs&&!done.has(x.h));
+  if(due.length){const x=due[due.length-1];fShowNotif(`${x.h} hours fasted: ${x.t}`,x.d);due.forEach(d=>done.add(d.h));changed=true}
+  if(hrs>=f.plan&&!done.has('goal')){done.add('goal');changed=true;setTimeout(()=>fShowNotif(`You reached your ${f.plan}-hour goal!`,'You can break your fast with a meal with protein and vegetables.'),due.length?2500:0)}
+  if(changed){const cur=fGet();fSave(Object.assign({},cur,{notified:[...done]}))}}
+setInterval(fCheckMilestones,20000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(fCheckMilestones,800)});
+window.addEventListener('load',()=>setTimeout(fCheckMilestones,2500));
+/* calendar reminders (.ics) for when the app is closed */
+function fIcs(){const f=fActive();if(!f)return;const now=Date.now();
+  const pad=n=>String(n).padStart(2,'0');const ut=t=>{const d=new Date(t);return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+pad(d.getUTCSeconds())+'Z'};
+  const esc=t=>String(t).replace(/\\/g,'\\\\').replace(/[,;]/g,m=>'\\'+m).replace(/\n/g,'\\n');
+  const items=FSTAGES.filter(x=>x.h>0&&x.h<=Math.max(f.plan,x.h<=24?24:0)).map(x=>({t:f.start+x.h*36e5,title:`${x.h} hours fasted: ${x.t}`,body:x.d}));
+  if(!items.some(i=>i.t===f.start+f.plan*36e5))items.push({t:f.start+f.plan*36e5,title:`${f.plan}-hour goal!`,body:'You can break your fast.'});
+  const fut=items.filter(i=>i.t>now).sort((a,b)=>a.t-b.t);
+  if(!fut.length){toast('No upcoming milestones.');return}
+  let ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Home WOD//Fasting//EL\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\n';
+  fut.forEach((i,k)=>{ics+=`BEGIN:VEVENT\r\nUID:homewod-fast-${f.start}-${k}@homewod.site\r\nDTSTAMP:${ut(now)}\r\nDTSTART:${ut(i.t)}\r\nDTEND:${ut(i.t+5*6e4)}\r\nSUMMARY:${esc(i.title)}\r\nDESCRIPTION:${esc(i.body)}\r\nTRANSP:TRANSPARENT\r\nBEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:${esc(i.title)}\r\nTRIGGER:PT0S\r\nEND:VALARM\r\nEND:VEVENT\r\n`});
+  ics+='END:VCALENDAR\r\n';
+  const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='homewod-nisteia.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},4000);
+  toast('Tap “Add All” to put the reminders in your calendar.')}
+
 $('#scanStart').onclick=startScan;
 $('#scanStop').onclick=stopScan;
 $('#scanPhoto').onchange=e=>scanPhoto(e.target.files&&e.target.files[0]);
@@ -1832,7 +1990,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='13';
+const APP_VER='14';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
