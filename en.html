@@ -414,6 +414,13 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .fctl input{background:var(--card2);border:1px solid var(--line2);color:var(--fg);border-radius:12px;padding:9px 10px;font:inherit;font-size:15px}
 .fnote{margin-top:14px;padding:13px 15px;border-radius:16px;background:var(--card2);font-size:13.5px;color:#c4c4ca;line-height:1.5;text-align:left}
 .fnote .btn{margin-top:10px;font-size:14px;padding:12px}
+.fpick{background:var(--card2);border-radius:18px;padding:14px;text-align:left}
+.fpick-l{font-weight:700;font-size:15px;margin-bottom:10px}
+.fago{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.fago button{padding:8px 12px;border-radius:99px;border:1px solid var(--line2);background:var(--card);color:var(--fg);font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+.fago button.on{background:var(--acc);color:var(--ink);border-color:transparent}
+.fpick .row{justify-content:flex-start!important;flex-wrap:wrap}
+.fpick-s{margin:10px 0 0;font-size:13.5px;color:#c4c4ca}
 .fstages{list-style:none;padding:0;margin:0;display:grid;gap:8px}
 .fstages li{display:grid;grid-template-columns:48px 1fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px 15px;opacity:.55}
 .fstages li.done{opacity:1;border-color:rgba(111,214,184,.35)}
@@ -1916,7 +1923,17 @@ function fmtHMS(ms){ms=Math.max(0,ms);const h=Math.floor(ms/36e5),m=Math.floor(m
 function fPlan(){const f=fGet();return (f&&f.plan)||+(LS.get('hw_fastplan',16))||16}
 function fSave(o){persist('hw_fast',Object.assign({},o,{upd:Date.now()}))}
 function localDT(d){const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,16)}
-function fStart(){const plan=fPlan();fSave({active:true,start:Date.now(),plan,notified:[0]});fAskNotif();renderFast();toast('Fast started')}
+let fPickT=null;
+function fStart(){const plan=fPlan();let t=fPickT||Date.now();if(t>Date.now())t=Date.now();const el=(Date.now()-t)/36e5;
+  const passed=FSTAGES.filter(x=>x.h<=el).map(x=>x.h);if(el>=plan)passed.push('goal');
+  fSave({active:true,start:t,plan,notified:passed});fPickT=null;fAskNotif();renderFast();
+  const cur=[...FSTAGES].reverse().find(x=>x.h<=el);
+  toast(el>=1/60?`Fast counting from ${new Date(t).toTimeString().slice(0,5)} · already ${fmtHMS(Date.now()-t).slice(0,5)} hours`:'Fast started');
+  if(cur&&cur.h>0)setTimeout(()=>fBanner(`${cur.h} hours fasted: ${cur.t}`,cur.d),1200)}
+function fPickUI(){const now=Date.now();const t=fPickT||now;const ago=(now-t)/36e5;
+  return `<div class="fpick"><div class="fpick-l">When did you start?</div><div class="fago">${[0,1,2,3,4,6].map(h=>`<button data-ago="${h}" class="${Math.abs(ago-h)<0.02?'on':''}">${h?`${h} h ago`:'Now'}</button>`).join('')}</div>
+  <div class="row">or exact time <input type="datetime-local" id="fStartPick" value="${localDT(new Date(t))}" max="${localDT(new Date(now))}"></div>
+  <p class="fpick-s" id="fPickS">${ago>=1/60?`Will count from <b>${new Date(t).toTimeString().slice(0,5)}</b>${new Date(t).toDateString()!==new Date(now).toDateString()?' (yesterday)':''}, so already <b>${fmtHMS(now-t).slice(0,5)}</b> hours of fasting.`:'Will count from now.'}</p></div>`}
 function fEnd(){const f=fActive();if(!f)return;const end=Date.now();const hrs=(end-f.start)/36e5;
   if(hrs>=0.25){const L=LS.get('hw_fasts',[])||[];L.push({id:f.start.toString(36),start:new Date(f.start).toISOString(),end:new Date(end).toISOString(),plan:f.plan,h:Math.round(hrs*10)/10,ok:hrs>=f.plan});persist('hw_fasts',L.slice(-200))}
   fSave({active:false,plan:f.plan});renderFast();toast(hrs>=f.plan?`Well done! Fasted ${fmtHMS(end-f.start).slice(0,5)} hours, you hit your goal.`:`Fast stopped at ${fmtHMS(end-f.start).slice(0,5)}.`)}
@@ -1930,7 +1947,9 @@ function renderFast(){
     $('#fStop').onclick=fEnd;$('#fIcs').onclick=fIcs;
     $('#fStartIn').onchange=e=>{const t=new Date(e.target.value).getTime();if(t&&t<=Date.now()){const cur=fActive();const el=(Date.now()-t)/36e5;fSave(Object.assign({},cur,{start:t,notified:FSTAGES.filter(x=>x.h<=el).map(x=>x.h)}));renderFast()}else toast('The start time can’t be in the future.')};
   }else{
-    $('#fCtl').innerHTML=`<div class="fctl"><button class="btn primary" id="fGo">Start fast</button></div>`;$('#fGo').onclick=fStart;
+    $('#fCtl').innerHTML=`<div class="fctl">${fPickUI()}<button class="btn primary" id="fGo">Start fast</button></div>`;$('#fGo').onclick=fStart;
+    $('#fCtl').querySelectorAll('[data-ago]').forEach(b=>b.onclick=()=>{const h=+b.dataset.ago;fPickT=h?Date.now()-h*36e5:null;renderFast()});
+    $('#fStartPick').onchange=e=>{const t=new Date(e.target.value).getTime();if(!t)return;if(t>Date.now()){toast('The start time can’t be in the future.');fPickT=null}else if(Date.now()-t>72*36e5){toast('Pick a time within the last 72 hours.');fPickT=null}else fPickT=t;renderFast()};
   }
   fNotifUI();fStatsUI();fTick();
   clearInterval(fTimer);fTimer=setInterval(()=>{if($('#v-fast').hidden){clearInterval(fTimer);return}fTick()},1000);
@@ -1938,7 +1957,7 @@ function renderFast(){
 function fTick(){
   const f=fActive(),plan=fPlan(),C=2*Math.PI*96,ring=$('#fRing');if(!ring)return;
   ring.style.strokeDasharray=C;
-  const el=f?Date.now()-f.start:0,hrs=el/36e5,goal=plan*36e5;
+  const el=f?Date.now()-f.start:(fPickT?Date.now()-fPickT:0),hrs=el/36e5,goal=plan*36e5;
   ring.style.strokeDashoffset=C*(1-Math.min(1,el/goal));ring.classList.toggle('done',!!f&&el>=goal);
   $('#fTime').textContent=fmtHMS(el);
   $('#fLbl').textContent=f?(el>=goal?'Goal reached':'Fasting'):'Ready to start';
@@ -2003,7 +2022,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='15';
+const APP_VER='16';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
