@@ -355,6 +355,40 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .fedit .btn{margin-top:12px}
 .ingr{font-size:13.5px;color:#c4c4ca;line-height:1.6;margin:0}
 .adds span b{font-weight:600;color:#9a9aa1;margin-left:4px}
+.meal-cta{display:grid;grid-template-columns:auto 1fr;gap:14px 16px;align-items:center;background:linear-gradient(135deg,rgba(255,138,91,.13),rgba(255,107,129,.08));border:1px solid rgba(255,138,91,.28);border-radius:26px;padding:20px;margin-bottom:18px}
+.meal-ico{width:54px;height:54px;border-radius:18px;background:var(--accSoft);color:var(--acc);display:grid;place-items:center}
+.meal-ico svg{width:30px;height:30px}
+.meal-txt b{display:block;font-size:18px;margin-bottom:3px}
+.meal-txt span{font-size:13.5px;color:#c4c4ca;line-height:1.45}
+.meal-btn{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+.meal-btn svg{width:22px;height:22px}
+.meal-prev{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:start}
+.meal-prev img{width:96px;height:96px;object-fit:cover;border-radius:16px}
+.meal-prev textarea{width:100%;min-height:70px;background:var(--card2);border:1px solid var(--line2);color:var(--fg);border-radius:14px;padding:11px 12px;font:inherit;font-size:16px;resize:vertical}
+.meal-prev small{display:block;color:var(--mut);font-size:12px;margin-bottom:6px}
+.mitems{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.mitems li{display:grid;grid-template-columns:1fr auto;gap:4px 10px;background:var(--card2);border-radius:14px;padding:11px 13px;align-items:center}
+.mitems li b{font-size:14.5px}
+.mitems li small{grid-column:1/-1;color:var(--mut);font-size:12px}
+.mitems li .g{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mut)}
+.mitems li input{width:68px;background:var(--bg);border:1px solid var(--line2);color:var(--fg);border-radius:10px;padding:7px 8px;font:inherit;font-size:16px;text-align:right}
+.mtot{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.mtot div{background:var(--card2);border-radius:14px;padding:11px 10px;text-align:center}
+.mtot small{display:block;color:var(--mut);font-size:11.5px;margin-bottom:2px}
+.mtot b{font-size:18px}
+.mtot .k{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink)}
+.mtot .k small{color:rgba(28,15,10,.7)}
+.mrow{display:flex;gap:10px;margin-top:16px}
+.mrow .btn{font-size:15px;padding:14px}
+.mday{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:18px}
+.mday .bar{height:10px;border-radius:99px;background:var(--card2);overflow:hidden;margin:10px 0 6px}
+.mday .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--mint),var(--acc));border-radius:99px}
+.mday .bar i.over{background:linear-gradient(90deg,var(--acc),#ff6b6b)}
+.mday ul{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.mday li{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;color:#cfcfd4}
+.mday li button{background:none;border:0;color:var(--mut2);font-size:16px;cursor:pointer;padding:0 0 0 8px}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid var(--line2);border-top-color:var(--acc);border-radius:50%;animation:sp 0.8s linear infinite;vertical-align:-4px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
 .scan-note{color:var(--mut2);font-size:12.5px;line-height:1.55;margin-top:22px}
 .fcard{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;margin-bottom:22px}
 .fhead{display:flex;gap:16px;align-items:center}
@@ -493,6 +527,14 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
   <section id="v-scan" hidden>
     <div class="sec-head top"><div class="eyebrow">Food scanner</div><h2>Scan a food</h2><p>Point at the barcode on the package. You’ll see whether it’s excellent, moderate or bad for weight loss, based on its ingredients and calories, and whether it contains ingredients considered possibly carcinogenic.</p></div>
     <div class="scan-wrap">
+      <div class="meal-cta">
+        <div class="meal-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><path d="M2 4v6M2 7h0M22 4v16"/></svg></div>
+        <div class="meal-txt"><b>Photograph your plate</b><span>AI recognises the food and estimates calories, protein, carbs and fat.</span></div>
+        <label class="btn primary meal-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Plate photo</span><input type="file" accept="image/*" capture="environment" id="mealPhoto" hidden></label>
+      </div>
+      <div id="mealOut"></div>
+      <div id="mealDay"></div>
+      <div class="fsub" style="margin-top:28px">Package barcode</div>
       <div class="scan-cam" id="scanCam"><div id="scanReader"></div>
         <div class="scan-ph" id="scanPh"><div class="scan-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8"/></svg></div><button class="btn primary" id="scanStart">Scan with camera</button><label class="btn scan-photo">Photograph the barcode<input type="file" accept="image/*" capture="environment" id="scanPhoto" hidden></label><small>If live scanning doesn’t catch it, take a photo close to the barcode, in good light.</small></div>
         <button class="scan-stop" id="scanStop" hidden>✕</button>
@@ -1128,8 +1170,10 @@ $('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='
 
 
 /* ================= CLOUD / AUTH ================= */
+const RECAPTCHA_KEY='6LfEXyguAAAAAHeLvpcsuDqlOHWdCY_DaGChHADY';window.RECAPTCHA_KEY=RECAPTCHA_KEY;
 const FB_CONFIG={apiKey:"AIzaSyD6X7ZmnNE1QQn_YXpHIrAH5FkBi31kPrU",authDomain:"home-wod-3fa81.firebaseapp.com",projectId:"home-wod-3fa81",storageBucket:"home-wod-3fa81.firebasestorage.app",messagingSenderId:"83347049614",appId:"1:83347049614:web:0fca3b57f0327d83e24ddf"}; /*FBCONFIG*/
-const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom'];
+window.FB_PUB=FB_CONFIG;
+const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals'];
 const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
   init(){try{if(!FB_CONFIG||!window.firebase){this.updateUI();return}firebase.initializeApp(FB_CONFIG);this.auth=firebase.auth();this.db=firebase.firestore();this.ready=true;
     this.auth.getRedirectResult().catch(e=>{});
@@ -1141,7 +1185,7 @@ const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
       const hist=byKey(c.hist,l.hist,x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-400);
       const weights=byKey(c.weights,l.weights,x=>x.d).sort((a,b)=>a.d<b.d?-1:1);
       const favs=byKey(c.favs,l.favs,x=>x.key).sort((a,b)=>a.saved<b.saved?1:-1).slice(0,40);
-      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);LS.set('hw_food_custom',Object.assign({},c.food_custom||{},l.food_custom||{}));
+      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);LS.set('hw_meals',byKey(c.meals,l.meals,x=>x.id).sort((a,b)=>a.t<b.t?-1:1).slice(-300));LS.set('hw_food_custom',Object.assign({},c.food_custom||{},l.food_custom||{}));
       const prs=Object.assign({},c.prs||{});Object.entries(l.prs||{}).forEach(([k,v])=>{const o=prs[k];if(!o||(v.type==='amrap'?v.val>o.val:v.val<o.val))prs[k]=v});
       const settings=c.settings||l.settings,goals=Object.assign({},l.goals||{},c.goals||{}),profile=Object.assign({},l.profile||{},c.profile||{});
       LS.set('hw_hist',hist);LS.set('hw_weights',weights);LS.set('hw_favs',favs);LS.set('hw_prs',prs);LS.set('hw_goals',goals);LS.set('hw_profile',profile);
@@ -1256,7 +1300,7 @@ function renderProgress(){
 
 /* ================= TABS ================= */
 function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
-  if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();getDecoder().catch(()=>{})}
+  if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();renderMealDay();getDecoder().catch(()=>{});window.MealAI&&MealAI.warm()}
   ['train','timer','library','scan','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
@@ -1700,6 +1744,78 @@ function renderScanRecent(){
   el.innerHTML=L.length?`<div class="fsub">Recent scans</div><ul class="srec">${L.slice(0,12).map(x=>`<li data-code="${escH(x.code)}"><i class="dot" style="background:${VCOL[x.v]||VCOL.unk}"></i><div>${escH(x.name)}${x.brand?` <small>· ${escH(x.brand)}</small>`:''}</div><small>${VLBL[x.v]?VLBL[x.v][0]:''}</small></li>`).join('')}</ul>`:'';
   el.querySelectorAll('[data-code]').forEach(li=>li.onclick=()=>{$('#scanCode').value=li.dataset.code;lookupFood(li.dataset.code)});
 }
+
+/* ===== Meal photo (AI) ===== */
+let MEAL=null;
+function mealPrompt(note){
+  return `You are a dietitian. The photo shows a meal. Identify every visible food or drink and estimate the amount in grams (use the plate, cutlery and packaging for scale; a typical dinner plate is about 26 cm across). For each item give calories, protein, carbohydrates and fat for that amount. Include the oil or butter the dish usually contains (e.g. olive oil in Mediterranean cooking), as a separate item if significant. ${note?`The user notes: “${note}”. Take it into account.`:''}
+Reply ONLY with JSON in this format:
+{"is_food":true,"dish":"short meal name","items":[{"name":"name in English","grams":0,"kcal":0,"protein":0,"carbs":0,"fat":0}],"confidence":"low|medium|high","tip":"1 short sentence in English on how it fits weight loss"}
+If the photo does not show food, set "is_food":false and an empty items list.`;
+}
+function imgToB64(file,max=1024){return new Promise((res,rej)=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);const d=c.toDataURL('image/jpeg',.85);res({b64:d.split(',')[1],url:d})};img.onerror=rej;img.src=url})}
+async function mealPicked(file){
+  if(!file)return;stopScan();
+  let im;try{im=await imgToB64(file)}catch(e){toast('Couldn’t open the photo.');return}
+  MEAL={img:im,note:''};
+  $('#mealOut').innerHTML=`<div class="fcard"><div class="meal-prev"><img src="${im.url}" alt=""><div><small>Something not visible? (optional)</small><textarea id="mealNote" placeholder="e.g. with 1 tbsp olive oil, half portion, no sugar"></textarea></div></div><button class="btn primary mt" id="mealGo" style="margin-top:14px">Calculate calories</button></div>`;
+  $('#mealGo').onclick=()=>mealRun();
+  $('#mealOut').scrollIntoView({behavior:'smooth',block:'start'});
+  const i=$('#mealPhoto');if(i)i.value='';
+}
+async function mealRun(){
+  if(!MEAL)return;MEAL.note=($('#mealNote')?.value||'').trim().slice(0,200);
+  const box=$('#mealOut');box.innerHTML=`<div class="fcard"><div class="meal-prev"><img src="${MEAL.img.url}" alt=""><p style="margin:0;color:var(--mut);align-self:center"><i class="spin"></i>Analysing the plate…</p></div></div>`;
+  try{
+    if(!window.MealAI)throw new Error('ai-not-loaded');
+    const txt=await MealAI.analyze(MEAL.img.b64,'image/jpeg',mealPrompt(MEAL.note));
+    const j=JSON.parse(String(txt).replace(/^```(json)?|```$/g,'').trim());
+    if(!j.is_food||!Array.isArray(j.items)||!j.items.length){box.innerHTML=`<div class="fcard"><p style="margin:0;line-height:1.55">I didn’t recognise food in the photo. Try again with the whole plate in frame and good light.</p></div>`;return}
+    MEAL.res={dish:String(j.dish||'Meal').slice(0,60),conf:j.confidence,tip:String(j.tip||'').slice(0,240),items:j.items.slice(0,12).map(x=>{const g=Math.max(1,+x.grams||0);return{name:String(x.name||'').slice(0,50),g0:g,g,k:(+x.kcal||0)/g,p:(+x.protein||0)/g,c:(+x.carbs||0)/g,f:(+x.fat||0)/g}})};
+    renderMeal();
+  }catch(e){console.warn(e);const m=String(e&&e.message||e);
+    box.innerHTML=`<div class="fcard"><p style="margin:0;line-height:1.55">${/429|quota|exhausted/i.test(m)?'You’ve reached the free analysis limit for now. Try again shortly.':/App ?Check|appCheck|401|403/i.test(m)?'The AI service couldn’t verify the page. Open the app from homewod.site and try again.':'The analysis didn’t finish. Check your internet connection and try again.'}</p><button class="btn mt" id="mealRetry" style="margin-top:12px">Retry</button></div>`;
+    $('#mealRetry').onclick=()=>mealRun()}
+}
+function mealTotals(){const t={k:0,p:0,c:0,f:0};MEAL.res.items.forEach(x=>{t.k+=x.k*x.g;t.p+=x.p*x.g;t.c+=x.c*x.g;t.f+=x.f*x.g});return t}
+function dailyTarget(){try{const prof=LS.get('hw_profile',{})||{};const W=LS.get('hw_weights',[])||[];const kg=W.length?W[W.length-1].kg:(parseFloat(ST.bw)||null);
+  if(!kg||!prof.age||!prof.height)return null;const bmr=10*kg+6.25*(+prof.height)-5*(+prof.age)+(prof.sex==='f'?-161:5);let k=bmr*(+prof.act||1.375)-(+prof.pace||0);return Math.round(Math.max(prof.sex==='f'?1200:1500,k))}catch(e){return null}}
+function mealVerdict(t){
+  const pk=t.k?t.p*4/t.k:0;const why=[];let s=0;
+  if(t.k>900){s-=1.5;why.push(['n','Too many calories for one meal'])}else if(t.k>700){s-=.75;why.push(['n','Quite a large meal'])}else if(t.k<=550){s+=.5;why.push(['p','Reasonable calories for a meal'])}
+  if(t.p>=30||pk>=.25){s+=1;why.push(['p','Good protein, filling'])}else if(t.p<15&&t.k>300){s-=.75;why.push(['n','Low protein'])}
+  if(t.k&&t.f*9/t.k>.45){s-=.75;why.push(['n','High fat'])}
+  return {v:s>=1?'good':s>=-.75?'mid':'bad',why};
+}
+function renderMeal(){
+  const R=MEAL.res,t=mealTotals(),V=mealVerdict(t),tgt=dailyTarget();const [vt]=VLBL[V.v];
+  $('#mealOut').innerHTML=`<div class="fcard">
+    <div class="fhead"><img src="${MEAL.img.url}" alt="" style="object-fit:cover"><div><h3>${escH(R.dish)}</h3><p>AI estimate${R.conf?` · confidence: ${{low:'low',medium:'medium',high:'high'}[R.conf]||escH(R.conf)}`:''}</p></div></div>
+    <div class="mtot"><div class="k"><small>Calories</small><b>${Math.round(t.k)}</b></div><div><small>Protein</small><b>${Math.round(t.p)} g</b></div><div><small>Carbs</small><b>${Math.round(t.c)} g</b></div><div><small>Fat</small><b>${Math.round(t.f)} g</b></div></div>
+    <div class="verdict ${VCLS[V.v]}"><i class="dot"></i><div><b>${vt}</b><br><span>${tgt?`About ${Math.round(t.k/tgt*100)}% of your daily target (${tgt} kcal).`:'Add age, height and weight in “Progress” to also see the share of your daily target.'}</span></div></div>
+    <ul class="why">${V.why.map(([k,x])=>`<li class="${k}">${x}</li>`).join('')}</ul>
+    ${R.tip?`<p class="ingr" style="margin-top:12px">${escH(R.tip)}</p>`:''}
+    <div class="fsub">What I recognised · correct the grams if needed</div>
+    <ul class="mitems">${R.items.map((x,i)=>`<li><b>${escH(x.name)}</b><span class="g"><input inputmode="numeric" data-i="${i}" value="${Math.round(x.g)}"> g</span><small>${Math.round(x.k*x.g)} kcal · P ${Math.round(x.p*x.g)} · C ${Math.round(x.c*x.g)} · F ${Math.round(x.f*x.g)} g</small></li>`).join('')}</ul>
+    <div class="mrow"><button class="btn primary" id="mealSave">＋ Add to today’s log</button><button class="btn" id="mealNew" style="flex:0 0 auto;width:auto">New</button></div>
+    <p class="scan-note" style="margin-top:14px">Photo estimate: usually 20 to 30% off reality, mostly because of oil and sauce you can’t see.</p>
+  </div>`;
+  $('#mealOut').querySelectorAll('.mitems input').forEach(inp=>inp.onchange=()=>{const v=parseFloat(String(inp.value).replace(',','.'));if(v>=0&&v<5000){MEAL.res.items[+inp.dataset.i].g=v;renderMeal()}});
+  $('#mealSave').onclick=()=>{const t=mealTotals();const L=LS.get('hw_meals',[])||[];L.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:new Date().toISOString(),d:todayISO(),name:R.dish,k:Math.round(t.k),p:Math.round(t.p),c:Math.round(t.c),f:Math.round(t.f)});persist('hw_meals',L.slice(-300));toast('Added to today’s log');$('#mealOut').innerHTML='';MEAL=null;renderMealDay();$('#mealDay').scrollIntoView({behavior:'smooth',block:'center'})};
+  $('#mealNew').onclick=()=>{$('#mealOut').innerHTML='';MEAL=null};
+  $('#mealOut').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderMealDay(){
+  const el=$('#mealDay');if(!el)return;const d=todayISO();const L=(LS.get('hw_meals',[])||[]).filter(x=>x.d===d);
+  if(!L.length){el.innerHTML='';return}
+  const t=L.reduce((a,x)=>({k:a.k+x.k,p:a.p+x.p}),{k:0,p:0});const tgt=dailyTarget();const pct=tgt?Math.min(100,t.k/tgt*100):0;
+  el.innerHTML=`<div class="mday"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>Today</b><span style="font-size:14px"><b>${t.k}</b>${tgt?` / ${tgt}`:''} kcal · ${t.p} g protein</span></div>
+  ${tgt?`<div class="bar"><i class="${t.k>tgt?'over':''}" style="width:${pct}%"></i></div><small style="color:var(--mut)">${t.k>tgt?`Over target by ${t.k-tgt} kcal`:`${tgt-t.k} kcal left`}</small>`:''}
+  <ul>${L.map(x=>`<li><span>${new Date(x.t).toTimeString().slice(0,5)} · ${escH(x.name)}</span><span>${x.k} kcal<button data-del="${x.id}" title="Delete">×</button></span></li>`).join('')}</ul></div>`;
+  el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{persist('hw_meals',(LS.get('hw_meals',[])||[]).filter(x=>x.id!==b.dataset.del));renderMealDay()});
+}
+$('#mealPhoto').onchange=e=>mealPicked(e.target.files&&e.target.files[0]);
+
 $('#scanStart').onclick=startScan;
 $('#scanStop').onclick=stopScan;
 $('#scanPhoto').onchange=e=>scanPhoto(e.target.files&&e.target.files[0]);
@@ -1714,7 +1830,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='10';
+const APP_VER='11';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
@@ -1722,6 +1838,36 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdat
 window.addEventListener('pageshow',e=>{if(e.persisted)checkUpdate()});
 if('serviceWorker' in navigator&&location.protocol==='https:'){let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(rl)return;rl=true;location.reload()});
   navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})}
+</script>
+<script type="module">
+const B='https://www.gstatic.com/firebasejs/13.4.0/';
+let modelP=null;
+async function getModel(){
+  if(modelP)return modelP;
+  modelP=(async()=>{
+    const [{initializeApp},AC,AI]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-app-check.js'),import(B+'firebase-ai.js')]);
+    const app=initializeApp(window.FB_PUB,'homewod-ai');
+    AC.initializeAppCheck(app,{provider:new AC.ReCaptchaEnterpriseProvider(window.RECAPTCHA_KEY),isTokenAutoRefreshEnabled:true});
+    const ai=AI.getAI(app,{backend:new AI.GoogleAIBackend()});
+    return {AI,ai};
+  })();
+  modelP.catch(()=>{modelP=null});
+  return modelP;
+}
+const MODELS=[['gemini-4-hydrogen',45000],['gemini-3.5-flash-lite',30000]];
+window.MealAI={
+  warm(){getModel().catch(()=>{})},
+  async analyze(b64,mime,prompt){
+    const {AI,ai}=await getModel();let last;
+    for(const [m,ms] of MODELS){
+      const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),ms);
+      try{const model=AI.getGenerativeModel(ai,{model:m,generationConfig:{responseMimeType:'application/json',temperature:0.2}});
+        const r=await model.generateContent([prompt,{inlineData:{data:b64,mimeType:mime}}],{signal:ctl.signal});clearTimeout(tm);return r.response.text()}
+      catch(e){clearTimeout(tm);last=e;if(!/404|not found|not supported|unsupported|429|quota|exhausted|50[0-9]|unavailable|abort|overloaded|fetch/i.test(String(e.message||e)))break}
+    }
+    throw last;
+  }
+};
 </script>
 </body>
 </html>
