@@ -10,6 +10,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Home WOD">
 <link rel="manifest" href="manifest.webmanifest">
+<script defer src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-auth-compat.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-firestore-compat.js"></script>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +54,51 @@ section[hidden]{display:none}
 .hero-cap{position:absolute;left:20px;top:20px;background:rgba(14,14,16,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line2);border-radius:16px;padding:10px 16px}
 .hero-cap b{display:block;font-size:16px}.hero-cap span{font-size:12.5px;color:var(--mut)}
 .features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:24px 0 10px}
+.acct{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:99px;border:1px solid var(--line2);font-size:14px;font-weight:600;color:var(--fg);white-space:nowrap;max-width:200px}
+.acct .av{width:28px;height:28px;border-radius:50%;background:var(--card2);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.acct.on .av{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink)}
+.acct span:last-child{overflow:hidden;text-overflow:ellipsis}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-top:20px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px}
+.pcard.wide{grid-column:1/-1}
+.pcard h4{margin:0 0 4px;font-size:19px;font-weight:800;letter-spacing:-.03em}
+.pcard .sub{color:var(--mut);font-size:13.5px;margin:0 0 14px;line-height:1.5}
+.frow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:10px}
+.frow label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:var(--mut);flex:1;min-width:110px}
+.frow .inp,.frow select{width:100%}
+select.inp{appearance:none;-webkit-appearance:none;background:var(--card2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b8b92' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:32px}
+.pcard .inp{background:var(--card2)}
+.btn.sm{width:auto;padding:12px 18px;font-size:14px;border-radius:14px}
+.big-n{font-size:44px;font-weight:900;letter-spacing:-.05em;line-height:1}
+.big-n small{font-size:15px;font-weight:600;color:var(--mut);letter-spacing:0}
+.wbar{height:10px;border-radius:99px;background:var(--card2);overflow:hidden;margin:12px 0 8px}
+.wbar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:99px}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.kv div{background:var(--card2);border-radius:16px;padding:12px}
+.kv b{display:block;font-size:22px;font-weight:900;letter-spacing:-.04em}
+.kv small{font-size:11.5px;color:var(--mut)}
+.mini-list{list-style:none;padding:0;margin:12px 0 0;max-height:220px;overflow:auto}
+.mini-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mini-list li span{color:var(--mut);font-size:12.5px}
+.xbtn{color:var(--mut);font-size:18px;padding:0 6px}
+.xbtn:hover{color:var(--acc)}
+.wchart{width:100%;height:auto;display:block;margin-top:10px}
+.lockcard{text-align:center;padding:30px 20px}
+.auth-tabs{display:flex;gap:4px;padding:4px;background:var(--card2);border-radius:14px;margin:14px 0}
+.auth-tabs button{flex:1;padding:10px;border-radius:11px;font-weight:600;font-size:14px;color:var(--mut)}
+.auth-tabs button.on{background:var(--fg);color:#111}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:16px;background:#fff;color:#1f1f1f;font-weight:700;font-size:15px}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:12px;margin:14px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line2)}
+.aform{display:grid;gap:10px}
+.aform .inp{width:100%;background:var(--card2)}
+.aerr{color:#ff9a8a;font-size:13px;min-height:18px}
+.aok{color:var(--mint);font-size:13px}
+.linkbtn{color:var(--acc);font-size:13px;font-weight:600;text-align:left;padding:0}
+.privacy{font-size:12px;color:var(--mut);line-height:1.5;margin-top:14px}
+.favbtn{background:rgba(28,15,10,.12);border-radius:99px;padding:6px 12px;font-size:12.5px;font-weight:700;color:var(--ink);margin-top:10px}
+.prnote{background:var(--accSoft);border:1px solid rgba(255,138,91,.4);color:var(--acc);border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:700;font-size:14px}
+@media (max-width:640px){.acct span:last-child{display:none}.acct{padding:4px}.pgrid{grid-template-columns:1fr}}
 .mchips{display:flex;flex-wrap:wrap;gap:8px}
 .mchips button{padding:10px 15px;border-radius:99px;border:1px solid var(--line2);font-weight:600;font-size:13.5px;color:#cfcfd4;background:var(--card2);transition:.2s}
 .mchips button.on{background:var(--accSoft);color:var(--acc);border-color:rgba(255,138,91,.55)}
@@ -266,8 +314,9 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
       <button data-v="train" class="on">Αρχική</button>
       <button data-v="timer">Timer</button>
       <button data-v="library">Ασκήσεις</button>
-      <button data-v="history">Ιστορικό</button>
+      <button data-v="history">Πρόοδος</button>
     </nav>
+    <button class="acct" id="acctBtn"><span class="av" id="acctAv">?</span><span id="acctName">Σύνδεση</span></button>
     <a class="btn primary navcta" href="#builder" data-go="builder">Φτιάξε WOD</a>
   </div>
 </header>
@@ -342,16 +391,24 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
   </section>
 
   <section id="v-history" hidden>
-    <div class="sec-head top"><div class="eyebrow">Η πρόοδός σου</div><h2>Ιστορικό</h2><p>Η συνέπεια φέρνει το αποτέλεσμα. Τα δεδομένα μένουν μόνο σε αυτή τη συσκευή.</p></div>
+    <div class="sec-head top"><div class="eyebrow">Η πρόοδός σου</div><h2>Πρόοδος</h2><p id="syncNote">Η συνέπεια φέρνει το αποτέλεσμα.</p></div>
     <div class="stats" id="hStats"></div>
+    <div class="pgrid">
+      <div class="pcard" id="pcWeek"></div>
+      <div class="pcard" id="pcWeight"></div>
+      <div class="pcard" id="pcNutri"></div>
+      <div class="pcard" id="pcPR"></div>
+      <div class="pcard wide" id="pcFav"></div>
+    </div>
+    <h3 class="lbl" style="margin-top:40px">Ιστορικό προπονήσεων</h3>
     <ul class="hist" id="hList"></ul>
     <button class="btn mt" id="hClear" style="font-size:14px;padding:13px;color:#8b8b92;max-width:860px">Διαγραφή ιστορικού</button>
   </section>
 </div>
 
 <footer class="foot"><div class="fin-in">
-  <div><a class="logo" href="#" data-go="train">Home<span>WOD</span></a><p>CrossFit προπονήσεις στο σπίτι για απώλεια βάρους. Δωρεάν, χωρίς λογαριασμό.</p></div>
-  <div class="flinks"><b>Σελίδες</b><a href="#" data-go="train">Αρχική</a><a href="#" data-go="builder">Φτιάξε WOD</a><a href="#" data-go="timer">Timer</a><a href="#" data-go="library">Ασκήσεις</a><a href="#" data-go="history">Ιστορικό</a></div>
+  <div><a class="logo" href="#" data-go="train">Home<span>WOD</span></a><p>CrossFit προπονήσεις στο σπίτι για απώλεια βάρους. Δωρεάν. Ο λογαριασμός είναι προαιρετικός και κρατάει την πρόοδό σου σε κάθε συσκευή.</p></div>
+  <div class="flinks"><b>Σελίδες</b><a href="#" data-go="train">Αρχική</a><a href="#" data-go="builder">Φτιάξε WOD</a><a href="#" data-go="timer">Timer</a><a href="#" data-go="library">Ασκήσεις</a><a href="#" data-go="history">Πρόοδος</a></div>
   <div class="flinks"><b>Σημείωση</b><span>Αν έχεις πρόβλημα υγείας ή τραυματισμό, συμβουλέψου γιατρό πριν ξεκινήσεις νέο πρόγραμμα άσκησης.</span></div>
 </div><div class="copy">© <span id="yr"></span> Home WOD</div></footer>
 
@@ -724,7 +781,8 @@ const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}
 const ST=Object.assign({eq:{kb:true,bike:true,tread:true,db:true,band:true},kbw:16,lvl:1,dur:30,fmt:'random',bw:'',music:{svc:'spotify',links:{}},tm:{mode:'amrap',v:{}}},LS.get('hw_settings',{}));
 if(!Array.isArray(ST.focus))ST.focus=[];
 if(!ST.music||!ST.music.links)ST.music={svc:'spotify',links:{}};if(!ST.tm||!ST.tm.v)ST.tm={mode:'amrap',v:{}};
-const save=()=>LS.set('hw_settings',ST);
+const save=()=>{LS.set('hw_settings',ST);Cloud.touch()};
+function persist(k,v){LS.set(k,v);Cloud.touch()}
 const ICON={
  bw:'<svg viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="6" r="3.5"/><path d="M16 10.5c-2 0-3 1-3.5 2.5L11 20h3l.6 9h2.8l.6-9h3l-1.5-7c-.5-1.5-1.5-2.5-3.5-2.5z"/></svg>',
  kb:'<svg viewBox="0 0 32 32"><path d="M10.5 14V11a5.5 5.5 0 0 1 11 0v3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="20" r="8.5" fill="currentColor"/></svg>',
@@ -903,18 +961,19 @@ function generate(){
   const bw=parseFloat(ST.bw)||75;const kcal=blocks.reduce((s,b)=>s+b.min*b.met*3.5*bw/200,0);
   const total=Math.round(blocks.reduce((s,b)=>s+b.min,0)+blocks.length*10/60);
   const mainB=blocks.find(b=>b.fmt);
-  WOD={focus:ST.focus.slice(),name:rand(NAMES),blocks,total,kcal:Math.round(kcal/10)*10,fmt:mainB?mainB.fmt:fmt.toUpperCase(),bw:!!parseFloat(ST.bw)};
+  WOD={key:Date.now().toString(36),focus:ST.focus.slice(),name:rand(NAMES),blocks,total,kcal:Math.round(kcal/10)*10,fmt:mainB?mainB.fmt:fmt.toUpperCase(),bw:!!parseFloat(ST.bw)};
   renderWod();
 }
 function renderWod(){
   const w=WOD,d=new Date();
-  $('#wodOut').innerHTML=`<div class="wod"><div class="wod-head"><div class="tag">WOD της ημέρας · ${d.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'})}</div><h2>${w.name}</h2>
+  $('#wodOut').innerHTML=`<div class="wod"><div class="wod-head"><div class="tag">WOD της ημέρας · ${d.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'})}</div><h2>${w.name}</h2><button class="favbtn" id="favBtn">☆ Αποθήκευση στα αγαπημένα</button>
    <div class="meta"><span>${w.fmt}</span><span>~${w.total} λεπτά</span><span>~${w.kcal} kcal${w.bw?'':' · 75 kg'}</span><span>${LVL[ST.lvl]}</span>${w.focus&&w.focus.length?`<span>Εστίαση: ${w.focus.map(m=>MUN[m]).join(', ')}</span>`:''}</div></div>
    <div class="wod-body">${w.blocks.map(b=>`<div class="blk"><div class="blk-h"><span>${b.name}</span><span>${b.type==='fortime'?'cap ':''}${Math.round(b.min)}'</span></div>${b.desc?`<p>${b.desc}</p>`:''}
    <ul>${b.list.map(i=>`<li data-ex="${i.ex}"><svg class="mini" data-ex="${i.ex}"></svg><div><b>${i.label}</b><small>${i.sub||''}</small></div></li>`).join('')}</ul></div>`).join('')}</div>
    <div class="wod-actions"><button class="btn primary" id="goBtn">Ξεκίνα ▶</button><button class="btn" id="rerollBtn">Άλλο ↻</button></div></div>`;
   mountFigs($('#wodOut'));
   $('#goBtn').onclick=startWorkout;$('#rerollBtn').onclick=generate;
+  $('#favBtn').onclick=()=>{const f=LS.get('hw_favs',[]);if(f.some(x=>x.key===w.key)){$('#favBtn').textContent='★ Υπάρχει ήδη στα αγαπημένα';return}if(!w.key)w.key=Date.now().toString(36);f.unshift({key:w.key,name:w.name,fmt:w.fmt,total:w.total,saved:new Date().toISOString(),wod:w});persist('hw_favs',f.slice(0,40));$('#favBtn').textContent='★ Αποθηκεύτηκε';};
   $('#wodOut').querySelectorAll('li[data-ex]').forEach(li=>li.onclick=()=>openModal(li.dataset.ex));
   $('#wodOut').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -947,9 +1006,137 @@ function renderHist(){
   $('#hStats').innerHTML=`<div><b>${h.length}</b><small>Προπονήσεις</small></div><div><b>${wk}</b><small>Αυτή την εβδ.</small></div><div><b>${kc>=1000?(kc/1000).toFixed(1)+'k':kc}</b><small>kcal (εκτ.)</small></div>`;
   $('#hList').innerHTML=h.length?h.slice().reverse().map(x=>`<li><b>${x.name}</b> <span class="tagx acc">${x.fmt}</span><div>${new Date(x.date).toLocaleString('el-GR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})} · ${x.min}' · ~${x.kcal} kcal<br>${(x.res||[]).join(' · ')}</div></li>`).join(''):'<div class="empty">Δεν υπάρχουν ακόμα προπονήσεις. Φτιάξε το πρώτο σου WOD.</div>';
   $('#hClear').hidden=!h.length;
+  try{renderProgress()}catch(e){console.warn(e)}
 }
 let clearArm=false;
-$('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='Πάτα ξανά για επιβεβαίωση';setTimeout(()=>{clearArm=false;$('#hClear').textContent='Διαγραφή ιστορικού'},3000);return}LS.set('hw_hist',[]);clearArm=false;$('#hClear').textContent='Διαγραφή ιστορικού';renderHist()};
+$('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='Πάτα ξανά για επιβεβαίωση';setTimeout(()=>{clearArm=false;$('#hClear').textContent='Διαγραφή ιστορικού'},3000);return}persist('hw_hist',[]);clearArm=false;$('#hClear').textContent='Διαγραφή ιστορικού';renderHist()};
+
+
+/* ================= CLOUD / AUTH ================= */
+const FB_CONFIG={apiKey:"AIzaSyD6X7ZmnNE1QQn_YXpHIrAH5FkBi31kPrU",authDomain:"home-wod-3fa81.firebaseapp.com",projectId:"home-wod-3fa81",storageBucket:"home-wod-3fa81.firebasestorage.app",messagingSenderId:"83347049614",appId:"1:83347049614:web:0fca3b57f0327d83e24ddf"}; /*FBCONFIG*/
+const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile'];
+const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
+  init(){try{if(!FB_CONFIG||!window.firebase){this.updateUI();return}firebase.initializeApp(FB_CONFIG);this.auth=firebase.auth();this.db=firebase.firestore();this.ready=true;
+    this.auth.getRedirectResult().catch(e=>{});
+    this.auth.onAuthStateChanged(async u=>{this.user=u;this.updateUI();if(u){await this.pull()}renderHist()})}catch(e){console.warn('cloud init',e);this.updateUI()}},
+  ref(){return this.db.collection('users').doc(this.user.uid)},
+  local(){const o={};SYNC_KEYS.forEach(k=>o[k.slice(3)]=LS.get(k,null));return o},
+  async pull(){if(!this.user)return;this.busy=true;try{const snap=await this.ref().get();const c=snap.exists?snap.data():{};const l=this.local();
+      const byKey=(a,b,f)=>{const m=new Map();(a||[]).forEach(x=>m.set(f(x),x));(b||[]).forEach(x=>m.set(f(x),x));return [...m.values()]};
+      const hist=byKey(c.hist,l.hist,x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-400);
+      const weights=byKey(c.weights,l.weights,x=>x.d).sort((a,b)=>a.d<b.d?-1:1);
+      const favs=byKey(c.favs,l.favs,x=>x.key).sort((a,b)=>a.saved<b.saved?1:-1).slice(0,40);
+      const prs=Object.assign({},c.prs||{});Object.entries(l.prs||{}).forEach(([k,v])=>{const o=prs[k];if(!o||(v.type==='amrap'?v.val>o.val:v.val<o.val))prs[k]=v});
+      const settings=c.settings||l.settings,goals=Object.assign({},l.goals||{},c.goals||{}),profile=Object.assign({},l.profile||{},c.profile||{});
+      LS.set('hw_hist',hist);LS.set('hw_weights',weights);LS.set('hw_favs',favs);LS.set('hw_prs',prs);LS.set('hw_goals',goals);LS.set('hw_profile',profile);
+      if(settings){LS.set('hw_settings',settings);Object.assign(ST,settings);if(!Array.isArray(ST.focus))ST.focus=[];try{renderSetup()}catch(e){}}
+      await this.push();}catch(e){console.warn('pull',e);toast('Δεν έγινε συγχρονισμός. Δοκίμασε ξανά αργότερα.')}this.busy=false;renderHist()},
+  async push(){if(!this.user)return;const o=this.local();const data={updatedAt:firebase.firestore.FieldValue.serverTimestamp(),email:this.user.email||null};
+    Object.entries(o).forEach(([k,v])=>{if(v!==null)data[k]=JSON.parse(JSON.stringify(v))});await this.ref().set(data,{merge:true})},
+  touch(){if(!this.user||this.busy)return;clearTimeout(this.t);this.t=setTimeout(()=>this.push().catch(e=>console.warn('push',e)),1200)},
+  updateUI(){const b=$('#acctBtn');if(!b)return;const u=this.user;b.classList.toggle('on',!!u);
+    $('#acctName').textContent=u?(u.displayName||u.email||'Λογαριασμός').split(' ')[0]:'Σύνδεση';
+    $('#acctAv').textContent=u?((u.displayName||u.email||'?').trim()[0]||'?').toUpperCase():'?';
+    const sn=$('#syncNote');if(sn)sn.textContent=u?`Συνδεδεμένος ως ${u.email||u.displayName}. Η πρόοδός σου αποθηκεύεται στον λογαριασμό σου και φαίνεται σε κάθε συσκευή.`:'Τα δεδομένα μένουν σε αυτή τη συσκευή. Κάνε σύνδεση για να τα κρατάς στον λογαριασμό σου, σε κάθε συσκευή.'}
+};
+function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--card2);border:1px solid var(--line2);color:var(--fg);padding:12px 18px;border-radius:14px;z-index:60;font-size:14px;max-width:90vw;box-shadow:0 10px 40px rgba(0,0,0,.5)';document.body.appendChild(t)}t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500)}
+const AERR={'auth/invalid-email':'Το email δεν είναι έγκυρο.','auth/user-not-found':'Δεν βρέθηκε λογαριασμός με αυτό το email.','auth/wrong-password':'Λάθος κωδικός.','auth/invalid-credential':'Λάθος email ή κωδικός.','auth/email-already-in-use':'Υπάρχει ήδη λογαριασμός με αυτό το email. Κάνε σύνδεση.','auth/weak-password':'Ο κωδικός θέλει τουλάχιστον 6 χαρακτήρες.','auth/too-many-requests':'Πολλές προσπάθειες. Δοκίμασε σε λίγο.','auth/popup-closed-by-user':'Το παράθυρο έκλεισε πριν ολοκληρωθεί η σύνδεση.','auth/network-request-failed':'Πρόβλημα σύνδεσης στο internet.','auth/requires-recent-login':'Για λόγους ασφαλείας κάνε ξανά σύνδεση και δοκίμασε πάλι.','auth/unauthorized-domain':'Η σύνδεση δεν επιτρέπεται από αυτή τη διεύθυνση. Άνοιξε το homewod.site.'};
+const aerr=e=>AERR[e&&e.code]||('Κάτι πήγε στραβά. '+(e&&e.message||''));
+const GICON='<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+function openAccount(mode){
+  const u=Cloud.user;const box=$('#modalBox');
+  if(!Cloud.ready){box.innerHTML=`<div class="tx"><h4>Λογαριασμός</h4><p class="sub" style="color:var(--mut);margin-top:10px">Οι λογαριασμοί δεν είναι διαθέσιμοι εδώ. Άνοιξε το <b>homewod.site</b> για σύνδεση. Μέχρι τότε η πρόοδός σου αποθηκεύεται σε αυτή τη συσκευή.</p><button class="btn close" id="mClose">Κλείσιμο</button></div>`;$('#modal').hidden=false;$('#mClose').onclick=()=>$('#modal').hidden=true;return}
+  if(u){box.innerHTML=`<div class="tx"><h4>Ο λογαριασμός σου</h4><p style="color:var(--mut);margin:8px 0 0">${u.displayName?u.displayName+'<br>':''}${u.email||''}</p>
+     <p class="privacy">Οι προπονήσεις, το βάρος, οι στόχοι, τα ρεκόρ και τα αγαπημένα σου αποθηκεύονται στον λογαριασμό σου (Google Firebase, servers στην ΕΕ) και τα βλέπεις μόνο εσύ.</p>
+     <div class="aerr" id="aErr"></div>
+     <div style="display:grid;gap:10px;margin-top:6px"><button class="btn" id="aOut">Αποσύνδεση</button><button class="btn" id="aDel" style="color:#ff9a8a">Διαγραφή λογαριασμού και δεδομένων</button><button class="btn primary" id="mClose">Κλείσιμο</button></div></div>`;
+    $('#modal').hidden=false;$('#mClose').onclick=()=>$('#modal').hidden=true;
+    $('#aOut').onclick=async()=>{await Cloud.auth.signOut();$('#modal').hidden=true;toast('Αποσυνδέθηκες. Τα δεδομένα μένουν και σε αυτή τη συσκευή.')};
+    let arm=false;$('#aDel').onclick=async()=>{if(!arm){arm=true;$('#aDel').textContent='Πάτα ξανά: διαγράφονται μόνιμα όλα τα δεδομένα';return}
+      try{await Cloud.ref().delete();await Cloud.user.delete();$('#modal').hidden=true;toast('Ο λογαριασμός και τα δεδομένα του διαγράφηκαν.')}catch(e){$('#aErr').textContent=aerr(e)}};
+    return}
+  mode=mode||'in';
+  box.innerHTML=`<div class="tx"><h4>${mode==='up'?'Δημιουργία λογαριασμού':'Σύνδεση'}</h4><p style="color:var(--mut);margin:8px 0 0;font-size:14px">Κράτα προπονήσεις, βάρος, ρεκόρ και αγαπημένα WOD σε κάθε συσκευή.</p>
+   <div class="auth-tabs"><button data-m="in" class="${mode==='in'?'on':''}">Σύνδεση</button><button data-m="up" class="${mode==='up'?'on':''}">Νέος λογαριασμός</button></div>
+   <button class="gbtn" id="gIn">${GICON} Συνέχεια με Google</button>
+   <div class="or">ή με email</div>
+   <form class="aform" id="aForm">${mode==='up'?'<input class="inp" id="aName" placeholder="Όνομα" autocomplete="name">':''}
+    <input class="inp" id="aEmail" type="email" placeholder="Email" autocomplete="email" required>
+    <input class="inp" id="aPass" type="password" placeholder="Κωδικός (τουλάχιστον 6 χαρακτήρες)" autocomplete="${mode==='up'?'new-password':'current-password'}" required>
+    <div class="aerr" id="aErr"></div>
+    <button class="btn primary" type="submit">${mode==='up'?'Δημιουργία λογαριασμού':'Σύνδεση'}</button>
+    ${mode==='in'?'<button type="button" class="linkbtn" id="aReset">Ξέχασες τον κωδικό;</button>':''}</form>
+   <p class="privacy">Με τη δημιουργία λογαριασμού, οι προπονήσεις, το βάρος και οι στόχοι σου αποθηκεύονται στο Google Firebase (servers στην ΕΕ) και είναι ορατά μόνο σε σένα. Μπορείς να διαγράψεις τον λογαριασμό και όλα τα δεδομένα οποτεδήποτε.</p>
+   <button class="btn close" id="mClose">Κλείσιμο</button></div>`;
+  $('#modal').hidden=false;$('#mClose').onclick=()=>$('#modal').hidden=true;
+  box.querySelectorAll('.auth-tabs button').forEach(b=>b.onclick=()=>openAccount(b.dataset.m));
+  $('#gIn').onclick=async()=>{const pr=new firebase.auth.GoogleAuthProvider();try{await Cloud.auth.signInWithPopup(pr);$('#modal').hidden=true;toast('Συνδέθηκες!')}catch(e){if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'){Cloud.auth.signInWithRedirect(pr)}else $('#aErr').textContent=aerr(e)}};
+  $('#aForm').onsubmit=async ev=>{ev.preventDefault();const em=$('#aEmail').value.trim(),pw=$('#aPass').value;$('#aErr').textContent='';
+    try{if(mode==='up'){const c=await Cloud.auth.createUserWithEmailAndPassword(em,pw);const nm=$('#aName').value.trim();if(nm)await c.user.updateProfile({displayName:nm});Cloud.updateUI()}else await Cloud.auth.signInWithEmailAndPassword(em,pw);
+      $('#modal').hidden=true;toast(mode==='up'?'Ο λογαριασμός δημιουργήθηκε!':'Συνδέθηκες!')}catch(e){$('#aErr').textContent=aerr(e)}};
+  const rs=$('#aReset');if(rs)rs.onclick=async()=>{const em=$('#aEmail').value.trim();if(!em){$('#aErr').textContent='Γράψε πρώτα το email σου.';return}
+    try{await Cloud.auth.sendPasswordResetEmail(em);$('#aErr').innerHTML='<span class="aok">Σου στείλαμε email για νέο κωδικό.</span>'}catch(e){$('#aErr').textContent=aerr(e)}};
+}
+$('#acctBtn').onclick=()=>openAccount();
+
+/* ================= PROGRESS ================= */
+const wkStart=d=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x.getTime()};
+const todayISO=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
+function renderProgress(){
+  const h=LS.get('hw_hist',[]),goals=Object.assign({weekly:4},LS.get('hw_goals',{})),W=LS.get('hw_weights',[]),prof=Object.assign({sex:'m',age:'',height:'',act:'1.375',pace:'500'},LS.get('hw_profile',{}));
+  // weekly goal + streak
+  const cnt={};h.forEach(x=>{const k=wkStart(x.date);cnt[k]=(cnt[k]||0)+1});const now=wkStart(Date.now());const thisW=cnt[now]||0;
+  let streak=0,k=now;if(thisW<goals.weekly)k-=7*864e5;while((cnt[k]||0)>=goals.weekly){streak++;k-=7*864e5}
+  $('#pcWeek').innerHTML=`<h4>Εβδομαδιαίος στόχος</h4><p class="sub">Πόσες προπονήσεις θέλεις την εβδομάδα (Δευτέρα έως Κυριακή).</p>
+    <div class="big-n">${thisW}<small> / ${goals.weekly} αυτή την εβδομάδα</small></div><div class="wbar"><i style="width:${Math.min(100,thisW/goals.weekly*100)}%"></i></div>
+    <p class="sub" style="margin:0">${thisW>=goals.weekly?'Πέτυχες τον στόχο της εβδομάδας!':`Λείπουν ${goals.weekly-thisW} για τον στόχο.`} Σερί: <b style="color:var(--fg)">${streak} ${streak===1?'εβδομάδα':'εβδομάδες'}</b></p>
+    <div class="frow"><label>Στόχος ανά εβδομάδα<select class="inp" id="goalW">${[2,3,4,5,6,7].map(n=>`<option ${n==goals.weekly?'selected':''}>${n}</option>`).join('')}</select></label></div>`;
+  $('#goalW').onchange=e=>{goals.weekly=+e.target.value;persist('hw_goals',goals);renderProgress()};
+  // weight
+  const last=W[W.length-1],first=W[0];const tgt=parseFloat(goals.target)||null;
+  let chart='';if(W.length>=2){const pts=W.slice(-60),vals=pts.map(p=>p.kg).concat(tgt?[tgt]:[]);let mn=Math.min(...vals),mx=Math.max(...vals);if(mx-mn<2){mn-=1;mx+=1}const pad=(mx-mn)*.12;mn-=pad;mx+=pad;
+    const X=i=>20+i*(560/Math.max(1,pts.length-1)),Y=v=>200-(v-mn)/(mx-mn)*180;
+    chart=`<svg class="wchart" viewBox="0 0 600 215">${tgt?`<line x1="20" x2="580" y1="${Y(tgt)}" y2="${Y(tgt)}" stroke="#6fd6b8" stroke-dasharray="6 6" stroke-width="2"/><text x="580" y="${Y(tgt)-6}" fill="#6fd6b8" font-size="12" text-anchor="end">στόχος ${tgt} kg</text>`:''}
+      <polyline fill="none" stroke="url(#wg)" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" points="${pts.map((p,i)=>X(i)+','+Y(p.kg)).join(' ')}"/>
+      <defs><linearGradient id="wg"><stop offset="0" stop-color="#ff8a5b"/><stop offset="1" stop-color="#ff6b81"/></linearGradient></defs>
+      ${pts.map((p,i)=>`<circle cx="${X(i)}" cy="${Y(p.kg)}" r="4" fill="#ff8a5b"/>`).join('')}
+      <text x="20" y="213" fill="#8b8b92" font-size="11">${pts[0].d.slice(5).split('-').reverse().join('/')}</text><text x="580" y="213" fill="#8b8b92" font-size="11" text-anchor="end">${pts[pts.length-1].d.slice(5).split('-').reverse().join('/')}</text></svg>`}
+  const diff=last&&first?(last.kg-first.kg):0;
+  $('#pcWeight').innerHTML=`<h4>Βάρος</h4><p class="sub">Ζυγίσου την ίδια ώρα, ιδανικά το πρωί, 1 έως 2 φορές την εβδομάδα.</p>
+    ${last?`<div class="kv"><div><b>${last.kg}</b><small>τώρα (kg)</small></div><div><b style="color:${diff<=0?'var(--mint)':'var(--acc)'}">${diff>0?'+':''}${diff.toFixed(1)}</b><small>από την αρχή</small></div><div><b>${tgt?(last.kg-tgt).toFixed(1):'–'}</b><small>έως τον στόχο</small></div></div>`:'<p class="sub">Πρόσθεσε την πρώτη σου μέτρηση.</p>'}
+    ${chart}
+    <div class="frow"><label>Ημερομηνία<input class="inp" type="date" id="wD" value="${todayISO()}"></label><label>Βάρος (kg)<input class="inp" type="number" step="0.1" inputmode="decimal" id="wKg" placeholder="π.χ. 82.4"></label><label>Μέση (cm, προαιρ.)<input class="inp" type="number" step="0.5" inputmode="decimal" id="wWaist"></label><button class="btn primary sm" id="wAdd">Προσθήκη</button></div>
+    <div class="frow"><label>Βάρος-στόχος (kg)<input class="inp" type="number" step="0.5" id="wTgt" value="${tgt||''}"></label></div>
+    <ul class="mini-list">${W.slice().reverse().slice(0,30).map(w=>`<li><div>${w.kg} kg ${w.waist?`<span>· μέση ${w.waist} cm</span>`:''}</div><div><span>${w.d.split('-').reverse().join('/')}</span><button class="xbtn" data-d="${w.d}" title="Διαγραφή">×</button></div></li>`).join('')}</ul>`;
+  $('#wAdd').onclick=()=>{const kg=parseFloat($('#wKg').value),d=$('#wD').value||todayISO(),wa=parseFloat($('#wWaist').value);if(!(kg>25&&kg<350)){toast('Γράψε ένα έγκυρο βάρος σε kg.');return}
+    const arr=W.filter(x=>x.d!==d);arr.push({d,kg:Math.round(kg*10)/10,...(wa>30?{waist:wa}:{})});arr.sort((a,b)=>a.d<b.d?-1:1);persist('hw_weights',arr);ST.bw=String(kg);save();renderProgress()};
+  $('#wTgt').onchange=e=>{const v=parseFloat(e.target.value);goals.target=v>25?v:null;persist('hw_goals',goals);renderProgress()};
+  $('#pcWeight').querySelectorAll('.xbtn').forEach(b=>b.onclick=()=>{persist('hw_weights',W.filter(x=>x.d!==b.dataset.d));renderProgress()});
+  // nutrition
+  const kgNow=last?last.kg:(parseFloat(ST.bw)||null);let res='';
+  if(kgNow&&prof.age&&prof.height){const bmr=10*kgNow+6.25*(+prof.height)-5*(+prof.age)+(prof.sex==='f'?-161:5);const tdee=bmr*(+prof.act);let kcal=tdee-(+prof.pace);const floor=prof.sex==='f'?1200:1500;const clamped=kcal<floor;kcal=Math.max(floor,kcal);
+    const prot=Math.round(kgNow*1.8),water=(kgNow*0.035).toFixed(1);goals.kcal=Math.round(kcal/10)*10;goals.protein=prot;LS.set('hw_goals',goals);
+    res=`<div class="kv"><div><b>${goals.kcal}</b><small>kcal / ημέρα</small></div><div><b>${prot} g</b><small>πρωτεΐνη / ημέρα</small></div><div><b>${water} L</b><small>νερό / ημέρα</small></div></div>
+      <p class="sub" style="margin-top:12px">Συντήρηση περίπου ${Math.round(tdee/10)*10} kcal.${+prof.pace?` Έλλειμμα ${prof.pace} kcal ≈ ${(prof.pace*7/7700).toFixed(2)} kg την εβδομάδα.`:''}${clamped?' Ο στόχος κρατήθηκε στο ελάχιστο ασφαλές όριο.':''} Είναι εκτίμηση (Mifflin-St Jeor). Για ιατρικά θέματα συμβουλέψου γιατρό ή διαιτολόγο.</p>`}
+  else res='<p class="sub">Συμπλήρωσε ηλικία, ύψος και βάρος για να δεις τους ημερήσιους στόχους σου.</p>';
+  $('#pcNutri').innerHTML=`<h4>Θερμίδες και πρωτεΐνη</h4><p class="sub">Η απώλεια βάρους κρίνεται κυρίως στη διατροφή. Η πρωτεΐνη κρατάει τη μυϊκή μάζα.</p>
+    <div class="frow"><label>Φύλο<select class="inp" id="nSex"><option value="m" ${prof.sex==='m'?'selected':''}>Άνδρας</option><option value="f" ${prof.sex==='f'?'selected':''}>Γυναίκα</option></select></label>
+    <label>Ηλικία<input class="inp" type="number" id="nAge" value="${prof.age}" min="16" max="90"></label><label>Ύψος (cm)<input class="inp" type="number" id="nH" value="${prof.height}" min="130" max="220"></label></div>
+    <div class="frow"><label>Δραστηριότητα<select class="inp" id="nAct">${[['1.2','Καθιστική'],['1.375','Ελαφριά (1-3 προπονήσεις)'],['1.55','Μέτρια (3-5 προπονήσεις)'],['1.725','Υψηλή (6-7 προπονήσεις)']].map(([v,l])=>`<option value="${v}" ${prof.act===v?'selected':''}>${l}</option>`).join('')}</select></label>
+    <label>Στόχος<select class="inp" id="nPace">${[['250','Ήπια απώλεια'],['500','Απώλεια'],['0','Διατήρηση']].map(([v,l])=>`<option value="${v}" ${String(prof.pace)===v?'selected':''}>${l}</option>`).join('')}</select></label></div>
+    ${kgNow?'':'<p class="sub" style="margin-top:10px">Πρόσθεσε το βάρος σου στην κάρτα «Βάρος».</p>'}${res}`;
+  ['nSex','nAge','nH','nAct','nPace'].forEach(id=>$('#'+id).onchange=()=>{prof.sex=$('#nSex').value;prof.age=$('#nAge').value;prof.height=$('#nH').value;prof.act=$('#nAct').value;prof.pace=$('#nPace').value;persist('hw_profile',prof);renderProgress()});
+  // PRs
+  const prs=Object.values(LS.get('hw_prs',{})).sort((a,b)=>a.date<b.date?1:-1);
+  $('#pcPR').innerHTML=`<h4>Ρεκόρ</h4><p class="sub">Οι καλύτεροι γύροι σε AMRAP και χρόνοι σε For Time. Επανάλαβε ένα αγαπημένο WOD για να τα σπάσεις.</p>
+    ${prs.length?`<ul class="mini-list">${prs.slice(0,25).map(p=>`<li><div>${p.name}<br><span>${p.moves||''}</span></div><div style="text-align:right"><b>${p.txt}</b><br><span>${new Date(p.date).toLocaleDateString('el-GR')}</span></div></li>`).join('')}</ul>`:'<p class="sub">Ολοκλήρωσε ένα AMRAP ή For Time για το πρώτο σου ρεκόρ.</p>'}`;
+  // favorites
+  const favs=LS.get('hw_favs',[]);
+  $('#pcFav').innerHTML=`<h4>Αγαπημένα WOD</h4><p class="sub">Πάτα «☆ Αποθήκευση» σε ένα WOD για να το βρίσκεις εδώ και να το επαναλαμβάνεις.</p>
+    ${favs.length?`<ul class="mini-list" style="max-height:none">${favs.map(f=>`<li><div><b>${f.name}</b> <span>· ${f.fmt} · ~${f.total}'</span></div><div style="display:flex;gap:8px;align-items:center"><button class="btn sm" data-open="${f.key}">Άνοιγμα</button><button class="xbtn" data-del="${f.key}" title="Διαγραφή">×</button></div></li>`).join('')}</ul>`:'<p class="sub">Δεν έχεις αποθηκεύσει ακόμα WOD.</p>'}`;
+  $('#pcFav').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{const f=favs.find(x=>x.key===b.dataset.open);if(!f)return;WOD=JSON.parse(JSON.stringify(f.wod));showView('train');renderWod()});
+  $('#pcFav').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{persist('hw_favs',favs.filter(x=>x.key!==b.dataset.del));renderProgress()});
+}
 
 /* ================= TABS ================= */
 function showView(v){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
@@ -991,6 +1178,10 @@ function finishBlock(capped){
   else if(b.type==='fortime')r=capped?`${b.name}: CAP (${P.si}/${b.items.length})`:`${b.name}: ${fmtT(P.el)}`;
   else r=null;
   if(r)P.res.push(r);
+  if((b.type==='amrap'&&P.el>=b.cap-1)||(b.type==='fortime'&&!capped)){const fp=b.type+'|'+b.cap+'|'+(b.items||[]).slice(0,8).map(i=>i.label).join(',');
+    const val=b.type==='amrap'?P.rounds+P.si/b.items.length:P.el;const prs=LS.get('hw_prs',{});const old=prs[fp];
+    const better=!old||(b.type==='amrap'?val>old.val:val<old.val);
+    if(better){prs[fp]={val,type:b.type,name:WOD.name+' · '+b.name,txt:r.split(': ')[1],date:new Date().toISOString(),moves:(b.items||[]).slice(0,b.type==='amrap'?b.items.length:Math.min(b.items.length,6)).map(i=>i.label).filter((x,i,a)=>a.indexOf(x)===i).join(' · ')};persist('hw_prs',prs);if(old)P.newPR=(P.newPR||[]).concat(b.name)}}
   P.bi++;P.si=0;P.el=0;P.rounds=0;
   if(P.bi>=WOD.blocks.length){endWorkout(true);return}
   P.prep=10;beep(440,.5);
@@ -1041,11 +1232,12 @@ function endWorkout(complete){
   let kcal=doneBlocks.reduce((s,b)=>s+b.min*b.met*3.5*bw/200,0);if(!complete&&P.bi<WOD.blocks.length)kcal+=(P.el/60)*WOD.blocks[P.bi].met*3.5*bw/200;
   kcal=Math.round(kcal/5)*5;
   if(complete)beep(1200,.6);
-  if(mins>=3||complete){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.concat(complete?[]:['Διακόπηκε'])});LS.set('hw_hist',h.slice(-200))}
+  if(mins>=3||complete){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.concat(complete?[]:['Διακόπηκε'])});persist('hw_hist',h.slice(-200))}
   $('#plRun').hidden=true;$('#plFin').hidden=false;$('#plBlock').textContent=complete?'ΟΛΟΚΛΗΡΩΘΗΚΕ':'ΤΕΛΟΣ';$('#plMenu').textContent='ΚΛΕΙΣΙΜΟ';
   $('#plFin').innerHTML=`<h2>${complete?'ΤΕΛΟΣ!':'ΣΤΑΜΑΤΗΣΕΣ'}</h2><p class="note" style="font-size:15px;margin:10px 0 22px">${WOD.name} · ${WOD.fmt}</p>
    <div class="res"><span>Χρόνος</span><b>${mins}'</b></div><div class="res"><span>Θερμίδες (εκτίμηση)</span><b>~${kcal} kcal</b></div>
    ${P.res.map(r=>{const[a,b]=r.split(': ');return `<div class="res"><span>${a}</span><b>${b||''}</b></div>`}).join('')}
+   ${P.newPR?`<div class="prnote">Νέο ρεκόρ: ${P.newPR.join(', ')}!</div>`:''}
    <p class="note" style="margin-top:18px">${complete?'Μπράβο. Νερό, πρωτεΐνη στο επόμενο γεύμα και ύπνος: εκεί γίνεται η πρόοδος.':'Ό,τι έκανες μετράει. Την επόμενη φορά λίγο παραπάνω.'}</p>
    <button class="btn primary mt" id="finClose">ΚΛΕΙΣΙΜΟ</button>`;
   $('#finClose').onclick=closePlayer;P.running=false;
@@ -1145,8 +1337,8 @@ $('#ckMain').onclick=()=>{if(!C)return;if(C.done){tmStart();return}if(C.prep>0){
 $('#ckAlt').onclick=()=>{if(!C||C.done)return;if(C.cfg.rounds){C.rounds++;beep(880,.1)}else if(C.prep>0){C.prep=0}else{C.pi++;C.el=0;if(C.pi>=C.cfg.ph.length)cfinish();else beep(990,.3)}cupdate()};
 $('#ckReset').onclick=()=>{if(!C)return;tmStart();C.running=false;C.prep=10;cupdate()};
 $('#ckSound').onclick=()=>{SOUND=!SOUND;$('#ckSound').textContent=$('#plSound').textContent=SOUND?'ΗΧΟΣ ON':'ΗΧΟΣ OFF'};
-$('#ckClose').onclick=()=>{if(C&&C.cfg.up&&C.tot>=60&&C.el>0){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:[`Χρόνος ${fmtT(C.el)}`].concat(C.cfg.rounds&&C.rounds?[`${C.rounds} γύροι`]:[])});LS.set('hw_hist',h.slice(-200))}
-  else if(C&&C.tot>=60){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:C.cfg.rounds&&C.rounds?[`${C.rounds} γύροι`]:[]});LS.set('hw_hist',h.slice(-200))}
+$('#ckClose').onclick=()=>{if(C&&C.cfg.up&&C.tot>=60&&C.el>0){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:[`Χρόνος ${fmtT(C.el)}`].concat(C.cfg.rounds&&C.rounds?[`${C.rounds} γύροι`]:[])});persist('hw_hist',h.slice(-200))}
+  else if(C&&C.tot>=60){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:C.cfg.rounds&&C.rounds?[`${C.rounds} γύροι`]:[]});persist('hw_hist',h.slice(-200))}
   clearInterval(ctimer);C=null;$('#clock').hidden=true;document.body.style.overflow='';try{wake&&wake.release()}catch(e){}};
 document.addEventListener('keydown',e=>{if(!C||$('#clock').hidden)return;if(e.code==='Space'){e.preventDefault();$('#ckMain').click()}if(e.code==='ArrowRight')$('#ckAlt').click()});
 
@@ -1157,6 +1349,7 @@ $('#yr').textContent=new Date().getFullYear();$('#exCount').textContent=EX.filte
 refreshMusic();
 renderSetup();
 $('#genBtn').onclick=generate;
+window.addEventListener('load',()=>Cloud.init());
 $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[{ex:'rest',label:'Βαθιές ανάσες',sub:'Χαλάρωσε τους ώμους',dur:45,info:'STRETCHING'}],list=[];
   pick.forEach((id,i)=>{const e=EXM[id];const d=e.side?60:50;const sub=e.side?`30" κάθε πλευρά · ${e.gr}`:e.gr;segs.push({ex:id,label:e.name,sub,dur:d,info:`ΔΙΑΤΑΣΗ ${i+1}/${pick.length}`,rest:true});list.push({ex:id,label:`${d}" ${e.name}`,sub})});
   const min=segs.reduce((s,x)=>s+x.dur,0)/60;const names=ST.focus.map(m=>MUN[m]);
