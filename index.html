@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home WOD · CrossFit στο σπίτι</title>
+<meta name="description" content="CrossFit προπονήσεις στο σπίτι για απώλεια βάρους: WOD με τον εξοπλισμό σου, animated ασκήσεις, timer AMRAP, EMOM, For Time, Tabata.">
+<meta name="theme-color" content="#0b0b0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Home WOD">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b0b0e;--fg:#f1f1f3;--acc:#ff8a5b;--acc2:#ff6b81;--mint:#6fd6b8;--accSoft:rgba(255,138,91,.13);--ink:#1c0f0a;--card:#0e0e10;--card2:#18181b;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--mut:#8b8b92;--mut2:#5d5d63}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg)}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;letter-spacing:-.011em}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 380px at 15% -10%,rgba(255,138,91,.13),transparent 70%),radial-gradient(600px 380px at 95% 0%,rgba(111,214,184,.08),transparent 70%);z-index:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:0 20px 130px}
+header{position:sticky;top:0;z-index:6;background:rgba(11,11,14,.66);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);border-bottom:1px solid var(--line)}
+.hd{max-width:560px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;font-size:21px;letter-spacing:-.045em;line-height:1}
+.logo span{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-radius:8px;padding:2px 7px;margin-left:5px}
+.hdate{font-size:12px;font-weight:500;color:var(--mut);border:1px solid var(--line2);border-radius:99px;padding:6px 12px}
+.tabs{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100% - 28px));display:flex;gap:4px;padding:6px;z-index:8;background:rgba(24,24,27,.72);backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);border:1px solid var(--line2);border-radius:26px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;border-radius:20px;font-size:11px;font-weight:600;color:var(--mut);transition:.2s}
+.tabs button svg{width:21px;height:21px}
+.tabs button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink)}
+section{animation:rise .35s ease}
+section[hidden]{display:none}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.hero{padding:30px 0 4px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1{margin:0;font-size:38px;font-weight:900;letter-spacing:-.05em;line-height:1.02}
+.hero p{margin:10px 0 0;color:var(--mut);font-size:15px}
+h3.lbl{font-size:13px;font-weight:600;color:var(--mut);margin:28px 0 10px;letter-spacing:0}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.eq{position:relative;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:18px 8px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;font-weight:600;font-size:12.5px;color:#cfcfd4;text-align:center;transition:.2s}
+.eq svg{width:30px;height:30px}
+.eq.on{background:var(--accSoft);color:var(--acc);border-color:rgba(255,138,91,.55)}
+.eq.on::after{content:"✓";position:absolute;top:8px;right:9px;width:18px;height:18px;border-radius:50%;background:var(--acc);color:var(--ink);font-size:10px;font-weight:800;line-height:18px;text-align:center}
+.eq.fixed{opacity:.45;cursor:default;background:var(--card);color:var(--fg);border-color:var(--line)}
+.eq.fixed::after{display:none}
+.seg{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:17px}
+.seg.wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+.seg.wrap4{display:grid;grid-template-columns:repeat(4,1fr)}
+.seg button{flex:1;padding:11px 4px;border-radius:13px;font-weight:600;font-size:13.5px;color:#bdbdc3;transition:.2s;white-space:nowrap}
+.seg button.on{background:var(--fg);color:#111;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.row{display:flex;gap:12px;align-items:center}
+.inp{background:var(--card);border:1px solid var(--line);border-radius:15px;color:var(--fg);padding:13px 14px;font:inherit;font-size:16px;width:110px}
+.inp:focus{outline:none;border-color:var(--acc)}
+.note{color:var(--mut);font-size:13px;line-height:1.5}
+.btn{display:block;width:100%;padding:17px;border-radius:19px;font-weight:700;font-size:16px;border:1px solid var(--line2);background:var(--card);color:var(--fg);text-align:center;text-decoration:none;transition:transform .12s}
+.btn.primary{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent;box-shadow:0 12px 40px rgba(255,110,100,.25)}
+.btn:active{transform:scale(.98)}
+.mt{margin-top:24px}
+.wod{margin-top:28px;border-radius:28px;background:var(--card);border:1px solid var(--line);overflow:hidden;animation:rise .4s ease}
+.wod-head{padding:24px 22px 22px;background:linear-gradient(135deg,#ffa274,var(--acc) 45%,var(--acc2));color:var(--ink)}
+.wod-head .tag{font-size:12px;font-weight:600;opacity:.55}
+.wod-head h2{font-size:46px;font-weight:900;letter-spacing:-.05em;line-height:1;margin:6px 0 14px}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.meta span{background:rgba(28,15,10,.12);border-radius:99px;padding:6px 11px;font-size:12.5px;font-weight:700}
+.blk{padding:18px 20px;border-top:1px solid var(--line)}
+.blk:first-of-type{border-top:0}
+.blk-h{display:flex;justify-content:space-between;align-items:baseline;font-weight:800;font-size:16px;letter-spacing:-.02em}
+.blk-h span:last-child{color:var(--mut);font-weight:600;font-size:13px}
+.blk p{margin:5px 0 10px;color:var(--mut);font-size:13px;line-height:1.45}
+.blk ul{list-style:none;margin:0;padding:0}
+.blk li{display:flex;align-items:center;gap:14px;padding:6px 0;cursor:pointer}
+.blk li b{display:block;font-weight:700;font-size:15.5px;letter-spacing:-.02em}
+.blk li small{color:var(--mut);font-size:12.5px}
+svg.fig{display:block}
+svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid var(--line);border-radius:15px}
+.fig path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig .fa,.fig .fl{stroke:#55555b}
+.fig .na,.fig .nl,.fig .tor{stroke:#ececef}
+.fig .fa,.fig .na{stroke-width:7}
+.fig .fl,.fig .nl{stroke-width:9}
+.fig .tor{stroke-width:12}
+.fig .hd{fill:#ececef}
+.fig .floor{stroke:rgba(255,255,255,.12);stroke-width:2}
+.wod-actions{padding:18px 20px 22px;display:grid;grid-template-columns:1.7fr 1fr;gap:10px;border-top:1px solid var(--line)}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:24px 0 4px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters button{flex:none;padding:9px 15px;border-radius:99px;border:1px solid var(--line2);font-weight:600;font-size:13px;color:#cfcfd4}
+.filters button.on{background:var(--accSoft);color:var(--acc);border-color:rgba(255,138,91,.55)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:22px;padding:8px 8px 14px;cursor:pointer;transition:.2s}
+.card:hover{border-color:var(--line2);transform:translateY(-2px)}
+.card svg{width:100%;aspect-ratio:1;border-radius:16px;background:#141417}
+.card b{display:block;font-weight:700;font-size:15px;margin:10px 6px 0;letter-spacing:-.02em}
+.card small{display:block;color:var(--mut);font-size:12px;margin:2px 6px 0}
+.card .tagx{margin-left:6px}
+.tagx.acc{color:var(--acc);border-color:rgba(255,138,91,.35);background:var(--accSoft)}
+.tagx{display:inline-block;font-size:10.5px;font-weight:600;border-radius:99px;background:var(--card2);border:1px solid var(--line);color:#bdbdc3;padding:3px 9px;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.stats div{padding:18px 10px;text-align:center;border-radius:20px;background:var(--card);border:1px solid var(--line)}
+.stats div:first-child{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent}
+.stats b{display:block;font-weight:900;font-size:32px;letter-spacing:-.05em}
+.stats small{font-size:11px;font-weight:600;opacity:.6}
+.hist{list-style:none;padding:0;margin:16px 0 0}
+.hist li{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.hist li b{font-size:17px;font-weight:800;letter-spacing:-.03em}
+.hist li .tagx{margin:0 0 0 6px;vertical-align:2px}
+.hist li div{color:var(--mut);font-size:13px;margin-top:4px;line-height:1.5}
+.empty{color:var(--mut);text-align:center;padding:40px 0;font-size:14px}
+#player{position:fixed;inset:0;background:radial-gradient(circle at 50% 46%,#22191a 0,var(--bg) 62%);z-index:20;display:flex;flex-direction:column;overflow:hidden}
+#player[hidden]{display:none}
+.pl-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;gap:10px}
+.pl-top .bn{font-weight:800;font-size:14px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-top button,.mbtn{font-weight:600;font-size:12px;border:1px solid var(--line2);background:rgba(255,255,255,.04);border-radius:99px;padding:8px 12px;color:var(--fg);text-decoration:none;display:inline-block;white-space:nowrap}
+.pl-top .r{display:flex;gap:6px}
+.pl-body{flex:1;display:flex;flex-direction:column;align-items:center;max-width:540px;width:100%;margin:0 auto;padding:4px 18px 18px;min-height:0}
+.pl-timer{font-weight:800;font-size:clamp(66px,20vw,110px);line-height:1;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+.pl-info{color:var(--mut);font-weight:600;font-size:12px;letter-spacing:.06em;margin-top:6px;text-align:center}
+.pl-bar{width:100%;height:4px;border-radius:99px;background:rgba(255,255,255,.1);margin-top:14px;overflow:hidden}
+.pl-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:99px;width:0;transition:width .1s linear}
+.pl-stage{position:relative;flex:1;min-height:150px;width:100%;display:flex;justify-content:center;align-items:center}
+.pl-stage svg{height:100%;max-height:330px;width:auto;aspect-ratio:1;filter:drop-shadow(0 0 24px rgba(255,138,91,.18))}
+.prep{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-weight:800;font-size:12px;letter-spacing:.22em;background:var(--acc);color:var(--ink);padding:8px 16px;border-radius:99px;display:none;white-space:nowrap}
+.pl-ex{text-align:center;width:100%}
+.pl-ex .lb{font-weight:900;font-size:clamp(26px,7.4vw,38px);line-height:1.04;letter-spacing:-.04em}
+.pl-ex .sb{margin-top:6px;font-weight:600;font-size:14px;color:#d8d8dc}
+.pl-ex .cu{margin-top:6px;color:var(--mut);font-size:13px;line-height:1.4;min-height:18px}
+.pl-next{margin-top:12px;font-size:12px;color:var(--mut);font-weight:600;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 14px}
+.pl-next span{color:var(--fg)}
+.pl-ctrl{display:grid;grid-template-columns:64px 1fr 64px;gap:10px;width:100%;margin-top:14px}
+.pl-ctrl button{border:1px solid var(--line2);background:var(--card);border-radius:22px;height:64px;font-weight:800;font-size:17px}
+.pl-ctrl .main{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent;box-shadow:0 10px 36px rgba(255,110,100,.25)}
+.pl-ctrl .arrow{font-size:26px;font-weight:500}
+.dlg{position:absolute;inset:0;background:rgba(11,11,14,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:flex-end;justify-content:center;padding:18px;z-index:3}
+.dlg[hidden]{display:none}
+.dlg .box{border:1px solid var(--line2);background:var(--card);border-radius:28px;padding:22px;width:100%;max-width:420px;display:grid;gap:10px;animation:rise .25s}
+.dlg h4{margin:0 0 6px;font-weight:900;font-size:24px;letter-spacing:-.04em}
+.dlg .btn{font-size:16px;padding:15px}
+.fin{flex:1;overflow:auto;padding:28px 20px;max-width:540px;margin:0 auto;width:100%}
+.fin h2{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;font-size:60px;margin:0;line-height:1;letter-spacing:-.06em}
+.fin .res{border-top:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between;gap:12px;font-size:14.5px;color:#cfcfd4}
+.fin .res b{font-size:17px;color:var(--fg)}
+.field{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:18px}
+.field span{font-size:14px;font-weight:600}
+.stp{display:flex;align-items:center;background:var(--card2);border-radius:14px;overflow:hidden}
+.stp button{width:42px;height:42px;font-size:20px;font-weight:600;color:#cfcfd4}
+.stp button:active{background:rgba(255,255,255,.1)}
+.stp input{width:56px;height:42px;background:transparent;color:var(--fg);border:0;text-align:center;font:inherit;font-weight:800;font-size:19px;-moz-appearance:textfield}
+.stp input:focus{outline:none}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#clock{position:fixed;inset:0;z-index:25;background:radial-gradient(circle at 50% 44%,#24191a 0,var(--bg) 62%);color:var(--fg);display:flex;flex-direction:column;transition:background .3s,color .3s}
+#clock[hidden]{display:none}
+#clock.rest{background:radial-gradient(circle at 50% 44%,#15241f 0,var(--bg) 62%)}
+#clock.rest .prg{stroke:var(--mint)}#clock.rest .ck-phase{color:var(--mint)}
+#clock.rest .ck-ctrl .main{background:var(--mint);box-shadow:0 10px 36px rgba(111,214,184,.25)}
+#clock.done .prg{stroke:var(--mint)}
+.ck-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 16px;text-align:center}
+.ring{position:relative;width:min(86vw,62vh,400px);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:2.6}
+.trk{stroke:rgba(255,255,255,.1)}
+.prg{stroke:var(--acc);stroke-linecap:round;stroke-dasharray:289.03;transition:stroke-dashoffset .1s linear}
+.ring-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ck-phase{color:var(--acc);font-weight:800;font-size:clamp(14px,3.6vw,18px);letter-spacing:.28em}
+.ck-time{font-weight:800;font-size:clamp(62px,19vw,118px);line-height:1;letter-spacing:-.055em;font-variant-numeric:tabular-nums;margin:8px 0}
+.ck-info{font-weight:600;font-size:12px;letter-spacing:.06em;opacity:.6;max-width:80%}
+.ck-rounds{font-weight:800;font-size:18px;margin-top:22px;padding:10px 18px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.ck-rounds:empty{display:none}
+.ck-ctrl{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;padding:16px 18px max(18px,env(safe-area-inset-bottom));max-width:560px;width:100%;margin:0 auto}
+.ck-ctrl button{border:1px solid var(--line2);background:var(--card);border-radius:22px;height:64px;font-weight:800;font-size:15px}
+.ck-ctrl .main{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent;font-size:19px;box-shadow:0 10px 36px rgba(255,110,100,.25)}
+.mrow{border-bottom:1px solid var(--line);padding:13px 0}
+.mrow .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mrow b{font-size:15px;font-weight:700}
+.mrow a{font-size:12px;font-weight:700;color:var(--ink);background:var(--acc);padding:7px 12px;border-radius:99px;text-decoration:none;white-space:nowrap}
+.mrow input{width:100%;margin-top:9px;background:var(--card2);border:1px solid var(--line);border-radius:12px;color:var(--fg);padding:10px 12px;font:inherit;font-size:13px}
+.mrow input:focus{outline:none;border-color:var(--acc)}
+#modal{position:fixed;inset:0;z-index:30;background:rgba(11,11,14,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;padding:16px}
+#modal[hidden]{display:none}
+#modal .box{background:var(--card);border:1px solid var(--line2);border-radius:28px;max-width:440px;width:100%;max-height:92vh;overflow:auto;animation:rise .25s}
+#modal svg{width:100%;aspect-ratio:1;background:radial-gradient(circle at 50% 55%,#2a1d1b,#0e0e10 72%)}
+#modal .tx{padding:18px 20px 20px}
+#modal h4{margin:0;font-weight:900;font-size:28px;letter-spacing:-.045em;line-height:1.05}
+#modal .gr{color:var(--mut);margin-top:5px;font-size:14px}
+#modal ul{padding-left:18px;margin:14px 0;line-height:1.6;font-size:14.5px;color:#dcdce0}
+#modal .mu{font-size:12.5px;color:var(--mut)}
+#modal .close{margin-top:16px}
+
+.pl-timer.rest{color:var(--mint)}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd">
+    <div class="logo">Home<span>WOD</span></div>
+    <div class="hdate" id="hdate"></div>
+  </div>
+</header>
+<nav class="tabs">
+  <button data-v="train" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>WOD</button>
+  <button data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="14" r="8"/><path d="M12 10v4l2.5 2M9 2h6M12 2v4"/></svg>Timer</button>
+  <button data-v="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Ασκήσεις</button>
+  <button data-v="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Ιστορικό</button>
+</nav>
+
+<div class="wrap">
+  <section id="v-train">
+    <div class="hero"><h1>Έτοιμος για<br>το σημερινό <em>WOD;</em></h1><p>Διάλεξε εξοπλισμό, ένταση και χρόνο. Τα υπόλοιπα τα αναλαμβάνω.</p></div>
+    <h3 class="lbl">Ο εξοπλισμός σου</h3>
+    <div class="chips" id="eqChips"></div>
+    <div id="kbBox">
+      <h3 class="lbl">Βάρος kettlebell</h3>
+      <div class="seg" id="kbSeg"></div>
+    </div>
+    <h3 class="lbl">Επίπεδο</h3>
+    <div class="seg" id="lvlSeg"></div>
+    <h3 class="lbl">Διάρκεια</h3>
+    <div class="seg" id="durSeg"></div>
+    <h3 class="lbl">Μορφή WOD</h3>
+    <div class="seg wrap" id="fmtSeg"></div>
+    <h3 class="lbl">Σωματικό βάρος</h3>
+    <div class="row"><input class="inp" id="bw" type="number" inputmode="decimal" min="35" max="250" placeholder="kg"><div class="note">Προαιρετικό. Χρησιμοποιείται μόνο για εκτίμηση θερμίδων.</div></div>
+    <h3 class="lbl">Μουσική</h3>
+    <button class="btn musicCfg" style="font-size:15px;padding:15px">♫ Μουσική <span class="svcName"></span></button>
+    <button class="btn primary mt" id="genBtn">Φτιάξε το WOD</button>
+    <p class="note" style="margin-top:12px">Για απώλεια κιλών μετράει πρώτα το έλλειμμα θερμίδων από τη διατροφή. Η προπόνηση το μεγαλώνει και κρατάει τη μυϊκή μάζα. Στόχος: 3 έως 5 WOD την εβδομάδα.</p>
+    <div id="wodOut"></div>
+  </section>
+
+  <section id="v-timer" hidden>
+    <div class="hero"><h1>Timer</h1><p>AMRAP, EMOM, For Time, Tabata και δικά σου intervals.</p></div>
+    <h3 class="lbl">Τύπος χρονομέτρου</h3>
+    <div class="seg wrap4" id="tmSeg"></div>
+    <p class="note" id="tmDesc" style="margin-top:12px"></p>
+    <div id="tmCfg"></div>
+    <button class="btn primary mt" id="tmGo">Έναρξη ▶</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      <a class="btn" id="tmMusic" target="_blank" rel="noopener" style="font-size:15px;padding:14px">♫ Μουσική ↗</a>
+      <button class="btn musicCfg" style="font-size:15px;padding:14px">Ρυθμίσεις ♫</button>
+    </div>
+  </section>
+
+  <section id="v-library" hidden>
+    <div class="hero"><h1>Ασκήσεις</h1><p>Πάτα μια άσκηση για τεχνική και οδηγίες.</p></div>
+    <div class="filters" id="libFilters"></div>
+    <div class="grid" id="libGrid"></div>
+  </section>
+
+  <section id="v-history" hidden>
+    <div class="hero"><h1>Ιστορικό</h1><p>Η συνέπεια φέρνει το αποτέλεσμα.</p></div>
+    <div class="stats" id="hStats"></div>
+    <ul class="hist" id="hList"></ul>
+    <button class="btn mt" id="hClear" style="font-size:14px;padding:13px;color:#8b8b92">Διαγραφή ιστορικού</button>
+  </section>
+</div>
+
+<div id="player" hidden>
+  <div class="pl-top">
+    <div class="bn" id="plBlock">ΖΕΣΤΑΜΑ</div>
+    <div class="r"><a id="plMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="plSound">ΗΧΟΣ ON</button><button id="plMenu">ΜΕΝΟΥ</button></div>
+  </div>
+  <div id="plRun" class="pl-body">
+    <div class="pl-timer" id="plTimer">00:00</div>
+    <div class="pl-info" id="plInfo"></div>
+    <div class="pl-bar"><i id="plBar"></i></div>
+    <div class="pl-stage"><svg class="fig" id="plAv"></svg><div class="prep" id="plPrep">ΕΤΟΙΜΑΣΟΥ</div></div>
+    <div class="pl-ex"><div class="lb" id="plLabel"></div><div class="sb" id="plSub"></div><div class="cu" id="plCue"></div></div>
+    <div class="pl-next">ΜΕΤΑ: <span id="plNext"></span></div>
+    <div class="pl-ctrl">
+      <button class="arrow" id="plPrev" aria-label="Προηγούμενο">‹</button>
+      <button class="main" id="plMain">ΠΑΥΣΗ</button>
+      <button class="arrow" id="plFwd" aria-label="Επόμενο">›</button>
+    </div>
+  </div>
+  <div id="plFin" class="fin" hidden></div>
+  <div class="dlg" id="plDlg" hidden>
+    <div class="box">
+      <h4>ΠΑΥΣΗ</h4>
+      <button class="btn primary" id="dResume">ΣΥΝΕΧΕΙΑ</button>
+      <button class="btn" id="dSkip">ΠΑΡΑΛΕΙΨΗ ΜΠΛΟΚ</button>
+      <button class="btn" id="dEnd">ΤΕΛΟΣ ΠΡΟΠΟΝΗΣΗΣ</button>
+    </div>
+  </div>
+</div>
+
+<div id="clock" hidden>
+  <div class="pl-top">
+    <div class="bn" id="ckName">AMRAP</div>
+    <div class="r"><a id="ckMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="ckSound">ΗΧΟΣ ON</button><button id="ckClose">ΚΛΕΙΣΙΜΟ</button></div>
+  </div>
+  <div class="ck-body">
+    <div class="ring"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="46"/><circle class="prg" id="ckRing" cx="50" cy="50" r="46" stroke-dashoffset="289.03"/></svg>
+      <div class="ring-in"><div class="ck-phase" id="ckPhase">ΕΤΟΙΜΑΣΟΥ</div><div class="ck-time" id="ckTime">00:10</div><div class="ck-info" id="ckInfo"></div></div></div>
+    <div class="ck-rounds" id="ckRounds"></div>
+  </div>
+  <div class="ck-ctrl">
+    <button id="ckReset">RESET</button>
+    <button id="ckMain" class="main">ΠΑΥΣΗ</button>
+    <button id="ckAlt">+1 ΓΥΡΟΣ</button>
+  </div>
+</div>
+
+<div id="modal" hidden><div class="box" id="modalBox"></div></div>
+
+<script>
+const $=s=>document.querySelector(s);
+/* ================= GEOMETRY / AVATAR ================= */
+const D2R=Math.PI/180;
+const LEN={tor:50,neck:7,hr:10,ua:25,fa:24,th:34,sh:34,ft:9};
+const GROUND=182;
+const dn=(a,l)=>[Math.sin(a*D2R)*l,Math.cos(a*D2R)*l];
+const up=(a,l)=>[Math.sin(a*D2R)*l,-Math.cos(a*D2R)*l];
+const add=(p,v)=>[p[0]+v[0],p[1]+v[1]];
+const KEYS=['t','a1','a2','b1','b2','l1','l2','m1','m2','air','x','hd'];
+function norm(p){const q=Object.assign({t:0,a1:0,a2:0,l1:0,l2:0,air:0,x:0,hd:0,d:1},p);
+  if(q.b1===undefined)q.b1=q.a1;if(q.b2===undefined)q.b2=q.a2;if(q.m1===undefined)q.m1=q.l1;if(q.m2===undefined)q.m2=q.l2;return q}
+function joints(q){
+  const H=[0,0],S=add(H,up(q.t,LEN.tor)),N=add(S,up(q.t+q.hd,LEN.neck)),C=add(S,up(q.t+q.hd,LEN.neck+LEN.hr));
+  const E1=add(S,dn(q.a1,LEN.ua)),W1=add(E1,dn(q.a2,LEN.fa)),E2=add(S,dn(q.b1,LEN.ua)),W2=add(E2,dn(q.b2,LEN.fa));
+  const K1=add(H,dn(q.l1,LEN.th)),A1=add(K1,dn(q.l2,LEN.sh)),T1=add(A1,[Math.cos(q.l2*D2R)*LEN.ft,-Math.sin(q.l2*D2R)*LEN.ft]);
+  const K2=add(H,dn(q.m1,LEN.th)),A2=add(K2,dn(q.m2,LEN.sh)),T2=add(A2,[Math.cos(q.m2*D2R)*LEN.ft,-Math.sin(q.m2*D2R)*LEN.ft]);
+  return {H,S,N,C,E1,W1,E2,W2,K1,A1,T1,K2,A2,T2};
+}
+const PTS=['H','S','N','C','E1','W1','E2','W2','K1','A1','T1','K2','A2','T2'];
+function offsetFor(ex,q,J){
+  if(ex.anchor==='fixed')return [ex.fx,ex.fy];
+  let maxY=-1e9;for(const k of PTS){const y=J[k][1]+(k==='C'?LEN.hr:0);if(y>maxY)maxY=y}
+  const g=ex.ground||GROUND,dy=g-maxY-(q.air||0);
+  let dx=q.x||0;
+  if(ex.anchor==='foot')dx=-J.A1[0];else if(ex.anchor==='hand')dx=-J.W1[0];else if(ex.anchor==='bhand')dx=-J.W2[0];
+  return [dx,dy];
+}
+function tr(J,dx,dy){const o={};for(const k of PTS)o[k]=[J[k][0]+dx,J[k][1]+dy];return o}
+function legIK(dx,dy){const d=Math.min(Math.max(Math.hypot(dx,dy),5),67.5);const base=Math.atan2(dx,dy)/D2R;const al=Math.acos(d/68)/D2R;return [base+al,base-al]}
+function armIK(dx,dy){const a=LEN.ua,b=LEN.fa;const d=Math.min(Math.max(Math.hypot(dx,dy),4),a+b-.5);const base=Math.atan2(dx,dy)/D2R;
+  const al=Math.acos((a*a+d*d-b*b)/(2*a*d))/D2R,ga=Math.acos((b*b+d*d-a*a)/(2*b*d))/D2R;return [base-al,base+ga]}
+const ease=u=>(1-Math.cos(Math.PI*u))/2;
+
+function prepEx(ex){
+  if(ex.frames){ex.kf=ex.frames.map(norm);ex.kfo=ex.kf.map(q=>offsetFor(ex,q,joints(q)));
+    const tot=ex.kf.reduce((s,q)=>s+q.d,0);let c=0;ex.cum=ex.kf.map(q=>{const v=c/tot;c+=q.d;return v});ex.cum.push(1)}
+  ex.cx=0;
+  if(ex.anchor!=='fixed'){let mn=1e9,mx=-1e9;for(let i=0;i<24;i++){const P=poseAt(ex,i/24*ex.period);
+      for(const k of PTS){const r=k==='C'?LEN.hr:4;mn=Math.min(mn,P.J[k][0]-r);mx=Math.max(mx,P.J[k][0]+r)}
+      if(ex.props&&ex.props.band==='post'){mx=Math.max(mx,P.J.A1[0]+96)}}
+    ex.cx=100-(mn+mx)/2}
+}
+function poseAt(ex,time){
+  const ph=((time/ex.period)%1+1)%1;let q,o;
+  if(ex.gen){q=norm(ex.gen(ph));const J0=joints(q);o=offsetFor(ex,q,J0);return {q,J:tr(J0,o[0]+ex.cx,o[1])}}
+  const n=ex.kf.length;let i=0;while(i<n-1&&ph>=ex.cum[i+1])i++;
+  const u=ease((ph-ex.cum[i])/(ex.cum[i+1]-ex.cum[i]));const A=ex.kf[i],B=ex.kf[(i+1)%n];
+  q={};for(const k of KEYS)q[k]=A[k]+(B[k]-A[k])*u;
+  const oa=ex.kfo[i],ob=ex.kfo[(i+1)%n];o=[oa[0]+(ob[0]-oa[0])*u,oa[1]+(ob[1]-oa[1])*u];
+  return {q,J:tr(joints(q),o[0]+ex.cx,o[1])};
+}
+const pt=p=>p[0].toFixed(1)+' '+p[1].toFixed(1);
+function kbSVG(W,fore,col){const c=fore==null?[W[0],W[1]+12]:add(W,dn(fore,12));const h=[(W[0]+c[0])/2,(W[1]+c[1])/2];
+  return `<circle cx="${h[0].toFixed(1)}" cy="${h[1].toFixed(1)}" r="5" fill="none" stroke="${col}" stroke-width="3"/><circle cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="9.5" fill="${col}" stroke="#000" stroke-width="1.5"/>`}
+function dbSVG(W,col){return `<circle cx="${W[0].toFixed(1)}" cy="${W[1].toFixed(1)}" r="7" fill="${col}" stroke="#000" stroke-width="1.5"/><circle cx="${W[0].toFixed(1)}" cy="${W[1].toFixed(1)}" r="2.2" fill="#000"/>`}
+function bandSVG(A,W,col){const m=[(A[0]+W[0])/2+5,(A[1]+W[1])/2];return `<path d="M${pt(A)} Q${pt(m)} ${pt(W)}" stroke="${col}" stroke-width="2.6" fill="none"/>`}
+function props(ex,P,time){
+  const pr=ex.props||{},J=P.J,q=P.q;let b='',f='';
+  if(pr.kb){f+=kbSVG(J.W1,pr.kb==='arm'?q.a2:null,'#ff8a5b')}
+  if(pr.db){if(pr.db==='both')b+=dbSVG(J.W2,'#7a4636');f+=dbSVG(J.W1,'#ff8a5b')}
+  if(pr.band==='foot'){b+=bandSVG(J.A2,J.W2,'#2e5a4e');f+=bandSVG(J.A1,J.W1,'#6fd6b8')}
+  if(pr.band==='post'){const px=J.A1[0]+92,py=GROUND-54;b+=`<rect x="${(px-3).toFixed(1)}" y="${GROUND-82}" width="6" height="82" fill="#3a3a3a"/>`;
+    b+=`<line x1="${px}" y1="${py}" x2="${J.W2[0]}" y2="${J.W2[1]}" stroke="#2e5a4e" stroke-width="2.6"/>`;
+    f+=`<line x1="${px}" y1="${py}" x2="${J.W1[0]}" y2="${J.W1[1]}" stroke="#6fd6b8" stroke-width="2.6"/>`}
+  if(pr.bike){const H=J.H,Cc=[H[0]+20,H[1]+46],F=[H[0]+82,H[1]+36],Pv=[F[0]-12,F[1]-8],rot=(time*540)%360;
+    let sp='';for(let i=0;i<8;i++){const a=i*45*D2R;sp+=`<line x1="${F[0]}" y1="${F[1]}" x2="${(F[0]+Math.cos(a)*28).toFixed(1)}" y2="${(F[1]+Math.sin(a)*28).toFixed(1)}"/>`}
+    b+=`<g stroke="#5a5a5a" stroke-width="5" stroke-linecap="round" fill="none">
+      <line x1="${H[0]-24}" y1="${GROUND}" x2="${F[0]+22}" y2="${GROUND}"/>
+      <line x1="${H[0]+6}" y1="${H[1]+60}" x2="${H[0]-14}" y2="${GROUND}"/>
+      <line x1="${F[0]}" y1="${F[1]}" x2="${F[0]+14}" y2="${GROUND}"/>
+      <path d="M${H[0]+2} ${H[1]+8} L${H[0]+6} ${H[1]+60} L${pt(Cc)} L${pt(F)}"/></g>
+      <circle cx="${F[0]}" cy="${F[1]}" r="31" fill="#0c0c0c" stroke="#5a5a5a" stroke-width="3"/>
+      <g stroke="#333" stroke-width="2" transform="rotate(${rot.toFixed(1)} ${F[0]} ${F[1]})">${sp}</g>
+      <line x1="${H[0]-10}" y1="${H[1]+7}" x2="${H[0]+12}" y2="${H[1]+7}" stroke="#aaa" stroke-width="6" stroke-linecap="round"/>
+      <line x1="${pt(Cc).replace(' ','" y1="')}" x2="${J.A2[0].toFixed(1)}" y2="${J.A2[1].toFixed(1)}" stroke="#444" stroke-width="3"/>
+      <line x1="${J.W2[0].toFixed(1)}" y1="${J.W2[1].toFixed(1)}" x2="${Pv[0]}" y2="${Pv[1]}" stroke="#444" stroke-width="4" stroke-linecap="round"/>`;
+    f+=`<line x1="${Cc[0]}" y1="${Cc[1]}" x2="${J.A1[0].toFixed(1)}" y2="${J.A1[1].toFixed(1)}" stroke="#999" stroke-width="3"/>
+      <line x1="${J.W1[0].toFixed(1)}" y1="${J.W1[1].toFixed(1)}" x2="${Pv[0]}" y2="${Pv[1]}" stroke="#bbb" stroke-width="4" stroke-linecap="round"/>`}
+  if(pr.tread){const g=ex.ground,H=J.H,x0=H[0]-80,x1=H[0]+64,off=(time*95)%14;
+    b+=`<g stroke="#5a5a5a" stroke-width="5" stroke-linecap="round" fill="none">
+      <line x1="${x0+8}" y1="${g+9}" x2="${x0+8}" y2="${GROUND}"/><line x1="${x1-8}" y1="${g+9}" x2="${x1-8}" y2="${GROUND}"/>
+      <line x1="${x1-4}" y1="${g}" x2="${x1+12}" y2="${g-84}"/><line x1="${x1+12}" y1="${g-84}" x2="${x1-26}" y2="${g-80}"/></g>
+      <rect x="${x1+2}" y="${g-96}" width="22" height="12" fill="#222" stroke="#5a5a5a" stroke-width="2"/>
+      <rect x="${x0}" y="${g}" width="${x1-x0}" height="9" rx="4.5" fill="#111" stroke="#777" stroke-width="2"/>
+      <line x1="${x0+6}" y1="${g+4.5}" x2="${x1-6}" y2="${g+4.5}" stroke="#555" stroke-width="2" stroke-dasharray="6 8" stroke-dashoffset="${off.toFixed(1)}"/>`}
+  return [b,f];
+}
+const FIGS=new Set();
+class Fig{
+  constructor(svg){this.svg=svg;this.on=true;svg.classList.add('fig');svg.setAttribute('viewBox','0 -14 200 204');
+    const gid='fg'+(Fig.n=(Fig.n||0)+1);svg.innerHTML='<defs><linearGradient id="'+gid+'"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#ff8a5b" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><line class="floor" x1="0" y1="182" x2="200" y2="182" style="stroke:url(#'+gid+')"/><g class="pb"></g><path class="fa"/><path class="fl"/><path class="tor"/><circle class="hd" r="10"/><path class="nl"/><path class="na"/><g class="pf"></g>';
+    this.e={};for(const c of ['pb','fa','fl','tor','hd','nl','na','pf'])this.e[c]=svg.querySelector('.'+c);
+    this.t0=performance.now();svg._fig=this;FIGS.add(this)}
+  set(id){if(this.id===id)return;this.id=id;this.t0=performance.now();this.draw(performance.now())}
+  draw(now){const ex=EXM[this.id];if(!ex)return;const time=(now-this.t0)/1000;const P=poseAt(ex,time),J=P.J,e=this.e;
+    e.fa.setAttribute('d',`M${pt(J.S)}L${pt(J.E2)}L${pt(J.W2)}`);
+    e.fl.setAttribute('d',`M${pt(J.H)}L${pt(J.K2)}L${pt(J.A2)}L${pt(J.T2)}`);
+    e.tor.setAttribute('d',`M${pt(J.H)}L${pt(J.N)}`);
+    e.hd.setAttribute('cx',J.C[0].toFixed(1));e.hd.setAttribute('cy',J.C[1].toFixed(1));
+    e.nl.setAttribute('d',`M${pt(J.H)}L${pt(J.K1)}L${pt(J.A1)}L${pt(J.T1)}`);
+    e.na.setAttribute('d',`M${pt(J.S)}L${pt(J.E1)}L${pt(J.W1)}`);
+    const [b,f]=props(ex,P,time);if(b!==this._b){e.pb.innerHTML=b;this._b=b}if(f!==this._f){e.pf.innerHTML=f;this._f=f}}
+}
+function loop(now){for(const f of FIGS){if(!f.svg.isConnected){FIGS.delete(f);continue}if(f.on)f.draw(now)}requestAnimationFrame(loop)}
+const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.target._fig)e.target._fig.on=e.isIntersecting})):null;
+function mountFigs(root){root.querySelectorAll('svg[data-ex]').forEach(s=>{const f=new Fig(s);f.set(s.dataset.ex);if(io)io.observe(s)})}
+
+/* ================= EXERCISES ================= */
+const STAND={a1:4,a2:4};
+const PL={t:75,l1:-65,l2:-65};
+function legRun(p){const K=[[28,8],[0,-25],[-38,-78],[58,-58]];const x=p*4,i=Math.floor(x)%4,u=ease(x-Math.floor(x)),A=K[i],B=K[(i+1)%4];return [A[0]+(B[0]-A[0])*u,A[1]+(B[1]-A[1])*u]}
+const EX=[
+ {id:'air_squat',name:'Air Squat',gr:'Καθίσματα σώματος',eq:'bw',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',
+  frames:[STAND,{t:40,a1:90,a2:90,l1:85,l2:-35}],cues:['Φτέρνες κάτω, βάρος στη μέση του πέλματος','Λεκάνη κάτω από τα γόνατα, στήθος ψηλά','Γόνατα ακολουθούν τα δάχτυλα'],mu:'Τετρακέφαλοι, γλουτοί'},
+ {id:'pushup',name:'Push-up',gr:'Κάμψεις',eq:'bw',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'hand',
+  frames:[PL,{t:85,a1:-105,a2:10,l1:-85,l2:-85}],cues:['Σώμα σανίδα, σφιχτοί γλουτοί και κοιλιά','Αγκώνες περίπου 45° από τον κορμό','Αρχάριος: με τα γόνατα στο έδαφος'],mu:'Στήθος, τρικέφαλοι, ώμοι'},
+ {id:'burpee',name:'Burpee',gr:'Μπέρπι',eq:'bw',cat:['engine'],unit:'reps',base:8,period:4.4,anchor:'hip',
+  frames:[{x:0,...STAND},{x:-8,t:60,a1:15,a2:15,l1:90,l2:-30},{x:0,...PL},{x:18,t:88,a1:-112,a2:8,l1:-88,l2:-88},{x:0,...PL},{x:-8,t:60,a1:15,a2:15,l1:90,l2:-30},{x:0,air:14,a1:178,a2:180,l1:-3,l2:-6,d:.8},{x:0,...STAND,d:.6}],
+  cues:['Στήθος στο έδαφος, μετά πάνω','Άλμα με παλαμάκι πάνω από το κεφάλι','Αρχάριος: πάτα πίσω τα πόδια ένα ένα'],mu:'Όλο το σώμα, καρδιο'},
+ {id:'mountain_climber',name:'Mountain Climbers',gr:'Ορειβάτες',eq:'bw',cat:['core','engine'],unit:'reps',base:24,period:1,anchor:'hand',
+  frames:[{...PL,m1:60,m2:-80},{t:75,l1:0,l2:-110,m1:0,m2:-110,d:.5},{t:75,l1:60,l2:-80,m1:-65,m2:-65},{t:75,l1:0,l2:-110,m1:0,m2:-110,d:.5}],
+  cues:['Ώμοι πάνω από τους καρπούς','Γόνατο δυνατά προς το στήθος','Λεκάνη χαμηλά, όχι στον αέρα'],mu:'Κοιλιακοί, ώμοι, καρδιο',note:'σύνολο'},
+ {id:'lunge',name:'Reverse Lunge',gr:'Προβολές προς τα πίσω',eq:'bw',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',
+  frames:[STAND,{t:5,a1:4,a2:4,l1:80,l2:0,m1:-25,m2:-95}],cues:['Μεγάλο βήμα πίσω, γόνατο σχεδόν στο έδαφος','Κορμός όρθιος','Εναλλάξ πόδια'],mu:'Γλουτοί, τετρακέφαλοι',note:'εναλλάξ'},
+ {id:'jump_squat',name:'Jump Squat',gr:'Καθίσματα με άλμα',eq:'bw',cat:['engine','lower'],unit:'reps',base:10,period:2.1,anchor:'foot',
+  frames:[STAND,{t:40,a1:-40,a2:-30,l1:85,l2:-35},{air:20,a1:40,a2:60,l1:-4,l2:-10,d:.7},{...STAND,d:.5}],cues:['Μαλακή προσγείωση στα δάχτυλα και μετά φτέρνες','Χέρια βοηθούν την ώθηση','Χωρίς άλμα αν πονάνε γόνατα'],mu:'Πόδια, εκρηκτικότητα'},
+ {id:'plank',name:'Plank',gr:'Σανίδα',eq:'bw',cat:['core'],unit:'sec',base:40,period:3.2,anchor:'hand',
+  frames:[{t:85,a1:0,a2:90,l1:-80,l2:-80},{t:84,a1:0,a2:90,l1:-79,l2:-79}],cues:['Αγκώνες κάτω από τους ώμους','Σφίξε γλουτούς και κοιλιά','Ανάσα σταθερή'],mu:'Κορμός'},
+ {id:'high_knees',name:'High Knees',gr:'Ψηλά γόνατα',eq:'bw',cat:['engine'],unit:'sec',base:30,period:.7,anchor:'hip',
+  frames:[{l1:90,l2:0,m1:-4,m2:-14,a1:-35,a2:50,b1:40,b2:115,air:3},{l1:-4,l2:-14,m1:90,m2:0,a1:40,a2:115,b1:-35,b2:50,air:3}],cues:['Γόνατα στο ύψος της λεκάνης','Πάνω στα δάχτυλα','Γρήγορα χέρια'],mu:'Καρδιο'},
+ {id:'situp',name:'Sit-up',gr:'Κοιλιακοί',eq:'bw',cat:['core'],unit:'reps',base:15,period:2.6,anchor:'hip',
+  frames:[{t:-85,a1:-95,a2:-95,l1:135,l2:45},{t:20,a1:100,a2:100,l1:135,l2:45}],cues:['Πέλματα στο έδαφος','Χέρια πίσω από το κεφάλι κάτω, μετά στα δάχτυλα','Έλεγχος στην επιστροφή'],mu:'Κοιλιακοί'},
+ {id:'kb_swing',name:'KB Swing',gr:'Αιωρήσεις kettlebell',eq:'kb',cat:['lower','engine'],unit:'reps',base:15,period:1.8,anchor:'foot',props:{kb:'arm'},
+  frames:[{t:55,a1:-25,a2:-25,l1:22,l2:-12},{t:-4,a1:90,a2:90}],cues:['Κίνηση από τη λεκάνη, όχι από τα χέρια','Δυνατό σφίξιμο γλουτών πάνω','Πλάτη ίσια στο κάτω σημείο'],mu:'Γλουτοί, οπίσθιοι μηριαίοι, κορμός'},
+ {id:'goblet_squat',name:'Goblet Squat',gr:'Κάθισμα με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},
+  frames:[{a1:20,a2:165},{t:35,a1:35,a2:175,l1:88,l2:-38}],cues:['Kettlebell κολλητά στο στήθος','Αγκώνες ανάμεσα στα γόνατα κάτω','Ώθηση από όλο το πέλμα'],mu:'Πόδια, γλουτοί, κορμός'},
+ {id:'kb_deadlift',name:'KB Deadlift',gr:'Άρση θανάτου με kettlebell',eq:'kb',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{kb:'hang'},
+  frames:[{a1:0,a2:0},{t:65,a1:-5,a2:-5,l1:45,l2:-15}],cues:['Πλάτη ουδέτερη','Σπρώξε το πάτωμα μακριά','Λεκάνη μπροστά στο τέλος'],mu:'Οπίσθια αλυσίδα'},
+ {id:'kb_hp',name:'KB Sumo High Pull',gr:'Έλξη μέχρι το πηγούνι',eq:'kb',cat:['engine','upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{kb:'hang'},
+  frames:[{t:50,a1:0,a2:0,l1:50,l2:-18},{t:-5,a1:-120,a2:60,air:2}],cues:['Φαρδιά στάση','Πρώτα πόδια, μετά χέρια','Αγκώνες ψηλά και έξω'],mu:'Πόδια, ώμοι, πλάτη'},
+ {id:'kb_press',name:'KB Push Press',gr:'Ώθηση πάνω από το κεφάλι',eq:'kb',cat:['upper'],unit:'reps',base:10,period:2.4,anchor:'foot',props:{kb:'arm'},
+  frames:[{a1:10,a2:170,b1:25,b2:25},{l1:25,l2:-22,a1:10,a2:170,b1:25,b2:25,d:.6},{a1:178,a2:180,b1:25,b2:25,air:2},{a1:10,a2:170,b1:25,b2:25,d:.6}],cues:['Μικρό λύγισμα γονάτων και ώθηση','Τέντωσε τον αγκώνα πάνω από το αυτί','Μισές επαναλήψεις ανά χέρι'],mu:'Ώμοι, τρικέφαλοι, πόδια',note:'μισά ανά χέρι'},
+ {id:'db_thruster',name:'DB Thruster',gr:'Κάθισμα + πίεση',eq:'db',cat:['engine','lower'],unit:'reps',base:10,period:2.6,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+  frames:[{a1:15,a2:165},{t:35,a1:30,a2:170,l1:85,l2:-35},{a1:178,a2:180,d:1.1}],cues:['Βαράκια στους ώμους','Από το κάθισμα σπρώξε κατευθείαν πάνω','Μία συνεχόμενη κίνηση'],mu:'Όλο το σώμα'},
+ {id:'db_row',name:'DB Bent-over Row',gr:'Κωπηλατική',eq:'db',cat:['upper'],unit:'reps',base:12,period:2,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
+  frames:[{t:62,a1:0,a2:0,l1:22,l2:-12},{t:62,a1:-70,a2:15,l1:22,l2:-12}],cues:['Κορμός σκυμμένος, πλάτη ίσια','Τράβα τους αγκώνες προς τη λεκάνη','Ωμοπλάτες μαζί πάνω'],mu:'Πλάτη, δικέφαλοι'},
+ {id:'db_press',name:'DB Shoulder Press',gr:'Πιέσεις ώμων',eq:'db',cat:['upper'],unit:'reps',base:10,period:2.2,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+  frames:[{a1:15,a2:165},{a1:178,a2:180}],cues:['Κοιλιά σφιχτή, χωρίς καμπύλη στη μέση','Βαράκια πάνω από το κεφάλι','Κατέβασμα ελεγχόμενο'],mu:'Ώμοι, τρικέφαλοι'},
+ {id:'db_rdl',name:'DB Romanian Deadlift',gr:'Ρουμανική άρση',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.8,anchor:'foot',props:{db:'both'},dbw:[8,12,15],
+  frames:[{a1:0,a2:0},{t:72,a1:0,a2:0,l1:12,l2:-12}],cues:['Λεκάνη πίσω, γόνατα ελαφρώς λυγισμένα','Βαράκια κολλητά στα πόδια','Νιώσε το τέντωμα πίσω στους μηρούς'],mu:'Οπίσθιοι μηριαίοι, γλουτοί'},
+ {id:'db_snatch',name:'DB Snatch',gr:'Αρπαγή με ένα χέρι',eq:'db',cat:['engine'],unit:'reps',base:10,period:2.4,anchor:'foot',props:{db:'near'},dbw:[7.5,10,15],one:true,
+  frames:[{t:55,a1:0,a2:0,b1:-20,b2:-20,l1:45,l2:-15},{t:2,a1:70,a2:150,b1:-20,b2:-20,air:3,d:.6},{a1:178,a2:180,b1:-20,b2:-20}],cues:['Από το έδαφος πάνω σε μία κίνηση','Εκρηκτικά πόδια, βαράκι κοντά στο σώμα','Εναλλάξ χέρια'],mu:'Όλο το σώμα',note:'εναλλάξ'},
+ {id:'db_lunge',name:'DB Reverse Lunge',gr:'Προβολές με βαράκια',eq:'db',cat:['lower'],unit:'reps',base:12,period:2.6,anchor:'foot',props:{db:'both'},dbw:[5,8,12.5],
+  frames:[{a1:0,a2:0},{t:5,a1:0,a2:0,l1:80,l2:0,m1:-25,m2:-95}],cues:['Βαράκια στο πλάι','Κορμός όρθιος','Εναλλάξ πόδια'],mu:'Γλουτοί, πόδια',note:'εναλλάξ'},
+ {id:'renegade_row',name:'Renegade Row',gr:'Κωπηλατική σε σανίδα',eq:'db',cat:['upper','core'],unit:'reps',base:8,period:2.2,anchor:'bhand',props:{db:'both'},dbw:[5,8,10],
+  frames:[PL,{...PL,a1:-60,a2:25,b1:0,b2:0}],cues:['Πόδια ανοιχτά για σταθερότητα','Λεκάνη παράλληλη στο έδαφος','Εναλλάξ χέρια'],mu:'Πλάτη, κορμός',note:'εναλλάξ'},
+ {id:'band_squat',name:'Band Squat',gr:'Κάθισμα με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:15,period:2.4,anchor:'foot',props:{band:'foot'},
+  frames:[{a1:15,a2:165},{t:38,a1:30,a2:170,l1:85,l2:-35}],cues:['Λάστιχο κάτω από τα πέλματα, χέρια στους ώμους','Σπρώξε δυνατά πάνω','Κράτα την ένταση και κάτω'],mu:'Πόδια, γλουτοί'},
+ {id:'band_row',name:'Band Row',gr:'Κωπηλατική με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'post'},
+  frames:[{t:15,a1:85,a2:85,l1:15,l2:-12},{t:15,a1:-30,a2:70,l1:15,l2:-12}],cues:['Δέσε το λάστιχο σε σταθερό σημείο στο ύψος του στήθους','Ωμοπλάτες πίσω και κάτω','Αγκώνες κοντά στο σώμα'],mu:'Πλάτη, δικέφαλοι'},
+ {id:'band_gm',name:'Band Good Morning',gr:'Κάμψη ισχίων με λάστιχο',eq:'band',cat:['lower'],unit:'reps',base:15,period:2.8,anchor:'foot',props:{band:'foot'},
+  frames:[{a1:-10,a2:175},{t:78,a1:5,a2:150,l1:12,l2:-12}],cues:['Λάστιχο από τα πέλματα πίσω από τον αυχένα','Λεκάνη πίσω, πλάτη ίσια','Σφίξε γλουτούς για να σηκωθείς'],mu:'Οπίσθια αλυσίδα'},
+ {id:'band_press',name:'Band Overhead Press',gr:'Πιέσεις ώμων με λάστιχο',eq:'band',cat:['upper'],unit:'reps',base:12,period:2.2,anchor:'foot',props:{band:'foot'},
+  frames:[{a1:15,a2:165},{a1:178,a2:180}],cues:['Λάστιχο κάτω από τα πέλματα','Χέρια πάνω, τέντωμα πλήρες','Κορμός σφιχτός'],mu:'Ώμοι'},
+ {id:'band_curl',name:'Band Curl',gr:'Κάμψεις δικεφάλων',eq:'band',cat:['upper'],unit:'reps',base:15,period:2,anchor:'foot',props:{band:'foot'},
+  frames:[{a1:0,a2:0},{a1:5,a2:150}],cues:['Αγκώνες κολλητά στο σώμα','Ανέβα γρήγορα, κατέβα αργά','Χωρίς ταλάντευση του κορμού'],mu:'Δικέφαλοι'},
+ {id:'bike',name:'Air Bike',gr:'Ποδήλατο αέρα',eq:'bike',cat:['machine'],unit:'cal',base:12,period:.9,anchor:'fixed',fx:58,fy:108,props:{bike:true},
+  gen:p=>{const th=2*Math.PI*p;const[l1,l2]=legIK(20+13*Math.cos(th),46+13*Math.sin(th));const[m1,m2]=legIK(20-13*Math.cos(th),46-13*Math.sin(th));
+    const S=up(20,50);const[a1,a2]=armIK(48+9*Math.cos(th+Math.PI)-S[0],-22-S[1]);const[b1,b2]=armIK(48+9*Math.cos(th)-S[0],-22-S[1]);return {t:20,l1,l2,m1,m2,a1,a2,b1,b2}},
+  cues:['Σπρώξε και τράβα ταυτόχρονα με χέρια και πόδια','Σέλα στο ύψος της λεκάνης','Μέτρα θερμίδες στην οθόνη'],mu:'Όλο το σώμα, καρδιο'},
+ {id:'run',name:'Treadmill Run',gr:'Τρέξιμο στον διάδρομο',eq:'tread',cat:['machine'],unit:'m',base:200,period:.72,anchor:'hip',ground:164,props:{tread:true},
+  gen:p=>{const[l1,l2]=legRun(p),[m1,m2]=legRun((p+.5)%1),c=Math.cos(2*Math.PI*p);return {t:12,l1,l2,m1,m2,a1:-38*c,a2:-38*c+88,b1:38*c,b2:38*c+88,air:2.5*Math.abs(Math.sin(4*Math.PI*p))}},
+  cues:['Ελαφρύ πάτημα κάτω από το σώμα','Χέρια στις 90°','Χωρίς να κρατιέσαι από τις χειρολαβές'],mu:'Καρδιο, πόδια'},
+ {id:'incline_walk',name:'Incline Walk',gr:'Περπάτημα σε κλίση',eq:'tread',cat:['walk'],unit:'sec',base:60,period:1.3,anchor:'hip',ground:164,props:{tread:true},hide:true,
+  gen:p=>{const th=2*Math.PI*p;const f=x=>{const t=22*Math.sin(x);return [t,t-32*Math.max(0,Math.cos(x))]};const[l1,l2]=f(th),[m1,m2]=f(th+Math.PI);return {t:8,l1,l2,m1,m2,a1:-18*Math.sin(th),a2:-18*Math.sin(th)+22,b1:18*Math.sin(th),b2:18*Math.sin(th)+22}},
+  cues:['Κλίση 8 έως 12%','Χωρίς να κρατιέσαι','Ρυθμός που μπορείς να μιλάς'],mu:'Καρδιο χαμηλής έντασης'},
+ {id:'fold',name:'Forward Fold',gr:'Διάταση οπίσθιων μηριαίων',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:6,anchor:'foot',hide:true,
+  frames:[{...STAND,d:.6},{t:105,a1:-4,a2:-4,l1:2,l2:-2},{t:108,a1:-4,a2:-4,l1:2,l2:-2,d:1.6}],cues:['Γόνατα ελαφρώς λυγισμένα','Άφησε το κεφάλι να κρέμεται','Αργές βαθιές ανάσες'],mu:'Οπίσθιοι μηριαίοι, μέση'},
+ {id:'quad',name:'Quad Stretch',gr:'Διάταση τετρακεφάλου',eq:'bw',cat:['stretch'],unit:'sec',base:40,period:4,anchor:'hip',hide:true,
+  frames:[{l1:-15,l2:-165,m1:0,m2:0,a1:-25,a2:-35,b1:75,b2:85},{t:2,l1:-17,l2:-167,m1:0,m2:0,a1:-27,a2:-37,b1:75,b2:85}],cues:['Γόνατα κοντά μεταξύ τους','Λεκάνη ελαφρώς μπροστά','20" κάθε πόδι'],mu:'Τετρακέφαλοι'},
+ {id:'rest',name:'Rest',gr:'Ξεκούραση',eq:'bw',cat:['rest'],unit:'sec',base:30,period:3.6,anchor:'hip',hide:true,
+  gen:p=>{const s=Math.sin(2*Math.PI*p);return {t:2+1.5*s,hd:-3*s,a1:-32,a2:48,l1:3,l2:-3,m1:-3,m2:3}},cues:['Βαθιές ανάσες από τη μύτη','Χέρια στη μέση, όχι σκυμμένος'],mu:''}
+];
+const EXM={};EX.forEach(e=>{EXM[e.id]=e;prepEx(e)});
+
+/* ================= STATE ================= */
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ST=Object.assign({eq:{kb:true,bike:true,tread:true,db:true,band:true},kbw:16,lvl:1,dur:30,fmt:'random',bw:'',music:{svc:'spotify',links:{}},tm:{mode:'amrap',v:{}}},LS.get('hw_settings',{}));
+if(!ST.music||!ST.music.links)ST.music={svc:'spotify',links:{}};if(!ST.tm||!ST.tm.v)ST.tm={mode:'amrap',v:{}};
+const save=()=>LS.set('hw_settings',ST);
+const ICON={
+ bw:'<svg viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="6" r="3.5"/><path d="M16 10.5c-2 0-3 1-3.5 2.5L11 20h3l.6 9h2.8l.6-9h3l-1.5-7c-.5-1.5-1.5-2.5-3.5-2.5z"/></svg>',
+ kb:'<svg viewBox="0 0 32 32"><path d="M10.5 14V11a5.5 5.5 0 0 1 11 0v3" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="20" r="8.5" fill="currentColor"/></svg>',
+ bike:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="22" cy="17" r="7"/><path d="M5 9h6M8 9l2 13 12-5M10 22l-4 6M22 24l2 4M4 28h24M18 10l2 7"/></svg>',
+ tread:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 24h22a3 3 0 0 0 3-3M25 22 28 6M28 6h-6M6 24v4M24 24v4"/></svg>',
+ db:'<svg viewBox="0 0 32 32" fill="currentColor"><rect x="3" y="10" width="6" height="12" rx="1.5"/><rect x="23" y="10" width="6" height="12" rx="1.5"/><rect x="9" y="14.5" width="14" height="3"/></svg>',
+ band:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 22c4-10 8-10 12 0s8 10 12 0"/></svg>'
+};
+const EQN={bw:'Βάρος σώματος',kb:'Kettlebell',bike:'Air Bike',tread:'Διάδρομος',db:'Βαράκια ≤15 kg',band:'Λάστιχα'};
+const EQS={bw:'BODYWEIGHT',kb:'KETTLEBELL',bike:'AIR BIKE',tread:'ΔΙΑΔΡΟΜΟΣ',db:'ΒΑΡΑΚΙΑ',band:'ΛΑΣΤΙΧΑ'};
+const LVL=['Αρχάριος','Μεσαίος','Προχωρημένος'];
+const FMTS=[['random','Τυχαίο'],['amrap','AMRAP'],['emom','EMOM'],['fortime','FOR TIME'],['tabata','TABATA'],['intervals','INTERVALS']];
+
+function segBtns(el,opts,cur,on){el.innerHTML=opts.map(([v,l])=>`<button data-v="${v}" class="${String(v)===String(cur)?'on':''}">${l}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;on(b.dataset.v);el.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))}}
+function renderSetup(){
+  const ch=$('#eqChips');
+  ch.innerHTML=`<div class="eq on fixed">${ICON.bw}Βάρος σώματος</div>`+['kb','bike','tread','db','band'].map(k=>`<button class="eq ${ST.eq[k]?'on':''}" data-k="${k}">${ICON[k]}${EQN[k]}</button>`).join('');
+  ch.onclick=e=>{const b=e.target.closest('button.eq');if(!b)return;const k=b.dataset.k;ST.eq[k]=!ST.eq[k];b.classList.toggle('on',ST.eq[k]);$('#kbBox').hidden=!ST.eq.kb;save()};
+  $('#kbBox').hidden=!ST.eq.kb;
+  segBtns($('#kbSeg'),[8,12,16,20,24].map(v=>[v,v+' kg']),ST.kbw,v=>{ST.kbw=+v;save()});
+  segBtns($('#lvlSeg'),LVL.map((l,i)=>[i,l]),ST.lvl,v=>{ST.lvl=+v;save()});
+  segBtns($('#durSeg'),[20,30,45].map(v=>[v,v+"'"]),ST.dur,v=>{ST.dur=+v;save()});
+  segBtns($('#fmtSeg'),FMTS,ST.fmt,v=>{ST.fmt=v;save()});
+  const bw=$('#bw');bw.value=ST.bw||'';bw.oninput=()=>{ST.bw=bw.value;save()};
+}
+
+/* ================= WOD GENERATOR ================= */
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const LVM=[.7,1,1.3];
+function amount(ex,mult){
+  let v=ex.base*LVM[ST.lvl]*(mult||1),n,txt;
+  if(ex.unit==='reps'){n=Math.max(2,Math.round(v));if(ex.note==='εναλλάξ'||ex.note==='σύνολο'||ex.note==='μισά ανά χέρι')n=Math.round(n/2)*2;txt=`${n} ${ex.name}`}
+  else if(ex.unit==='cal'){n=Math.max(4,Math.round(v));txt=`${n} cal ${ex.name}`}
+  else if(ex.unit==='m'){n=Math.max(100,Math.round(v/50)*50);txt=`${n} m Run`}
+  else{n=Math.max(15,Math.round(v/5)*5);txt=`${n}" ${ex.name}`}
+  return txt;
+}
+function load(ex,extra){
+  const parts=[];
+  if(ex.eq==='kb')parts.push(`KB ${ST.kbw} kg`);
+  if(ex.eq==='db')parts.push(`${ex.one?'1':'2'}×${String(ex.dbw[ST.lvl]).replace('.',',')} kg`);
+  if(ex.eq==='band')parts.push(['Ελαφρύ λάστιχο','Μεσαίο λάστιχο','Δυνατό λάστιχο'][ST.lvl]);
+  if(ex.id==='run')parts.push(['9 km/h','11 km/h','13 km/h'][ST.lvl]);
+  if(ex.id==='incline_walk')parts.push(['5 km/h · κλίση 8%','5,5 km/h · κλίση 10%','6 km/h · κλίση 12%'][ST.lvl]);
+  if(ex.note&&ex.unit!=='sec')parts.push(ex.note);
+  if(extra)parts.push(extra);
+  return parts.join(' · ');
+}
+function pickMoves(k,opt){
+  const eqs=new Set(['bw',...Object.keys(ST.eq).filter(x=>ST.eq[x])]);
+  const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&!e.cat.includes('rest'));
+  const used=new Set(),out=[];
+  const machines=avail.filter(e=>e.cat.includes('machine'));
+  let slots=['engine','lower','upper','core'];
+  if(k===3)slots=Math.random()<.5?['engine','lower','upper']:['lower','upper','core'];
+  if(k===2)slots=['lower','upper'];
+  if(k>=5)slots=slots.concat(shuffle(['lower','upper','engine']).slice(0,k-4));
+  for(const s of slots){
+    let pool;
+    if(s==='engine'&&opt.machine&&machines.length&&Math.random()<.65)pool=machines.filter(e=>!used.has(e.id));
+    else pool=avail.filter(e=>e.cat.includes(s)&&!e.cat.includes('machine')&&!used.has(e.id)&&!(opt.noSec&&e.unit==='sec'));
+    if(!pool.length)pool=avail.filter(e=>!used.has(e.id)&&!e.cat.includes('machine'));
+    let tot=0;const w=pool.map(e=>{const x=e.eq==='bw'?1:3;tot+=x;return x});let r=Math.random()*tot,i=0;while(r>w[i]&&i<w.length-1){r-=w[i];i++}
+    const p=pool[i];if(p){used.add(p.id);out.push(p)}
+  }
+  return out;
+}
+const NAMES=['ΚΕΡΒΕΡΟΣ','ΤΙΤΑΝΑΣ','ΣΠΑΡΤΗ','ΑΤΛΑΣ','ΜΙΝΩΤΑΥΡΟΣ','ΚΥΚΛΩΠΑΣ','ΥΔΡΑ','ΗΦΑΙΣΤΟΣ','ΑΡΗΣ','ΚΡΟΝΟΣ','ΠΡΟΜΗΘΕΑΣ','ΘΕΡΜΟΠΥΛΕΣ','ΜΑΡΑΘΩΝΑΣ','ΗΡΑΚΛΗΣ','ΑΧΙΛΛΕΑΣ','ΛΕΩΝΙΔΑΣ','ΜΕΔΟΥΣΑ','ΠΗΓΑΣΟΣ'];
+function item(ex,mult,info){return {ex:ex.id,label:amount(ex,mult),sub:load(ex),info}}
+function buildWarm(){
+  const segs=[],list=[];const r=ST.dur===20?1:2;
+  if(ST.eq.bike){const e=EXM.bike;segs.push({ex:'bike',label:'Air Bike',sub:'Χαλαρός ρυθμός',dur:90,info:'ΖΕΣΤΑΜΑ'});list.push({ex:'bike',label:'90" Air Bike',sub:'Χαλαρός ρυθμός'})}
+  else if(ST.eq.tread){segs.push({ex:'incline_walk',label:'Incline Walk',sub:load(EXM.incline_walk),dur:90,info:'ΖΕΣΤΑΜΑ'});list.push({ex:'incline_walk',label:'90" Incline Walk',sub:load(EXM.incline_walk)})}
+  const mv=['air_squat','lunge','mountain_climber','high_knees'];
+  for(let i=0;i<r;i++)mv.forEach(id=>segs.push({ex:id,label:EXM[id].name,sub:'Ελαφρύς ρυθμός',dur:30,info:`ΖΕΣΤΑΜΑ · ΓΥΡΟΣ ${i+1}/${r}`}));
+  mv.forEach(id=>list.push({ex:id,label:`30" ${EXM[id].name}`,sub:EXM[id].gr}));
+  const sec=segs.reduce((s,x)=>s+x.dur,0);
+  return {name:'ΖΕΣΤΑΜΑ',type:'timeline',segs,list,desc:`${r} ${r>1?'γύροι':'γύρος'} χωρίς διάλειμμα, ήπια ένταση.`,min:sec/60,met:5};
+}
+function buildCool(){
+  const segs=[],list=[];
+  if(ST.eq.tread){segs.push({ex:'incline_walk',label:'Χαλαρό περπάτημα',sub:'4 km/h, χωρίς κλίση',dur:90,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'incline_walk',label:'90" χαλαρό περπάτημα',sub:'4 km/h'})}
+  else{segs.push({ex:'rest',label:'Βαθιές ανάσες',sub:'Περπάτα στον χώρο',dur:60,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});list.push({ex:'rest',label:'60" ανάσες',sub:'Περπάτημα στον χώρο'})}
+  segs.push({ex:'fold',label:'Forward Fold',sub:EXM.fold.gr,dur:40,info:'ΑΠΟΘΕΡΑΠΕΙΑ'},{ex:'quad',label:'Quad Stretch',sub:'20" κάθε πόδι',dur:40,info:'ΑΠΟΘΕΡΑΠΕΙΑ'},{ex:'rest',label:'Ανάσες',sub:'4" εισπνοή, 6" εκπνοή',dur:30,info:'ΑΠΟΘΕΡΑΠΕΙΑ'});
+  list.push({ex:'fold',label:'40" Forward Fold',sub:EXM.fold.gr},{ex:'quad',label:'40" Quad Stretch',sub:'20" κάθε πόδι'});
+  return {name:'ΑΠΟΘΕΡΑΠΕΙΑ',type:'timeline',segs,list,desc:'Χαλάρωση και διατάσεις.',min:segs.reduce((s,x)=>s+x.dur,0)/60,met:2.5};
+}
+function buildFinisher(){
+  const segs=[],list=[];let desc;
+  if(ST.eq.bike){for(let i=0;i<4;i++){segs.push({ex:'bike',label:'ΣΠΡΙΝΤ',sub:'Air Bike · όλα τα δίνεις',dur:20,info:`FINISHER · ${i+1}/4`},{ex:'bike',label:'Χαλαρά',sub:'Air Bike · ενεργή ξεκούραση',dur:40,info:`FINISHER · ${i+1}/4`,rest:true})}
+    list.push({ex:'bike',label:'4 × 20" σπριντ Air Bike',sub:'40" χαλαρά ανάμεσα'});desc='Τελευταία έκρηξη για μεγαλύτερη κατανάλωση.'}
+  else if(ST.eq.tread){for(let i=0;i<4;i++){segs.push({ex:'run',label:'ΓΡΗΓΟΡΑ',sub:['10 km/h','12 km/h','14 km/h'][ST.lvl],dur:30,info:`FINISHER · ${i+1}/4`},{ex:'incline_walk',label:'Περπάτημα',sub:'5 km/h',dur:30,info:`FINISHER · ${i+1}/4`,rest:true})}
+    list.push({ex:'run',label:'4 × 30" γρήγορο τρέξιμο',sub:'30" περπάτημα ανάμεσα'});desc='Τελευταία έκρηξη για μεγαλύτερη κατανάλωση.'}
+  else{const mv=['burpee','mountain_climber'];for(let i=0;i<8;i++){const id=mv[i%2];segs.push({ex:id,label:EXM[id].name,sub:'Max επαναλήψεις',dur:20,info:`FINISHER · TABATA ${i+1}/8`},{ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'',dur:10,info:`FINISHER · TABATA ${i+1}/8`,rest:true})}
+    list.push({ex:'burpee',label:'Burpee',sub:'20" δουλειά / 10" ξεκούραση'},{ex:'mountain_climber',label:'Mountain Climbers',sub:'εναλλάξ, 8 γύροι'});desc='Tabata 4 λεπτών.'}
+  return {name:'FINISHER',type:'timeline',segs,list,desc,min:4,met:9};
+}
+function buildMain(fmt,M){
+  const L=ST.lvl,k=L===0?3:4;
+  if(fmt==='amrap'){
+    const mk=(cap,tag)=>{const mv=pickMoves(k,{machine:true});const items=mv.map(e=>item(e,1));
+      return {name:'AMRAP '+cap+"'"+(tag?' '+tag:''),type:'amrap',cap:cap*60,items,list:items,desc:`Όσους γύρους μπορείς σε ${cap}'. Πάτα ✓ μετά από κάθε άσκηση.`,min:cap,met:8.5,fmt:'AMRAP'}};
+    if(M>20){const c=Math.floor((M-2)/2);return [mk(c,'A'),{name:'ΔΙΑΛΕΙΜΜΑ',type:'timeline',segs:[{ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'Νερό και ανάσες',dur:120,info:'2 ΛΕΠΤΑ',rest:true}],list:[{ex:'rest',label:"2' ξεκούραση",sub:'Νερό'}],desc:'',min:2,met:3},mk(c,'B')]}
+    return [mk(M)];
+  }
+  if(fmt==='emom'){
+    const mv=pickMoves(k,{machine:true,noSec:false});const tot=Math.max(k,Math.floor(M/k)*k);const segs=[];
+    for(let m=0;m<tot;m++){const e=mv[m%k];segs.push({ex:e.id,label:amount(e,.75),sub:load(e),dur:60,info:`ΛΕΠΤΟ ${m+1}/${tot}`})}
+    return [{name:`EMOM ${tot}'`,type:'timeline',segs,list:mv.map(e=>({ex:e.id,label:amount(e,.75),sub:load(e)})),desc:`Στην αρχή κάθε λεπτού κάνε τον σταθμό. Ό,τι περισσεύει από το λεπτό είναι ξεκούραση. ${tot/k} γύροι.`,min:tot,met:8,fmt:'EMOM'}];
+  }
+  if(fmt==='fortime'){
+    const mv=pickMoves(k,{machine:true});let R=[3,4,5][L];if(M<14)R=Math.max(2,R-1);if(M>22)R+=1;const items=[];
+    for(let r=0;r<R;r++)mv.forEach(e=>items.push(Object.assign(item(e,1),{info:`ΓΥΡΟΣ ${r+1}/${R}`})));
+    return [{name:'FOR TIME',type:'fortime',cap:M*60,items,list:mv.map(e=>item(e,1)),desc:`${R} γύροι όσο πιο γρήγορα μπορείς. Time cap ${M}'.`,min:M,met:8.5,fmt:'FOR TIME'}];
+  }
+  if(fmt==='tabata'){
+    const n=Math.min(5,Math.max(2,Math.floor((M+1)/5)));const mv=pickMoves(n,{machine:true});const segs=[];
+    mv.forEach((e,i)=>{for(let r=0;r<8;r++){segs.push({ex:e.id,label:e.name,sub:e.unit==='cal'?'Max θερμίδες':e.id==='run'?'Γρήγορο τρέξιμο':'Max επαναλήψεις · '+load(e),dur:20,info:`TABATA ${i+1}/${n} · ΓΥΡΟΣ ${r+1}/8`});
+      if(r<7)segs.push({ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'',dur:10,info:`TABATA ${i+1}/${n} · ΓΥΡΟΣ ${r+1}/8`,rest:true});
+      else if(i<n-1)segs.push({ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'Ετοίμασε τον επόμενο σταθμό',dur:60,info:'1 ΛΕΠΤΟ',rest:true});}});
+    return [{name:`TABATA × ${n}`,type:'timeline',segs,list:mv.map(e=>({ex:e.id,label:e.name,sub:'8 × 20" / 10" · '+(load(e)||e.gr)})),desc:`${n} σταθμοί, ο καθένας 8 γύροι 20" δουλειά και 10" ξεκούραση. 1' διάλειμμα ανάμεσα.`,min:segs.reduce((s,x)=>s+x.dur,0)/60,met:9,fmt:'TABATA'}];
+  }
+  // intervals
+  const machines=EX.filter(e=>e.cat.includes('machine')&&ST.eq[e.eq]);const mach=rand(machines);const st=pickMoves(2,{noSec:true});const R=Math.max(3,Math.floor(M*60/150));const segs=[];
+  for(let r=0;r<R;r++){const s=st[r%2];
+    segs.push({ex:mach.id,label:mach.name,sub:mach.id==='bike'?'Δυνατά · μάζεψε θερμίδες':'Γρήγορα · '+['10 km/h','12 km/h','14 km/h'][ST.lvl],dur:60,info:`ΓΥΡΟΣ ${r+1}/${R}`});
+    segs.push({ex:s.id,label:s.name,sub:'Σταθερός ρυθμός · '+(load(s)||s.gr),dur:60,info:`ΓΥΡΟΣ ${r+1}/${R}`});
+    segs.push({ex:'rest',label:'ΞΕΚΟΥΡΑΣΗ',sub:'',dur:30,info:`ΓΥΡΟΣ ${r+1}/${R}`,rest:true});}
+  return [{name:`INTERVALS × ${R}`,type:'timeline',segs,list:[{ex:mach.id,label:`1' ${mach.name}`,sub:'Υψηλή ένταση'},...st.map(s=>({ex:s.id,label:`1' ${s.name}`,sub:'εναλλάξ ανά γύρο · '+(load(s)||s.gr)})),{ex:'rest',label:'30" ξεκούραση',sub:''}],desc:`${R} γύροι: 1' μηχάνημα, 1' άσκηση δύναμης, 30" ξεκούραση.`,min:R*2.5,met:8.5,fmt:'INTERVALS'}];
+}
+let WOD=null;
+function generate(){
+  const M={20:12,30:17,45:26}[ST.dur];const hasM=ST.eq.bike||ST.eq.tread;
+  let fmt=ST.fmt;if(fmt==='random'){const o=['amrap','emom','fortime','tabata'];if(hasM)o.push('intervals','intervals');fmt=rand(o)}
+  if(fmt==='intervals'&&!hasM)fmt='amrap';
+  const blocks=[buildWarm(),...buildMain(fmt,M)];if(ST.dur>=30)blocks.push(buildFinisher());blocks.push(buildCool());
+  const bw=parseFloat(ST.bw)||75;const kcal=blocks.reduce((s,b)=>s+b.min*b.met*3.5*bw/200,0);
+  const total=Math.round(blocks.reduce((s,b)=>s+b.min,0)+blocks.length*10/60);
+  const main=blocks.find(b=>b.fmt);
+  WOD={name:rand(NAMES),blocks,total,kcal:Math.round(kcal/10)*10,fmt:main?main.fmt:fmt.toUpperCase(),bw:!!parseFloat(ST.bw)};
+  renderWod();
+}
+function renderWod(){
+  const w=WOD,d=new Date();
+  $('#wodOut').innerHTML=`<div class="wod"><div class="wod-head"><div class="tag">WOD της ημέρας · ${d.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'})}</div><h2>${w.name}</h2>
+   <div class="meta"><span>${w.fmt}</span><span>~${w.total} λεπτά</span><span>~${w.kcal} kcal${w.bw?'':' · 75 kg'}</span><span>${LVL[ST.lvl]}</span></div></div>
+   ${w.blocks.map(b=>`<div class="blk"><div class="blk-h"><span>${b.name}</span><span>${b.type==='fortime'?'cap ':''}${Math.round(b.min)}'</span></div>${b.desc?`<p>${b.desc}</p>`:''}
+   <ul>${b.list.map(i=>`<li data-ex="${i.ex}"><svg class="mini" data-ex="${i.ex}"></svg><div><b>${i.label}</b><small>${i.sub||''}</small></div></li>`).join('')}</ul></div>`).join('')}
+   <div class="wod-actions"><button class="btn primary" id="goBtn">Ξεκίνα ▶</button><button class="btn" id="rerollBtn">Άλλο ↻</button></div></div>`;
+  mountFigs($('#wodOut'));
+  $('#goBtn').onclick=startWorkout;$('#rerollBtn').onclick=generate;
+  $('#wodOut').querySelectorAll('li[data-ex]').forEach(li=>li.onclick=()=>openModal(li.dataset.ex));
+  $('#wodOut').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ================= LIBRARY ================= */
+let libF='all';
+function renderLib(){
+  const fs=[['all','Όλες'],['bw','Bodyweight'],['kb','Kettlebell'],['db','Βαράκια'],['band','Λάστιχα'],['bike','Air Bike'],['tread','Διάδρομος']];
+  $('#libFilters').innerHTML=fs.map(([k,l])=>`<button data-k="${k}" class="${k===libF?'on':''}">${l}</button>`).join('');
+  $('#libFilters').onclick=e=>{const b=e.target.closest('button');if(!b)return;libF=b.dataset.k;renderLib()};
+  const list=EX.filter(e=>e.id!=='rest'&&(libF==='all'||e.eq===libF));
+  $('#libGrid').innerHTML=list.map(e=>`<div class="card" data-ex="${e.id}"><svg data-ex="${e.id}"></svg><b>${e.name}</b><small>${e.gr}</small><br><span class="tagx">${EQN[e.eq]}</span></div>`).join('');
+  mountFigs($('#libGrid'));
+  $('#libGrid').querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(c.dataset.ex));
+}
+function openModal(id){
+  const e=EXM[id];if(!e)return;
+  $('#modalBox').innerHTML=`<svg data-ex="${id}"></svg><div class="tx"><h4>${e.name}</h4><div class="gr">${e.gr} · ${EQN[e.eq]}</div>
+    <ul>${e.cues.map(c=>`<li>${c}</li>`).join('')}</ul>${e.mu?`<div class="mu">Μύες: ${e.mu}</div>`:''}<button class="btn close" id="mClose">Κλείσιμο</button></div>`;
+  $('#modal').hidden=false;mountFigs($('#modalBox'));$('#mClose').onclick=()=>$('#modal').hidden=true;
+}
+$('#modal').onclick=e=>{if(e.target.id==='modal')$('#modal').hidden=true};
+
+/* ================= HISTORY ================= */
+function renderHist(){
+  const h=LS.get('hw_hist',[]);const now=new Date();const wk=h.filter(x=>(now-new Date(x.date))<7*864e5).length;
+  const mins=h.reduce((s,x)=>s+(x.min||0),0),kc=h.reduce((s,x)=>s+(x.kcal||0),0);
+  $('#hStats').innerHTML=`<div><b>${h.length}</b><small>Προπονήσεις</small></div><div><b>${wk}</b><small>Αυτή την εβδ.</small></div><div><b>${kc>=1000?(kc/1000).toFixed(1)+'k':kc}</b><small>kcal (εκτ.)</small></div>`;
+  $('#hList').innerHTML=h.length?h.slice().reverse().map(x=>`<li><b>${x.name}</b> <span class="tagx acc">${x.fmt}</span><div>${new Date(x.date).toLocaleString('el-GR',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})} · ${x.min}' · ~${x.kcal} kcal<br>${(x.res||[]).join(' · ')}</div></li>`).join(''):'<div class="empty">Δεν υπάρχουν ακόμα προπονήσεις. Φτιάξε το πρώτο σου WOD.</div>';
+  $('#hClear').hidden=!h.length;
+}
+let clearArm=false;
+$('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='Πάτα ξανά για επιβεβαίωση';setTimeout(()=>{clearArm=false;$('#hClear').textContent='Διαγραφή ιστορικού'},3000);return}LS.set('hw_hist',[]);clearArm=false;$('#hClear').textContent='Διαγραφή ιστορικού';renderHist()};
+
+/* ================= TABS ================= */
+function showView(v){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  ['train','timer','library','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
+
+/* ================= PLAYER ================= */
+let P=null,AC=null,SOUND=true,timer=null,last=0,wake=null;
+const plFig=new Fig($('#plAv'));
+function beep(f,d){if(!SOUND||!AC)return;try{const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=f;g.gain.setValueAtTime(.12,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+const fmtT=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+function startWorkout(){
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){AC=null}
+  try{if(navigator.wakeLock)navigator.wakeLock.request('screen').then(w=>wake=w).catch(()=>{})}catch(e){}
+  P={bi:0,si:0,el:0,prep:10,running:true,rounds:0,res:[],start:Date.now()};
+  $('#player').hidden=false;$('#plRun').hidden=false;$('#plFin').hidden=true;$('#plDlg').hidden=true;document.body.style.overflow='hidden';
+  last=performance.now();clearInterval(timer);timer=setInterval(tick,100);update();
+}
+const blk=()=>WOD.blocks[P.bi];
+function curIt(b){b=b||blk();if(b.type==='timeline')return b.segs[P.si];if(b.type==='amrap')return b.items[P.si%b.items.length];return b.items[P.si]}
+function nextIt(){const b=blk();if(b.type==='amrap')return b.items[(P.si+1)%b.items.length];const arr=b.type==='timeline'?b.segs:b.items;
+  if(P.si+1<arr.length)return arr[P.si+1];const nb=WOD.blocks[P.bi+1];if(!nb)return null;return nb.type==='timeline'?nb.segs[0]:nb.items[0]}
+function crossed(before,after){const a=Math.ceil(before),b=Math.ceil(after);return a!==b&&b<=3&&b>0}
+function tick(){
+  const now=performance.now(),dt=(now-last)/1000;last=now;if(!P||!P.running)return;
+  if(P.prep>0){const b4=P.prep;P.prep-=dt;if(crossed(b4,P.prep))beep(660,.12);if(P.prep<=0){P.prep=0;beep(990,.4)}update();return}
+  const b=blk(),b4=P.el;P.el+=dt;
+  if(b.type==='timeline'){const s=b.segs[P.si];if(crossed(s.dur-b4,s.dur-P.el))beep(660,.12);if(P.el>=s.dur)advance()}
+  else if(b.type==='amrap'){if(crossed(b.cap-b4,b.cap-P.el))beep(660,.12);if(P.el>=b.cap)finishBlock(true)}
+  else{if(P.el>=b.cap)finishBlock(true)}
+  update();
+}
+function advance(){const b=blk();P.si++;P.el=0;if(P.si>=b.segs.length)finishBlock();else beep(990,.3)}
+function finishBlock(capped){
+  const b=blk();let r;
+  if(b.type==='amrap')r=`${b.name}: ${P.rounds} γύροι + ${P.si} ασκ.`;
+  else if(b.type==='fortime')r=capped?`${b.name}: CAP (${P.si}/${b.items.length})`:`${b.name}: ${fmtT(P.el)}`;
+  else r=null;
+  if(r)P.res.push(r);
+  P.bi++;P.si=0;P.el=0;P.rounds=0;
+  if(P.bi>=WOD.blocks.length){endWorkout(true);return}
+  P.prep=10;beep(440,.5);
+}
+function done(){const b=blk();if(P.prep>0){P.prep=0;beep(990,.3);update();return}
+  if(b.type==='timeline'){advance()}
+  else if(b.type==='amrap'){P.si++;if(P.si>=b.items.length){P.si=0;P.rounds++;beep(880,.25)}else beep(990,.08)}
+  else{P.si++;beep(990,.08);if(P.si>=b.items.length){P.si--;finishBlock(false)}}
+  update()}
+function prev(){const b=blk();if(P.prep>0)return;
+  if(b.type==='timeline'){if(P.el>2||P.si===0)P.el=0;else{P.si--;P.el=0}}
+  else if(b.type==='amrap'){if(P.si>0)P.si--;else if(P.rounds>0){P.rounds--;P.si=b.items.length-1}}
+  else if(P.si>0)P.si--;
+  update()}
+function update(){
+  if(!P||P.bi>=WOD.blocks.length)return;const b=blk(),it=curIt(b);const ex=EXM[it.ex];
+  $('#plBlock').textContent=b.name;
+  $('#plMusic').href=musicUrl(blockKey(b));
+  const task=b.type!=='timeline';
+  $('#plMain').textContent=P.prep>0?'ΞΕΚΙΝΑ ΤΩΡΑ':!P.running?'ΣΥΝΕΧΕΙΑ':task?'ΕΓΙΝΕ ✓':'ΠΑΥΣΗ';
+  $('#plPrep').style.display=P.prep>0?'block':'none';
+  let timerTxt,info,bar;
+  if(P.prep>0){timerTxt=String(Math.ceil(P.prep));info=b.desc?b.desc.toUpperCase().slice(0,0)+(b.type==='amrap'?`ΣΤΟΧΟΣ: ΟΣΟΙ ΠΕΡΙΣΣΟΤΕΡΟΙ ΓΥΡΟΙ ΣΕ ${b.cap/60}'`:b.type==='fortime'?`TIME CAP ${b.cap/60}'`:(it.info||'')):'';bar=1-P.prep/10}
+  else if(b.type==='timeline'){timerTxt=fmtT(it.dur-P.el);info=it.info||'';bar=P.el/it.dur}
+  else if(b.type==='amrap'){timerTxt=fmtT(b.cap-P.el);info=`ΓΥΡΟΣ ${P.rounds+1} · ΑΣΚΗΣΗ ${P.si+1}/${b.items.length}`;bar=P.el/b.cap}
+  else{timerTxt=fmtT(P.el);info=`${it.info} · ${P.si+1}/${b.items.length} · CAP ${b.cap/60}'`;bar=P.si/b.items.length}
+  $('#plTimer').textContent=timerTxt;$('#plInfo').textContent=info;$('#plBar').style.width=Math.min(100,bar*100)+'%';
+  plFig.set(it.ex);
+  $('#plLabel').textContent=it.label;$('#plSub').textContent=it.sub||'';
+  $('#plCue').textContent=it.rest?'':(ex.cues[0]||'');
+  const n=nextIt();$('#plNext').textContent=n?n.label:'ΤΕΛΟΣ';
+  $('#plTimer').style.opacity=P.running?1:.4;$('#plTimer').classList.toggle('rest',!!it.rest&&!(P.prep>0));
+}
+$('#plMain').onclick=()=>{if(!P)return;if(P.prep>0){P.prep=0;beep(990,.3);update();return}
+  const b=blk();if(!P.running){P.running=true;last=performance.now();update();return}
+  if(b.type==='timeline'){P.running=false;update()}else done()};
+$('#plFwd').onclick=()=>P&&done();
+$('#plPrev').onclick=()=>P&&prev();
+$('#plSound').onclick=()=>{SOUND=!SOUND;$('#plSound').textContent=SOUND?'ΗΧΟΣ ON':'ΗΧΟΣ OFF'};
+$('#plMenu').onclick=()=>{if(!P)return;if(!$('#plFin').hidden){closePlayer();return}P.wasRunning=P.running;P.running=false;$('#plDlg').hidden=false;update()};
+$('#dResume').onclick=()=>{$('#plDlg').hidden=true;P.running=true;last=performance.now();update()};
+$('#dSkip').onclick=()=>{$('#plDlg').hidden=true;finishBlock(false);P.running=true;last=performance.now();update()};
+$('#dEnd').onclick=()=>{$('#plDlg').hidden=true;endWorkout(false)};
+function endWorkout(complete){
+  clearInterval(timer);const mins=Math.max(1,Math.round((Date.now()-P.start)/60000));
+  const bw=parseFloat(ST.bw)||75;
+  const doneBlocks=WOD.blocks.slice(0,P.bi);
+  let kcal=doneBlocks.reduce((s,b)=>s+b.min*b.met*3.5*bw/200,0);if(!complete&&P.bi<WOD.blocks.length)kcal+=(P.el/60)*WOD.blocks[P.bi].met*3.5*bw/200;
+  kcal=Math.round(kcal/5)*5;
+  if(complete)beep(1200,.6);
+  if(mins>=3||complete){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.concat(complete?[]:['Διακόπηκε'])});LS.set('hw_hist',h.slice(-200))}
+  $('#plRun').hidden=true;$('#plFin').hidden=false;$('#plBlock').textContent=complete?'ΟΛΟΚΛΗΡΩΘΗΚΕ':'ΤΕΛΟΣ';$('#plMenu').textContent='ΚΛΕΙΣΙΜΟ';
+  $('#plFin').innerHTML=`<h2>${complete?'ΤΕΛΟΣ!':'ΣΤΑΜΑΤΗΣΕΣ'}</h2><p class="note" style="font-size:15px;margin:10px 0 22px">${WOD.name} · ${WOD.fmt}</p>
+   <div class="res"><span>Χρόνος</span><b>${mins}'</b></div><div class="res"><span>Θερμίδες (εκτίμηση)</span><b>~${kcal} kcal</b></div>
+   ${P.res.map(r=>{const[a,b]=r.split(': ');return `<div class="res"><span>${a}</span><b>${b||''}</b></div>`}).join('')}
+   <p class="note" style="margin-top:18px">${complete?'Μπράβο. Νερό, πρωτεΐνη στο επόμενο γεύμα και ύπνος: εκεί γίνεται η πρόοδος.':'Ό,τι έκανες μετράει. Την επόμενη φορά λίγο παραπάνω.'}</p>
+   <button class="btn primary mt" id="finClose">ΚΛΕΙΣΙΜΟ</button>`;
+  $('#finClose').onclick=closePlayer;P.running=false;
+}
+function closePlayer(){$('#player').hidden=true;document.body.style.overflow='';$('#plMenu').textContent='ΜΕΝΟΥ';clearInterval(timer);P=null;try{wake&&wake.release()}catch(e){}renderHist()}
+document.addEventListener('keydown',e=>{if(!P||$('#player').hidden)return;if(e.code==='Space'){e.preventDefault();$('#plMain').click()}if(e.code==='ArrowRight')$('#plFwd').click();if(e.code==='ArrowLeft')$('#plPrev').click()});
+
+/* ================= MUSIC ================= */
+const MKEYS=[['general','Η δική μου playlist (για όλα)','crossfit workout music'],['warm','Ζέσταμα','workout warm up music'],['amrap','AMRAP','crossfit amrap workout music'],['emom','EMOM','emom workout music'],['fortime','For Time','crossfit gym motivation music'],['tabata','Tabata','tabata songs 20 10'],['intervals','Intervals / HIIT','hiit interval workout music'],['cool','Αποθεραπεία','stretching cool down music']];
+const MQ={};MKEYS.forEach(([k,,q])=>MQ[k]=q);
+function okUrl(u){return /^https:\/\/[^\s]+$/i.test(u||'')}
+function musicUrl(key){const L=ST.music.links;if(okUrl(L[key]))return L[key];if(okUrl(L.general))return L.general;const q=encodeURIComponent(MQ[key]||MQ.general);
+  return ST.music.svc==='youtube'?`https://www.youtube.com/results?search_query=${q}`:`https://open.spotify.com/search/${q}/playlists`}
+function blockKey(b){if(b.name==='ΖΕΣΤΑΜΑ')return 'warm';if(b.name==='ΑΠΟΘΕΡΑΠΕΙΑ')return 'cool';if(b.name==='FINISHER')return 'intervals';
+  const f=(b.fmt||'').toLowerCase().replace(' ','');return MQ[f]?f:'general'}
+function svcLabel(){return ST.music.svc==='youtube'?'· YouTube':'· Spotify'}
+function openMusic(){
+  const s=ST.music;
+  $('#modalBox').innerHTML=`<div class="tx"><h4>Μουσική</h4>
+   <p class="note" style="margin:10px 0 14px">Η μουσική ανοίγει στην εφαρμογή ή στη σελίδα του Spotify ή του YouTube, συνδεδεμένη με τον δικό σου λογαριασμό. Ξεκινάς τη λίστα, γυρνάς εδώ και η προπόνηση συνεχίζει. Αν δεν βάλεις δική σου playlist, ανοίγει αναζήτηση με λίστες για το κάθε πρόγραμμα.</p>
+   <div class="seg" id="svcSeg"></div>
+   <div id="mRows" style="margin-top:8px"></div>
+   <button class="btn primary close" id="mClose">Αποθήκευση</button></div>`;
+  segBtns($('#svcSeg'),[['spotify','Spotify'],['youtube','YouTube']],s.svc,v=>{s.svc=v;save();rows()});
+  function rows(){$('#mRows').innerHTML=MKEYS.map(([k,l])=>`<div class="mrow"><div class="top"><b>${l}</b><a href="${musicUrl(k)}" target="_blank" rel="noopener">ΑΝΟΙΓΜΑ ↗</a></div>
+     <input data-k="${k}" type="url" placeholder="Επικόλλησε link playlist ${s.svc==='youtube'?'YouTube':'Spotify'} (προαιρετικό)" value="${(s.links[k]||'').replace(/"/g,'&quot;')}"></div>`).join('');
+    $('#mRows').querySelectorAll('input').forEach(i=>i.onchange=()=>{const v=i.value.trim();if(v&&!okUrl(v)){i.style.borderColor='#fff';i.value='';i.placeholder='Το link πρέπει να ξεκινά με https://';return}s.links[i.dataset.k]=v;save();rows()})}
+  rows();$('#modal').hidden=false;$('#mClose').onclick=()=>{$('#modal').hidden=true;refreshMusic()};
+}
+function refreshMusic(){document.querySelectorAll('.svcName').forEach(e=>e.textContent=svcLabel());$('#tmMusic').href=musicUrl(TDEF[ST.tm.mode].mk)}
+document.querySelectorAll('.musicCfg').forEach(b=>b.onclick=openMusic);
+
+/* ================= TIMER ================= */
+const TDEF={
+ amrap:{n:'AMRAP',mk:'amrap',d:'As Many Rounds As Possible: όσους γύρους μπορείς μέσα στον χρόνο. Μέτρα τους γύρους με το +1.',f:[['min','Λεπτά',12]]},
+ emom:{n:'EMOM',mk:'emom',d:'Every Minute On the Minute: στην αρχή κάθε διαστήματος κάνεις τη δουλειά, ό,τι περισσεύει είναι ξεκούραση.',f:[['every','Κάθε (δευτ.)',60],['rounds','Γύροι',12]]},
+ fortime:{n:'FOR TIME',mk:'fortime',d:'Τελείωσε τη δουλειά όσο πιο γρήγορα γίνεται. Ο χρόνος μετράει προς τα πάνω μέχρι το time cap.',f:[['cap','Time cap (λεπτά)',15]]},
+ tabata:{n:'TABATA',mk:'tabata',d:'Κλασικό: 8 γύροι 20" δουλειά / 10" ξεκούραση. Μπορείς να αλλάξεις τιμές και σετ.',f:[['work','Δουλειά (δευτ.)',20],['rest','Ξεκούραση (δευτ.)',10],['rounds','Γύροι',8],['sets','Σετ',1],['setrest','Διάλειμμα σετ (δευτ.)',60]]},
+ int:{n:'INTERVALS',mk:'intervals',d:'Δικά σου διαστήματα δουλειάς και ξεκούρασης (HIIT, Death by, κλπ).',f:[['work','Δουλειά (δευτ.)',40],['rest','Ξεκούραση (δευτ.)',20],['rounds','Γύροι',10]]},
+ sw:{n:'ΧΡΟΝΟΜΕΤΡΟ',mk:'general',d:'Απλό χρονόμετρο προς τα πάνω με μετρητή γύρων. Βάλε 0 για χωρίς όριο.',f:[['cap','Όριο (λεπτά, 0 = χωρίς)',0]]},
+ cd:{n:'ΑΝΤΙΣΤΡΟΦΗ',mk:'general',d:'Αντίστροφη μέτρηση, π.χ. για ξεκούραση ή plank.',f:[['min','Λεπτά',5],['sec','Δευτερόλεπτα',0]]}
+};
+function tmVal(k,def){const v=ST.tm.v[ST.tm.mode+'_'+k];return v===undefined?def:v}
+function renderTimer(){
+  segBtns($('#tmSeg'),Object.keys(TDEF).map(k=>[k,TDEF[k].n]),ST.tm.mode,v=>{ST.tm.mode=v;save();renderTimer()});
+  const d=TDEF[ST.tm.mode];$('#tmDesc').textContent=d.d;
+  $('#tmCfg').innerHTML=d.f.map(([k,l,def])=>`<div class="field"><span>${l}</span><div class="stp"><button data-k="${k}" data-s="-1">−</button><input data-k="${k}" type="number" inputmode="numeric" min="0" value="${tmVal(k,def)}"><button data-k="${k}" data-s="1">+</button></div></div>`).join('');
+  $('#tmCfg').querySelectorAll('input').forEach(i=>i.onchange=()=>{ST.tm.v[ST.tm.mode+'_'+i.dataset.k]=Math.max(0,Math.round(+i.value||0));save();i.value=ST.tm.v[ST.tm.mode+'_'+i.dataset.k]});
+  $('#tmCfg').querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=$('#tmCfg').querySelector(`input[data-k="${b.dataset.k}"]`);const k=b.dataset.k;const step=/sec|every|work|rest|setrest/.test(k)?5:1;i.value=Math.max(0,(+i.value||0)+step*(+b.dataset.s));i.onchange()});
+  refreshMusic();
+}
+let C=null,ctimer=null,clast=0;
+function tmBuild(){
+  const m=ST.tm.mode,d=TDEF[m],v={};d.f.forEach(([k,,def])=>v[k]=+tmVal(k,def));const ph=[];let up=false,cap=0,rounds=false;
+  if(m==='sw'){up=true;cap=v.cap*60;rounds=true}
+  else if(m==='fortime'){up=true;cap=Math.max(1,v.cap)*60;rounds=true}
+  else if(m==='cd')ph.push({t:'work',d:Math.max(5,v.min*60+v.sec),lab:'ΑΝΤΙΣΤΡΟΦΗ'});
+  else if(m==='amrap'){ph.push({t:'work',d:Math.max(1,v.min)*60,lab:'AMRAP'});rounds=true}
+  else if(m==='emom'){const n=Math.max(1,v.rounds);for(let i=0;i<n;i++)ph.push({t:'work',d:Math.max(10,v.every),lab:`ΓΥΡΟΣ ${i+1}/${n}`})}
+  else if(m==='tabata'){const S=Math.max(1,v.sets),R=Math.max(1,v.rounds);for(let s=0;s<S;s++){for(let r=0;r<R;r++){ph.push({t:'work',d:Math.max(5,v.work),lab:'WORK',info:`${S>1?`ΣΕΤ ${s+1}/${S} · `:''}ΓΥΡΟΣ ${r+1}/${R}`});
+      if(r<R-1&&v.rest>0)ph.push({t:'rest',d:v.rest,lab:'REST',info:`${S>1?`ΣΕΤ ${s+1}/${S} · `:''}ΓΥΡΟΣ ${r+1}/${R}`})}
+    if(s<S-1&&v.setrest>0)ph.push({t:'rest',d:v.setrest,lab:'ΔΙΑΛΕΙΜΜΑ',info:`ΕΠΟΜΕΝΟ ΣΕΤ ${s+2}/${S}`})}}
+  else if(m==='int'){const R=Math.max(1,v.rounds);for(let r=0;r<R;r++){ph.push({t:'work',d:Math.max(5,v.work),lab:'WORK',info:`ΓΥΡΟΣ ${r+1}/${R}`});if(r<R-1&&v.rest>0)ph.push({t:'rest',d:v.rest,lab:'REST',info:`ΓΥΡΟΣ ${r+1}/${R}`})}}
+  return {m,name:d.n,ph,up,cap,rounds,total:ph.reduce((s,p)=>s+p.d,0)};
+}
+function tmStart(){
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){AC=null}
+  try{if(navigator.wakeLock)navigator.wakeLock.request('screen').then(w=>wake=w).catch(()=>{})}catch(e){}
+  C={cfg:tmBuild(),pi:0,el:0,tot:0,prep:10,running:true,rounds:0,done:false};
+  $('#clock').hidden=false;document.body.style.overflow='hidden';$('#ckName').textContent=C.cfg.name;$('#ckMusic').href=musicUrl(TDEF[C.cfg.m].mk);
+  clast=performance.now();clearInterval(ctimer);ctimer=setInterval(ctick,100);cupdate();
+}
+function ctick(){const now=performance.now(),dt=(now-clast)/1000;clast=now;if(!C||!C.running||C.done)return;
+  if(C.prep>0){const b=C.prep;C.prep-=dt;if(crossed(b,C.prep))beep(660,.12);if(C.prep<=0){C.prep=0;beep(990,.45)}cupdate();return}
+  const c=C.cfg,b4=C.el;C.el+=dt;C.tot+=dt;
+  if(c.up){if(c.cap&&crossed(c.cap-b4,c.cap-C.el))beep(660,.12);if(c.cap&&C.el>=c.cap){C.el=c.cap;cfinish()}}
+  else{const p=c.ph[C.pi];if(crossed(p.d-b4,p.d-C.el))beep(660,.12);if(C.el>=p.d){C.pi++;C.el=0;if(C.pi>=c.ph.length)cfinish();else beep(c.ph[C.pi].t==='rest'?520:990,.4)}}
+  cupdate()}
+function cfinish(){C.done=true;C.running=false;beep(1200,.8);setTimeout(()=>beep(1200,.8),900)}
+function cupdate(){
+  if(!C)return;const c=C.cfg;let phase,time,info='',bar=0,rest=false;
+  if(C.prep>0){phase='ΕΤΟΙΜΑΣΟΥ';time=fmtT(C.prep);info=c.name;bar=1-C.prep/10}
+  else if(C.done){phase='ΤΕΛΟΣ';time=c.up?fmtT(C.el):'00:00';info=c.up&&c.cap&&C.el>=c.cap?'TIME CAP':'ΣΥΝΟΛΟ '+fmtT(C.tot);bar=1}
+  else if(c.up){phase=c.m==='fortime'?'FOR TIME':'ΧΡΟΝΟΜΕΤΡΟ';time=fmtT(C.el);info=c.cap?`CAP ${fmtT(c.cap)}`:'';bar=c.cap?C.el/c.cap:0}
+  else{const p=c.ph[C.pi];phase=p.lab;time=fmtT(p.d-C.el);rest=p.t==='rest';
+    const left=c.total-c.ph.slice(0,C.pi).reduce((s,x)=>s+x.d,0)-C.el;info=(p.info?p.info+' · ':'')+(c.ph.length>1?'ΣΥΝΟΛΟ '+fmtT(left):'');bar=C.el/p.d}
+  $('#clock').classList.toggle('rest',rest&&!C.done);$('#clock').classList.toggle('done',C.done);
+  $('#ckPhase').textContent=phase;$('#ckTime').textContent=time;$('#ckInfo').textContent=info;$('#ckRing').style.strokeDashoffset=(289.03*(1-Math.min(1,Math.max(0,bar)))).toFixed(1);
+  $('#ckRounds').textContent=c.rounds?`ΓΥΡΟΙ: ${C.rounds}`:'';
+  $('#ckMain').textContent=C.done?'ΞΑΝΑ':C.prep>0?'ΞΕΚΙΝΑ':C.running?'ΠΑΥΣΗ':'ΣΥΝΕΧΕΙΑ';
+  $('#ckAlt').textContent=c.rounds?'+1 ΓΥΡΟΣ':'SKIP ›';
+  $('#ckAlt').style.visibility=C.done?'hidden':'visible';
+  $('#ckTime').style.opacity=C.running||C.done||C.prep>0?1:.4;
+}
+$('#tmGo').onclick=tmStart;
+$('#ckMain').onclick=()=>{if(!C)return;if(C.done){tmStart();return}if(C.prep>0){C.prep=0;beep(990,.4);cupdate();return}C.running=!C.running;clast=performance.now();cupdate()};
+$('#ckAlt').onclick=()=>{if(!C||C.done)return;if(C.cfg.rounds){C.rounds++;beep(880,.1)}else if(C.prep>0){C.prep=0}else{C.pi++;C.el=0;if(C.pi>=C.cfg.ph.length)cfinish();else beep(990,.3)}cupdate()};
+$('#ckReset').onclick=()=>{if(!C)return;tmStart();C.running=false;C.prep=10;cupdate()};
+$('#ckSound').onclick=()=>{SOUND=!SOUND;$('#ckSound').textContent=$('#plSound').textContent=SOUND?'ΗΧΟΣ ON':'ΗΧΟΣ OFF'};
+$('#ckClose').onclick=()=>{if(C&&C.cfg.up&&C.tot>=60&&C.el>0){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:[`Χρόνος ${fmtT(C.el)}`].concat(C.cfg.rounds&&C.rounds?[`${C.rounds} γύροι`]:[])});LS.set('hw_hist',h.slice(-200))}
+  else if(C&&C.tot>=60){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:C.cfg.rounds&&C.rounds?[`${C.rounds} γύροι`]:[]});LS.set('hw_hist',h.slice(-200))}
+  clearInterval(ctimer);C=null;$('#clock').hidden=true;document.body.style.overflow='';try{wake&&wake.release()}catch(e){}};
+document.addEventListener('keydown',e=>{if(!C||$('#clock').hidden)return;if(e.code==='Space'){e.preventDefault();$('#ckMain').click()}if(e.code==='ArrowRight')$('#ckAlt').click()});
+
+/* ================= INIT ================= */
+$('#hdate').textContent=new Date().toLocaleDateString('el-GR',{weekday:'short',day:'numeric',month:'short'});
+refreshMusic();
+renderSetup();
+$('#genBtn').onclick=generate;
+requestAnimationFrame(loop);
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
