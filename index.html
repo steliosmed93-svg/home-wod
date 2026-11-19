@@ -101,7 +101,7 @@ select.inp{appearance:none;-webkit-appearance:none;background:var(--card2) url("
 .privacy{font-size:12px;color:var(--mut);line-height:1.5;margin-top:14px}
 .favbtn{background:rgba(28,15,10,.12);border-radius:99px;padding:6px 12px;font-size:12.5px;font-weight:700;color:var(--ink);margin-top:10px}
 .prnote{background:var(--accSoft);border:1px solid rgba(255,138,91,.4);color:var(--acc);border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:700;font-size:14px}
-@media (max-width:640px){.acct span:last-child{display:none}.acct{padding:4px}.pgrid{grid-template-columns:1fr}}
+@media (max-width:640px){.acct.in span:last-child{display:none}.acct{padding:4px}.pgrid{grid-template-columns:1fr}}
 .mchips{display:flex;flex-wrap:wrap;gap:8px}
 .mchips button{padding:10px 15px;border-radius:99px;border:1px solid var(--line2);font-weight:600;font-size:13.5px;color:#cfcfd4;background:var(--card2);transition:.2s}
 .mchips button.on{background:var(--accSoft);color:var(--acc);border-color:rgba(255,138,91,.55)}
@@ -309,6 +309,87 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .pl-timer.rest{color:var(--mint)}
 .av[hidden]{display:none!important}
 .langsw{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:36px;padding:0 10px;margin-right:8px;border-radius:12px;border:1px solid var(--line);color:var(--fg);font-size:13px;font-weight:700;text-decoration:none;letter-spacing:.04em}.langsw:hover{background:rgba(255,255,255,.06)}
+
+.mbar{display:none}
+@media (max-width:760px){
+ .mbar{position:fixed;left:0;right:0;bottom:0;z-index:15;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:6px 4px calc(6px + env(safe-area-inset-bottom));background:rgba(11,11,14,.88);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-top:1px solid var(--line)}
+ .mbar button{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;color:var(--mut);font-family:inherit;padding:6px 0;cursor:pointer}
+ .mbar button b{font-size:10.5px;font-weight:600}
+ .mbar button svg{width:23px;height:23px}
+ .mbar button.on{color:var(--fg)}
+ .mbar .mscan .ic{width:56px;height:56px;margin-top:-28px;border-radius:19px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);display:grid;place-items:center;box-shadow:0 10px 30px rgba(255,110,100,.35);border:4px solid var(--bg)}
+ .mbar .mscan .ic svg{width:26px;height:26px}
+ .mbar .mscan.on b{color:var(--acc)}
+ header .tabs{display:none!important}
+ header .navcta{display:none!important}
+ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+ #toast{bottom:calc(100px + env(safe-area-inset-bottom))!important}
+}
+.scan-wrap{max-width:720px}
+.scan-cam{position:relative;border-radius:26px;overflow:hidden;background:var(--card);border:1px solid var(--line);aspect-ratio:4/3;display:grid;place-items:center}
+.scan-cam #scanReader{position:absolute;inset:0}
+.scan-cam #scanReader video{width:100%!important;height:100%!important;object-fit:cover}
+.scan-cam #scanReader img,.scan-cam #scanReader #qr-shaded-region{display:none}
+.scan-cam.live::after{content:"";position:absolute;left:12%;right:12%;top:50%;height:2px;background:var(--acc);box-shadow:0 0 18px var(--acc);animation:scanline 1.6s ease-in-out infinite alternate;pointer-events:none}
+.scan-cam.live::before{content:"";position:absolute;left:10%;right:10%;top:28%;bottom:28%;border:2px solid rgba(255,255,255,.75);border-radius:16px;z-index:2;pointer-events:none}
+@keyframes scanline{from{transform:translateY(-55px)}to{transform:translateY(55px)}}
+.scan-ph{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px;text-align:center}
+.scan-ph[hidden]{display:none}
+.scan-ph .btn{width:auto;padding:15px 26px}
+.scan-ph small{color:var(--mut);font-size:12.5px}
+.scan-ico{width:64px;height:64px;border-radius:20px;background:var(--accSoft);color:var(--acc);display:grid;place-items:center}
+.scan-ico svg{width:32px;height:32px}
+.scan-stop{position:absolute;top:12px;right:12px;z-index:3;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer}
+.scan-man{display:flex;gap:10px;margin:14px 0 22px}
+.scan-man input{flex:1;min-width:0;background:var(--card);border:1px solid var(--line2);color:var(--fg);border-radius:16px;padding:14px 16px;font:inherit;font-size:16px}
+.scan-man .btn{width:auto;padding:14px 18px;font-size:15px}
+.scan-note{color:var(--mut2);font-size:12.5px;line-height:1.55;margin-top:22px}
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;margin-bottom:22px}
+.fhead{display:flex;gap:16px;align-items:center}
+.fhead img{width:76px;height:76px;object-fit:contain;background:#fff;border-radius:16px;flex:none}
+.fhead h3{font-size:19px;margin:0 0 4px;line-height:1.25}
+.fhead p{margin:0;color:var(--mut);font-size:13.5px}
+.verdict{display:flex;align-items:center;gap:14px;margin:18px 0 6px;padding:16px 18px;border-radius:20px}
+.verdict b{font-size:24px;letter-spacing:-.02em}
+.verdict span{font-size:13.5px;opacity:.85;line-height:1.4}
+.verdict .dot{width:16px;height:16px;border-radius:50%;flex:none;background:currentColor}
+.v-good{background:rgba(111,214,184,.12);color:#6fd6b8}
+.v-mid{background:rgba(255,196,92,.12);color:#ffc45c}
+.v-bad{background:rgba(255,107,107,.13);color:#ff7a7a}
+.v-unk{background:var(--card2);color:var(--mut)}
+.why{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:7px}
+.why li{font-size:14px;color:#cfcfd4;padding-left:22px;position:relative;line-height:1.4}
+.why li::before{position:absolute;left:0;top:0;font-weight:800}
+.why li.p::before{content:"+";color:#6fd6b8}
+.why li.n::before{content:"−";color:#ff7a7a}
+.why li.i::before{content:"•";color:var(--mut)}
+.nutr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.nutr div{background:var(--card2);border-radius:14px;padding:11px 12px;border-left:3px solid var(--line2)}
+.nutr div small{display:block;color:var(--mut);font-size:11.5px;margin-bottom:3px}
+.nutr div b{font-size:16px}
+.nutr .lo{border-left-color:#6fd6b8}.nutr .md{border-left-color:#ffc45c}.nutr .hi{border-left-color:#ff7a7a}
+.fsub{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:22px 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.badge{font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:99px;background:var(--card2);border:1px solid var(--line)}
+.ns-a{background:#038141;color:#fff;border:0}.ns-b{background:#85bb2f;color:#10200a;border:0}.ns-c{background:#fecb02;color:#2a2200;border:0}.ns-d{background:#ee8100;color:#fff;border:0}.ns-e{background:#e63e11;color:#fff;border:0}
+.carc{display:grid;gap:10px}
+.carc div{border-radius:16px;padding:13px 15px;background:var(--card2);border:1px solid var(--line)}
+.carc div.g1{border-color:rgba(255,107,107,.45)}.carc div.g2a{border-color:rgba(255,160,90,.45)}.carc div.g2b{border-color:rgba(255,196,92,.35)}
+.carc b{display:block;font-size:14.5px;margin-bottom:3px}
+.carc em{font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--acc);display:block;margin-bottom:5px}
+.carc p{margin:0;font-size:13.5px;color:#c4c4ca;line-height:1.5}
+.carc-ok{font-size:14px;color:#b9e9d9}
+.fcard details{margin-top:16px;font-size:13.5px;color:#bdbdc3;line-height:1.55}
+.fcard details summary{cursor:pointer;color:var(--fg);font-weight:600}
+.fcard .flink{display:inline-block;margin-top:14px;color:var(--acc);font-size:13.5px;text-decoration:none}
+.adds{display:flex;flex-wrap:wrap;gap:6px}
+.adds span{font-size:12px;padding:4px 9px;border-radius:99px;background:var(--card2);border:1px solid var(--line);color:#cfcfd4}
+.srec{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.srec li{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:11px 14px;cursor:pointer}
+.srec li .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.srec li div{flex:1;min-width:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srec li small{color:var(--mut);font-size:12px}
+.acct.in span:last-child{}
 </style>
 </head>
 <body>
@@ -318,6 +399,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
     <nav class="tabs">
       <button data-v="train" class="on">Αρχική</button>
       <button data-v="timer">Timer</button>
+      <button data-v="scan">Σαρωτής</button>
       <button data-v="library">Ασκήσεις</button>
       <button data-v="history">Πρόοδος</button>
     </nav>
@@ -395,6 +477,21 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
     <div class="grid" id="libGrid"></div>
   </section>
 
+
+  <section id="v-scan" hidden>
+    <div class="sec-head top"><div class="eyebrow">Σαρωτής τροφίμων</div><h2>Σκάναρε ένα τρόφιμο</h2><p>Στόχευσε το barcode της συσκευασίας. Θα δεις αν είναι άριστο, μέτριο ή κακό για απώλεια βάρους, με βάση τα συστατικά και τις θερμίδες, και αν έχει συστατικά που θεωρούνται πιθανά καρκινογόνα.</p></div>
+    <div class="scan-wrap">
+      <div class="scan-cam" id="scanCam"><div id="scanReader"></div>
+        <div class="scan-ph" id="scanPh"><div class="scan-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8"/></svg></div><button class="btn primary" id="scanStart">Άνοιξε την κάμερα</button><small>Θα σου ζητηθεί άδεια για την κάμερα.</small></div>
+        <button class="scan-stop" id="scanStop" hidden>✕</button>
+      </div>
+      <form class="scan-man" id="scanForm"><input id="scanCode" inputmode="numeric" autocomplete="off" placeholder="ή γράψε τον αριθμό barcode"><button class="btn" type="submit">Αναζήτηση</button></form>
+      <div id="scanOut"></div>
+      <div id="scanRecent"></div>
+      <p class="scan-note">Τα στοιχεία προέρχονται από τη δωρεάν βάση Open Food Facts και μπορεί να λείπουν ή να έχουν λάθη. Η αξιολόγηση είναι ενδεικτική και δεν αντικαθιστά διαιτολόγο ή γιατρό.</p>
+    </div>
+  </section>
+
   <section id="v-history" hidden>
     <div class="sec-head top"><div class="eyebrow">Η πρόοδός σου</div><h2>Πρόοδος</h2><p id="syncNote">Η συνέπεια φέρνει το αποτέλεσμα.</p></div>
     <div class="stats" id="hStats"></div>
@@ -411,6 +508,7 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
   </section>
 </div>
 
+<nav class="mbar" id="mbar"><button data-v="train" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><b>Αρχική</b></button><button data-v="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg><b>Timer</b></button><button data-v="scan" class="mscan"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 8v8M11 8v8M14 8v8M17 8v8"/></svg></span><b>Σάρωση</b></button><button data-v="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><b>Ασκήσεις</b></button><button data-v="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><b>Πρόοδος</b></button></nav>
 <footer class="foot"><div class="fin-in">
   <div><a class="logo" href="#" data-go="train">Home<span>WOD</span></a><p>CrossFit προπονήσεις στο σπίτι για απώλεια βάρους. Δωρεάν. Ο λογαριασμός είναι προαιρετικός και κρατάει την πρόοδό σου σε κάθε συσκευή.</p></div>
   <div class="flinks"><b>Σελίδες</b><a href="#" data-go="train">Αρχική</a><a href="#" data-go="builder">Φτιάξε WOD</a><a href="#" data-go="timer">Timer</a><a href="#" data-go="library">Ασκήσεις</a><a href="#" data-go="history">Πρόοδος</a></div>
@@ -1019,7 +1117,7 @@ $('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='
 
 /* ================= CLOUD / AUTH ================= */
 const FB_CONFIG={apiKey:"AIzaSyD6X7ZmnNE1QQn_YXpHIrAH5FkBi31kPrU",authDomain:"home-wod-3fa81.firebaseapp.com",projectId:"home-wod-3fa81",storageBucket:"home-wod-3fa81.firebasestorage.app",messagingSenderId:"83347049614",appId:"1:83347049614:web:0fca3b57f0327d83e24ddf"}; /*FBCONFIG*/
-const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile'];
+const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans'];
 const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
   init(){try{if(!FB_CONFIG||!window.firebase){this.updateUI();return}firebase.initializeApp(FB_CONFIG);this.auth=firebase.auth();this.db=firebase.firestore();this.ready=true;
     this.auth.getRedirectResult().catch(e=>{});
@@ -1031,6 +1129,7 @@ const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
       const hist=byKey(c.hist,l.hist,x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-400);
       const weights=byKey(c.weights,l.weights,x=>x.d).sort((a,b)=>a.d<b.d?-1:1);
       const favs=byKey(c.favs,l.favs,x=>x.key).sort((a,b)=>a.saved<b.saved?1:-1).slice(0,40);
+      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);
       const prs=Object.assign({},c.prs||{});Object.entries(l.prs||{}).forEach(([k,v])=>{const o=prs[k];if(!o||(v.type==='amrap'?v.val>o.val:v.val<o.val))prs[k]=v});
       const settings=c.settings||l.settings,goals=Object.assign({},l.goals||{},c.goals||{}),profile=Object.assign({},l.profile||{},c.profile||{});
       LS.set('hw_hist',hist);LS.set('hw_weights',weights);LS.set('hw_favs',favs);LS.set('hw_prs',prs);LS.set('hw_goals',goals);LS.set('hw_profile',profile);
@@ -1041,7 +1140,7 @@ const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
   touch(){if(!this.user||this.busy)return;clearTimeout(this.t);this.t=setTimeout(()=>this.push().catch(e=>console.warn('push',e)),1200)},
   updateUI(){const b=$('#acctBtn');if(!b)return;const u=this.user;b.classList.toggle('on',!!u);
     $('#acctName').textContent=u?(u.displayName||u.email||'Λογαριασμός').split(' ')[0]:'Σύνδεση';
-    $('#acctAv').textContent=u?((u.displayName||u.email||'U').trim()[0]||'U').toUpperCase():'';$('#acctAv').hidden=!u;
+    $('#acctAv').textContent=u?((u.displayName||u.email||'U').trim()[0]||'U').toUpperCase():'';$('#acctAv').hidden=!u;$('#acctBtn').classList.toggle('in',!!u);
     const sn=$('#syncNote');if(sn)sn.textContent=u?`Συνδεδεμένος ως ${u.email||u.displayName}. Η πρόοδός σου αποθηκεύεται στον λογαριασμό σου και φαίνεται σε κάθε συσκευή.`:'Τα δεδομένα μένουν σε αυτή τη συσκευή. Κάνε σύνδεση για να τα κρατάς στον λογαριασμό σου, σε κάθε συσκευή.'}
 };
 function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--card2);border:1px solid var(--line2);color:var(--fg);padding:12px 18px;border-radius:14px;z-index:60;font-size:14px;max-width:90vw;box-shadow:0 10px 40px rgba(0,0,0,.5)';document.body.appendChild(t)}t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500)}
@@ -1144,9 +1243,11 @@ function renderProgress(){
 }
 
 /* ================= TABS ================= */
-function showView(v){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
-  ['train','timer','library','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
+function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v!=='scan')stopScan();if(v==='scan')renderScanRecent();
+  ['train','timer','library','scan','history'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
+document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();const g=a.dataset.go;
   if(g==='builder'){showView('train');setTimeout(()=>$('#builder').scrollIntoView({behavior:'smooth'}),30)}else showView(g)});
 
@@ -1354,6 +1455,145 @@ $('#yr').textContent=new Date().getFullYear();$('#exCount').textContent=EX.filte
 refreshMusic();
 renderSetup();
 $('#genBtn').onclick=generate;
+
+/* ===== Food scanner ===== */
+const SCAN_LIB='https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js';
+let scanner=null,scanBusy=false;
+function loadScript(src){return new Promise((res,rej)=>{if(window.Html5Qrcode)return res();const s=document.createElement('script');s.src=src;s.onload=()=>res();s.onerror=()=>rej(new Error('lib'));document.head.appendChild(s)})}
+async function startScan(){
+  if(scanner)return;
+  try{await loadScript(SCAN_LIB)}catch(e){toast('Δεν φόρτωσε ο σαρωτής. Έλεγξε τη σύνδεση στο internet.');return}
+  $('#scanPh').hidden=true;$('#scanStop').hidden=false;$('#scanCam').classList.add('live');
+  const F=window.Html5QrcodeSupportedFormats;
+  try{
+    scanner=new Html5Qrcode('scanReader',{formatsToSupport:[F.EAN_13,F.EAN_8,F.UPC_A,F.UPC_E],experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false});
+    await scanner.start({facingMode:'environment'},{fps:12,qrbox:(w,h)=>({width:Math.floor(Math.min(w*.8,360)),height:Math.floor(Math.min(h*.42,170))})},
+      code=>{if(scanBusy)return;scanBusy=true;try{navigator.vibrate&&navigator.vibrate(60)}catch(_){}stopScan();$('#scanCode').value=code;lookupFood(code).finally(()=>{scanBusy=false})},()=>{});
+  }catch(e){console.warn(e);await stopScan();
+    toast(/Permission|NotAllowed/i.test(String(e))?'Δεν δόθηκε άδεια για την κάμερα. Ενεργοποίησέ την από τις ρυθμίσεις του κινητού.':'Δεν άνοιξε η κάμερα. Γράψε τον αριθμό του barcode από κάτω.')}
+}
+async function stopScan(){const sc=scanner;scanner=null;if(sc){try{if(sc.isScanning)await sc.stop()}catch(e){}try{sc.clear()}catch(e){}}
+  const ph=$('#scanPh');if(ph)ph.hidden=false;const st=$('#scanStop');if(st)st.hidden=true;const c=$('#scanCam');if(c)c.classList.remove('live')}
+
+const CARC=[
+ {g:'1',pen:1.5,name:'Επεξεργασμένο κρέας',txt:'Ο Διεθνής Οργανισμός Έρευνας για τον Καρκίνο (IARC, ΠΟΥ) κατατάσσει τα αλλαντικά, το μπέικον και τα λουκάνικα στην Ομάδα 1, κυρίως για καρκίνο του παχέος εντέρου. Ο κίνδυνος μεγαλώνει με την ποσότητα και τη συχνότητα.',
+  t:(p,x)=>x.cat(/processed-meat|hams?\b|bacon|sausage|salami|chorizo|pepperoni|cured-meat|frankfurter|hot-dog|mortadella|prosciutto|cold-cut|deli-meat|charcuterie|corned-beef|jerk/)},
+ {g:'2A',pen:.75,name:'Νιτρώδη / νιτρικά (E249 έως E252)',txt:'Συντηρητικά κυρίως σε αλλαντικά. Στο στομάχι μπορούν να σχηματίσουν νιτροζαμίνες. Ο IARC κατατάσσει την πρόσληψή τους υπό αυτές τις συνθήκες στην Ομάδα 2A (πιθανώς καρκινογόνα).',
+  t:(p,x)=>x.add(['e249','e250','e251','e252'])},
+ {g:'1',pen:1.5,name:'Αλκοόλ',txt:'Το αλκοόλ είναι στην Ομάδα 1 του IARC (καρκίνος στόματος, οισοφάγου, ήπατος, μαστού, εντέρου). Δεν υπάρχει όριο κατανάλωσης χωρίς κανέναν κίνδυνο.',
+  t:(p,x)=>(x.n('alcohol')||0)>0.5||x.cat(/alcoholic-beverages|\bwines?\b|\bbeers?\b|spirits|liqueurs/)},
+ {g:'2B',pen:.4,name:'Διοξείδιο του τιτανίου (E171)',txt:'Απαγορεύεται στα τρόφιμα στην ΕΕ από το 2022, επειδή η EFSA δεν μπορούσε να αποκλείσει βλάβη στο DNA. Ο IARC το έχει στην Ομάδα 2B (με βάση την εισπνοή).',
+  t:(p,x)=>x.add(['e171'])},
+ {g:'2B',pen:.25,name:'Ασπαρτάμη (E951)',txt:'Ο IARC την κατέταξε το 2023 στην Ομάδα 2B (ενδεχομένως καρκινογόνο, με περιορισμένα στοιχεία). Η επιτροπή JECFA του ΠΟΥ κράτησε το αποδεκτό όριο στα 40 mg ανά κιλό σωματικού βάρους την ημέρα.',
+  t:(p,x)=>x.add(['e951','e962'])},
+ {g:'2B',pen:.25,name:'Καραμελόχρωμα αμμωνίας (E150c / E150d)',txt:'Μπορεί να περιέχει 4-MEI, ουσία που ο IARC κατατάσσει στην Ομάδα 2B. Συχνό σε αναψυκτικά τύπου cola και σε σάλτσες.',
+  t:(p,x)=>x.add(['e150c','e150d'])},
+ {g:'2B',pen:.25,name:'BHA (E320)',txt:'Αντιοξειδωτικό συντηρητικό που ο IARC κατατάσσει στην Ομάδα 2B.',
+  t:(p,x)=>x.add(['e320'])},
+ {g:'2B',pen:.4,name:'Βρωμικό κάλιο (E924)',txt:'Ομάδα 2B του IARC. Δεν επιτρέπεται στα τρόφιμα στην ΕΕ.',
+  t:(p,x)=>x.add(['e924','e924a'])},
+ {g:'1',pen:.25,soft:1,name:'Βενζοϊκό μαζί με βιταμίνη C',txt:'Το βενζοϊκό (E210 έως E213) μαζί με ασκορβικό οξύ μπορεί, με ζέστη ή φως, να σχηματίσει ίχνη βενζολίου (Ομάδα 1). Στα αναψυκτικά οι ποσότητες που μετριούνται είναι συνήθως πολύ χαμηλές.',
+  t:(p,x)=>x.add(['e210','e211','e212','e213'])&&(x.add(['e300','e301','e302'])||x.ing(/ascorbic|ασκορβικ/))},
+ {g:'1',pen:.5,soft:1,name:'Κάπνισμα / αρτύματα καπνού',txt:'Το κάπνισμα και τα αρτύματα καπνού μπορεί να αφήσουν πολυκυκλικούς αρωματικούς υδρογονάνθρακες, όπως το βενζο[a]πυρένιο (Ομάδα 1). Η ΕΕ καταργεί σταδιακά πολλά αρτύματα καπνού λόγω ανησυχιών για βλάβη στο DNA.',
+  t:(p,x)=>x.ing(/smoke flavou?r|smoked|liquid smoke|καπνιστ|άρωμα καπνού|αρτυμα καπνου|άρτυμα καπνού|καπνού/)||x.cat(/smoked/)},
+ {g:'2A',pen:.4,soft:1,name:'Ακρυλαμίδη (από τηγάνισμα ή ψήσιμο)',txt:'Σχηματίζεται όταν αμυλούχα τρόφιμα τηγανίζονται ή ψήνονται σε υψηλή θερμοκρασία (πατατάκια, τηγανητές πατάτες, μπισκότα, κράκερ). Ο IARC την κατατάσσει στην Ομάδα 2A. Δεν αναγράφεται στα συστατικά: είναι εκτίμηση από το είδος του προϊόντος.',
+  t:(p,x)=>x.cat(/crisps|potato-chips|chips-and-fries|french-fries|\bfries\b|biscuits|crackers|cookies|breakfast-cereals|wafers|rusks/)},
+ {g:'2A',pen:.3,soft:1,name:'Φοινικέλαιο (εξευγενισμένο)',txt:'Στον εξευγενισμό των φυτικών ελαίων, κυρίως του φοινικέλαιου, σχηματίζονται γλυκιδυλεστέρες. Η γλυκιδόλη είναι στην Ομάδα 2A του IARC. Η ΕΕ έχει θέσει ανώτατα όρια.',
+  t:(p,x)=>x.ing(/palm (oil|fat|kernel)|palm-oil|huile de palme|φοινικ/)},
+];
+const GLBL={'1':'IARC Ομάδα 1 · αποδεδειγμένα καρκινογόνο','2A':'IARC Ομάδα 2A · πιθανώς καρκινογόνο','2B':'IARC Ομάδα 2B · ενδεχομένως καρκινογόνο'};
+
+function rateFood(p){
+  const N=p.nutriments||{};const n=k=>{const v=N[k+'_100g'];return v===undefined||v===null||v===''||isNaN(+v)?null:+v};
+  const cats=(p.categories_tags||[]).join(' ');
+  const ingTxt=[p.ingredients_text_el,p.ingredients_text_en,p.ingredients_text].filter(Boolean).join(' ').toLowerCase();
+  const adds=(p.additives_tags||[]).map(a=>a.replace(/^en:/,'').toLowerCase());
+  const x={n,cat:re=>re.test(cats),ing:re=>re.test(ingTxt),add:l=>l.some(c=>adds.includes(c))};
+  const drink=/beverages|drinks|sodas|juices|waters|nectars/.test(cats)&&!/milks|yogurts|dairies/.test(cats);
+  let kcal=n('energy-kcal');if(kcal===null&&n('energy')!==null)kcal=n('energy')/4.184;
+  const v={kcal,pro:n('proteins'),sug:n('sugars'),sat:n('saturated-fat'),fat:n('fat'),salt:n('salt')!==null?n('salt'):(n('sodium')!==null?n('sodium')*2.5:null),fib:n('fiber'),carb:n('carbohydrates')};
+  let s=0,known=0;const why=[];const P=t=>why.push(['p',t]),M=t=>why.push(['n',t]),I=t=>why.push(['i',t]);
+  const ns=(p.nutriscore_grade||'').toLowerCase();
+  if(/^[a-e]$/.test(ns)){known++;const d={a:2,b:1,c:0,d:-1,e:-2}[ns];s+=d;(d>0?P:d<0?M:I)('Nutri-Score '+ns.toUpperCase())}
+  const w=/^[a-e]$/.test(ns)?.5:1;
+  const nova=+p.nova_group;
+  if(nova===1){s+=.75;P('Ελάχιστα επεξεργασμένο (NOVA 1)')}else if(nova===4){s-=.75;M('Υπερ-επεξεργασμένο (NOVA 4)')}
+  const T=drink?{sug:[2.5,11.25],sat:[.75,2.5],salt:[.3,.75],fat:[1.5,8.75]}:{sug:[5,22.5],sat:[1.5,5],salt:[.3,1.5],fat:[3,17.5]};
+  if(v.sug!==null){known++;if(v.sug>T.sug[1]){s-=w;M(`Πολλή ζάχαρη: ${fmtN(v.sug)} g / 100 ${drink?'ml':'g'}`)}else if(v.sug<=T.sug[0]&&(v.carb===null||v.carb>3))P('Λίγη ζάχαρη')}
+  if(v.sat!==null){known++;if(v.sat>T.sat[1]){s-=w;M(`Πολλά κορεσμένα λιπαρά: ${fmtN(v.sat)} g`)}}
+  if(v.salt!==null){known++;if(v.salt>T.salt[1]){s-=w;M(`Πολύ αλάτι: ${fmtN(v.salt)} g`)}}
+  if(v.kcal!==null){known++;
+    if(!drink&&v.kcal>=450){s-=.5;M(`Πολλές θερμίδες: ${Math.round(v.kcal)} kcal / 100 g`)}
+    else if(drink&&v.kcal>=40){s-=.5;M(`Θερμίδες σε υγρή μορφή: ${Math.round(v.kcal)} kcal / 100 ml, δεν χορταίνουν`)}
+    else if(!drink&&v.kcal<=120)P(`Λίγες θερμίδες: ${Math.round(v.kcal)} kcal / 100 g`)}
+  if(v.pro!==null&&v.kcal){known++;const pp=v.pro*400/Math.max(v.kcal,1);
+    if(v.pro>=10&&pp>=20){s+=.75;P(`Πολλή πρωτεΐνη: ${fmtN(v.pro)} g, χορταίνει και κρατάει τους μύες`)}
+    else if(v.pro>=6){s+=.25;P(`Καλή πρωτεΐνη: ${fmtN(v.pro)} g`)}}
+  if(v.fib!==null&&v.fib>=6){s+=.5;P(`Πολλές φυτικές ίνες: ${fmtN(v.fib)} g`)}
+  const carc=CARC.filter(c=>{try{return c.t(p,x)}catch(e){return false}});
+  carc.forEach(c=>{s-=c.pen});
+  if(carc.some(c=>!c.soft&&(c.g==='1'||c.g==='2A')))M('Περιέχει συστατικό που θεωρείται καρκινογόνο (δες παρακάτω)');
+  let verdict='unk';
+  if(known>=2||/^[a-e]$/.test(ns))verdict=s>=1?'good':s>=-1?'mid':'bad';
+  return {verdict,score:s,why,v,drink,carc,adds,nova,ns,ingTxt};
+}
+function fmtN(x){return (Math.round(x*10)/10).toString().replace('.',',')}
+const VLBL={good:['Άριστο','Καλή επιλογή για απώλεια βάρους.'],mid:['Μέτριο','Με μέτρο και σε λογική ποσότητα.'],bad:['Κακό','Καλύτερα σπάνια ή καθόλου, ειδικά όταν χάνεις βάρος.'],unk:['Χωρίς αρκετά στοιχεία','Η βάση δεν έχει αρκετά διατροφικά στοιχεία για αξιολόγηση.']};
+const VCLS={good:'v-good',mid:'v-mid',bad:'v-bad',unk:'v-unk'};
+const VCOL={good:'#6fd6b8',mid:'#ffc45c',bad:'#ff7a7a',unk:'#5d5d63'};
+function lvl(val,lo,hi){return val===null?'':val<=lo?'lo':val>hi?'hi':'md'}
+function escH(t){return String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+async function lookupFood(code){
+  code=String(code||'').replace(/\D/g,'');
+  if(code.length<6){toast('Γράψε έναν έγκυρο αριθμό barcode.');return}
+  const out=$('#scanOut');out.innerHTML='<div class="fcard"><p style="margin:0;color:var(--mut)">Αναζήτηση…</p></div>';
+  const fields='code,product_name,product_name_el,product_name_en,generic_name,brands,quantity,serving_size,image_front_small_url,image_front_url,nutriscore_grade,nova_group,nutriments,additives_tags,ingredients_text,ingredients_text_el,ingredients_text_en,categories_tags';
+  let j;
+  try{const r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=${fields}`);j=await r.json()}
+  catch(e){out.innerHTML='<div class="fcard"><p style="margin:0">Δεν ήταν δυνατή η αναζήτηση. Έλεγξε τη σύνδεση στο internet και δοκίμασε ξανά.</p></div>';return}
+  if(!j||j.status!==1||!j.product){
+    out.innerHTML=`<div class="fcard"><h3 style="margin:0 0 8px;font-size:18px">Δεν βρέθηκε το προϊόν</h3><p style="margin:0;color:#c4c4ca;font-size:14px;line-height:1.55">Ο κωδικός ${escH(code)} δεν υπάρχει ακόμα στη βάση Open Food Facts. Μπορείς να το προσθέσεις εσύ από την εφαρμογή Open Food Facts φωτογραφίζοντας τη συσκευασία, και μετά θα το βρίσκεις κι εδώ.</p><a class="flink" href="https://world.openfoodfacts.org/cgi/product.pl?type=search_or_add&code=${code}" target="_blank" rel="noopener">Προσθήκη στο Open Food Facts ↗</a></div>`;return}
+  const p=j.product,R=rateFood(p);renderFood(p,R,code);saveScan(p,R,code);
+}
+function renderFood(p,R,code){
+  const name=p.product_name_el||p.product_name||p.product_name_en||p.generic_name||'Χωρίς όνομα';
+  const sub=[p.brands,p.quantity].filter(Boolean).join(' · ');
+  const [vt,vs]=VLBL[R.verdict];const v=R.v,u=R.drink?'ml':'g';
+  const T=R.drink?{sug:[2.5,11.25],sat:[.75,2.5],salt:[.3,.75]}:{sug:[5,22.5],sat:[1.5,5],salt:[.3,1.5]};
+  const cell=(l,val,unit,cls)=>`<div class="${cls||''}"><small>${l}</small><b>${val===null?'–':(unit==='kcal'?Math.round(val):fmtN(val))+' '+unit}</b></div>`;
+  const kserv=p.nutriments&&p.nutriments['energy-kcal_serving'];
+  const carcHtml=R.carc.length?`<div class="carc">${R.carc.map(c=>`<div class="g${c.g.toLowerCase()}"><b>${c.name}</b><em>${GLBL[c.g]}${c.soft?' · εξαρτάται από επεξεργασία/ποσότητα':''}</em><p>${c.txt}</p></div>`).join('')}</div><p class="scan-note" style="margin-top:12px">Η ομάδα του IARC δείχνει πόσο ισχυρά είναι τα στοιχεία ότι κάτι μπορεί να προκαλέσει καρκίνο, όχι πόσο μεγάλος είναι ο κίνδυνος από μία μερίδα.</p>`
+    :`<p class="carc-ok">${R.ingTxt||R.adds.length?'Δεν βρέθηκαν γνωστά πιθανά καρκινογόνα στα συστατικά και τα πρόσθετα που αναφέρονται.':'Η βάση δεν έχει λίστα συστατικών για αυτό το προϊόν, οπότε δεν μπορεί να γίνει έλεγχος.'}</p>`;
+  $('#scanOut').innerHTML=`<div class="fcard">
+    <div class="fhead">${p.image_front_small_url?`<img src="${escH(p.image_front_small_url)}" alt="">`:''}<div><h3>${escH(name)}</h3><p>${escH(sub)}</p></div></div>
+    <div class="verdict ${VCLS[R.verdict]}"><i class="dot"></i><div><b>${vt}</b><br><span>${vs}</span></div></div>
+    ${R.why.length?`<ul class="why">${R.why.map(([k,t])=>`<li class="${k}">${escH(t)}</li>`).join('')}</ul>`:''}
+    <div class="badges">${/^[a-e]$/.test(R.ns)?`<span class="badge ns-${R.ns}">Nutri-Score ${R.ns.toUpperCase()}</span>`:''}${R.nova?`<span class="badge">NOVA ${R.nova}</span>`:''}${kserv?`<span class="badge">${Math.round(kserv)} kcal / μερίδα${p.serving_size?' ('+escH(p.serving_size)+')':''}</span>`:''}</div>
+    <div class="fsub">Ανά 100 ${u}</div>
+    <div class="nutr">${cell('Θερμίδες',v.kcal,'kcal',v.kcal===null?'':R.drink?(v.kcal<=20?'lo':v.kcal>=45?'hi':'md'):(v.kcal<=150?'lo':v.kcal>=400?'hi':'md'))}${cell('Πρωτεΐνη',v.pro,'g',v.pro===null?'':v.pro>=10?'lo':v.pro<3?'hi':'md')}${cell('Σάκχαρα',v.sug,'g',lvl(v.sug,...T.sug))}${cell('Κορεσμένα',v.sat,'g',lvl(v.sat,...T.sat))}${cell('Αλάτι',v.salt,'g',lvl(v.salt,...T.salt))}${cell('Φυτικές ίνες',v.fib,'g',v.fib===null?'':v.fib>=6?'lo':v.fib<3?'md':'lo')}</div>
+    <div class="fsub">Πιθανά καρκινογόνα</div>${carcHtml}
+    ${R.adds.length?`<div class="fsub">Πρόσθετα (${R.adds.length})</div><div class="adds">${R.adds.map(a=>`<span>${escH(a.toUpperCase())}</span>`).join('')}</div>`:''}
+    ${R.ingTxt?`<details><summary>Συστατικά</summary><p>${escH(p.ingredients_text_el||p.ingredients_text||p.ingredients_text_en)}</p></details>`:''}
+    <a class="flink" href="https://world.openfoodfacts.org/product/${code}" target="_blank" rel="noopener">Δες το στο Open Food Facts ↗</a>
+  </div>`;
+  $('#scanOut').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function saveScan(p,R,code){
+  const name=p.product_name_el||p.product_name||p.product_name_en||code;
+  let L=LS.get('hw_scans',[])||[];L=L.filter(x=>x.code!==code);L.unshift({code,name:String(name).slice(0,80),brand:String(p.brands||'').slice(0,40),v:R.verdict,date:new Date().toISOString()});
+  persist('hw_scans',L.slice(0,30));renderScanRecent();
+}
+function renderScanRecent(){
+  const L=LS.get('hw_scans',[])||[];const el=$('#scanRecent');if(!el)return;
+  el.innerHTML=L.length?`<div class="fsub">Πρόσφατες σαρώσεις</div><ul class="srec">${L.slice(0,12).map(x=>`<li data-code="${escH(x.code)}"><i class="dot" style="background:${VCOL[x.v]||VCOL.unk}"></i><div>${escH(x.name)}${x.brand?` <small>· ${escH(x.brand)}</small>`:''}</div><small>${VLBL[x.v]?VLBL[x.v][0]:''}</small></li>`).join('')}</ul>`:'';
+  el.querySelectorAll('[data-code]').forEach(li=>li.onclick=()=>{$('#scanCode').value=li.dataset.code;lookupFood(li.dataset.code)});
+}
+$('#scanStart').onclick=startScan;
+$('#scanStop').onclick=stopScan;
+$('#scanForm').onsubmit=e=>{e.preventDefault();stopScan();lookupFood($('#scanCode').value)};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopScan()});
+
 window.addEventListener('load',()=>Cloud.init());document.getElementById('langSw')?.addEventListener('click',e=>{try{localStorage.setItem('hw_lang',e.currentTarget.dataset.lang)}catch(_){}});
 $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[{ex:'rest',label:'Βαθιές ανάσες',sub:'Χαλάρωσε τους ώμους',dur:45,info:'STRETCHING'}],list=[];
   pick.forEach((id,i)=>{const e=EXM[id];const d=e.side?60:50;const sub=e.side?`30" κάθε πλευρά · ${e.gr}`:e.gr;segs.push({ex:id,label:e.name,sub,dur:d,info:`ΔΙΑΤΑΣΗ ${i+1}/${pick.length}`,rest:true});list.push({ex:id,label:`${d}" ${e.name}`,sub})});
