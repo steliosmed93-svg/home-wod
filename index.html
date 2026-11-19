@@ -21,9 +21,9 @@ html,body{margin:0;background:var(--bg);color:var(--fg)}
 body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;letter-spacing:-.011em}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 380px at 15% -10%,rgba(255,138,91,.13),transparent 70%),radial-gradient(600px 380px at 95% 0%,rgba(111,214,184,.08),transparent 70%);z-index:0}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 28px 60px}
+.wrap{position:relative;z-index:1;max-width:none;margin:0 auto;padding:0 clamp(18px,4.5vw,110px) 60px}
 header{position:sticky;top:0;z-index:6;background:rgba(11,11,14,.66);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);border-bottom:1px solid var(--line)}
-.hd{max-width:1160px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:28px}
+.hd{max-width:none;margin:0 auto;padding:14px clamp(18px,4.5vw,110px);display:flex;align-items:center;gap:28px}
 .logo{font-weight:900;font-size:22px;letter-spacing:-.045em;line-height:1;color:var(--fg);text-decoration:none;flex:none}
 .logo span{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-radius:8px;padding:2px 7px;margin-left:5px}
 .tabs{display:flex;gap:4px;flex:1}
@@ -37,15 +37,15 @@ section[hidden]{display:none}
 .hero{padding:30px 0 4px}
 .landing{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center;padding:64px 0 40px}
 .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-.landing h1{font-size:clamp(40px,5.4vw,68px);font-weight:900;letter-spacing:-.055em;line-height:1;margin:14px 0 18px}
+.landing h1{font-size:clamp(40px,4.6vw,92px);font-weight:900;letter-spacing:-.055em;line-height:1;margin:14px 0 18px}
 .landing h1 em{font-style:normal;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{font-size:18px;line-height:1.6;color:#b9b9c0;margin:0;max-width:560px}
+.lead{font-size:clamp(17px,1.15vw,21px);line-height:1.6;color:#b9b9c0;margin:0;max-width:680px}
 .cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
 .cta .btn{width:auto;padding:16px 24px}
 .kpis{display:flex;gap:36px;margin-top:36px;flex-wrap:wrap}
 .kpis b{display:block;font-size:30px;font-weight:900;letter-spacing:-.04em}
 .kpis span{font-size:13px;color:var(--mut)}
-.l-visual{position:relative}
+.l-visual{position:relative;width:100%;max-width:min(100%,68vh,760px);justify-self:center}
 .stage{aspect-ratio:1;border-radius:32px;background:radial-gradient(circle at 50% 58%,#2a1d1b 0,#121214 66%);border:1px solid var(--line);overflow:hidden}
 .stage svg{width:100%;height:100%;filter:drop-shadow(0 0 28px rgba(255,138,91,.2))}
 .hero-cap{position:absolute;left:20px;top:20px;background:rgba(14,14,16,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line2);border-radius:16px;padding:10px 16px}
@@ -63,16 +63,16 @@ section[hidden]{display:none}
 .builder h3.lbl:first-child{margin-top:24px}
 .btn.big{padding:19px;font-size:17px}
 .tipline{margin-top:14px;max-width:760px}
-.timer-card{max-width:720px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:10px 28px 28px;margin-top:24px}
+.timer-card{max-width:900px;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:10px 28px 28px;margin-top:24px}
 .timer-card .field{background:var(--card2)}
 .foot{border-top:1px solid var(--line);margin-top:40px;position:relative;z-index:1}
-.fin-in{max-width:1160px;margin:0 auto;padding:44px 28px 24px;display:grid;grid-template-columns:1.3fr 1fr 1.3fr;gap:40px}
+.fin-in{max-width:none;margin:0 auto;padding:44px 28px 24px;display:grid;grid-template-columns:1.3fr 1fr 1.3fr;gap:40px}
 .foot p{color:var(--mut);font-size:14px;line-height:1.6;margin:14px 0 0;max-width:340px}
 .flinks{display:flex;flex-direction:column;gap:9px;font-size:14px}
 .flinks b{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg);margin-bottom:4px}
 .flinks a{color:var(--mut);text-decoration:none}.flinks a:hover{color:var(--acc)}
 .flinks span{color:var(--mut);line-height:1.55}
-.copy{max-width:1160px;margin:0 auto;padding:16px 28px 30px;font-size:12.5px;color:var(--mut2)}
+.copy{max-width:none;margin:0 auto;padding:16px 28px 30px;font-size:12.5px;color:var(--mut2)}
 #wodOut .wod{max-width:none}
 .wod-body{display:grid;grid-template-columns:1fr 1fr}
 .wod-body .blk{border-top:1px solid var(--line);border-left:1px solid var(--line)}
@@ -160,12 +160,12 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .card .tagx{margin-left:6px}
 .tagx.acc{color:var(--acc);border-color:rgba(255,138,91,.35);background:var(--accSoft)}
 .tagx{display:inline-block;font-size:10.5px;font-weight:600;border-radius:99px;background:var(--card2);border:1px solid var(--line);color:#bdbdc3;padding:3px 9px;margin-top:8px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px;max-width:860px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px;max-width:1100px}
 .stats div{padding:18px 10px;text-align:center;border-radius:20px;background:var(--card);border:1px solid var(--line)}
 .stats div:first-child{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent}
 .stats b{display:block;font-weight:900;font-size:32px;letter-spacing:-.05em}
 .stats small{font-size:11px;font-weight:600;opacity:.6}
-.hist{list-style:none;padding:0;margin:16px 0 0;max-width:860px}
+.hist{list-style:none;padding:0;margin:16px 0 0;max-width:1100px}
 .hist li{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px 16px;margin-bottom:10px}
 .hist li b{font-size:17px;font-weight:800;letter-spacing:-.03em}
 .hist li .tagx{margin:0 0 0 6px;vertical-align:2px}
@@ -978,7 +978,8 @@ refreshMusic();
 renderSetup();
 $('#genBtn').onclick=generate;
 requestAnimationFrame(loop);
-if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+if('serviceWorker' in navigator&&location.protocol==='https:'){let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(rl)return;rl=true;location.reload()});
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})}
 </script>
 </body>
 </html>
