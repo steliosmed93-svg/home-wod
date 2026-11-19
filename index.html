@@ -1502,7 +1502,7 @@ async function scanPhoto(file){
     }
     try{h.clear()}catch(_){}
     $('#scanOut').innerHTML='<div class="fcard"><p style="margin:0;line-height:1.55">Δεν διαβάστηκε το barcode από τη φωτογραφία. Βγάλε την πιο κοντά, με το barcode οριζόντιο, καθαρό και με καλό φως. Ή γράψε τους αριθμούς που είναι κάτω από τις γραμμές.</p></div>';
-  }catch(e){toast('Δεν φόρτωσε ο σαρωτής. Έλεγξε τη σύνδεση στο internet.')}
+  }catch(e){console.warn(e);$('#scanOut').innerHTML='';toast('Δεν φόρτωσε ο σαρωτής. Έλεγξε τη σύνδεση στο internet.')}
   finally{const i=$('#scanPhoto');if(i)i.value=''}
 }
 

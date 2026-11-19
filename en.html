@@ -1502,7 +1502,7 @@ async function scanPhoto(file){
     }
     try{h.clear()}catch(_){}
     $('#scanOut').innerHTML='<div class="fcard"><p style="margin:0;line-height:1.55">Couldn’t read the barcode from the photo. Take it closer, with the barcode horizontal, sharp and in good light. Or type the numbers under the lines.</p></div>';
-  }catch(e){toast('The scanner didn’t load. Check your internet connection.')}
+  }catch(e){console.warn(e);$('#scanOut').innerHTML='';toast('The scanner didn’t load. Check your internet connection.')}
   finally{const i=$('#scanPhoto');if(i)i.value=''}
 }
 
