@@ -1781,10 +1781,12 @@ function mealTotals(){const t={k:0,p:0,c:0,f:0};MEAL.res.items.forEach(x=>{t.k+=
 function dailyTarget(){try{const prof=LS.get('hw_profile',{})||{};const W=LS.get('hw_weights',[])||[];const kg=W.length?W[W.length-1].kg:(parseFloat(ST.bw)||null);
   if(!kg||!prof.age||!prof.height)return null;const bmr=10*kg+6.25*(+prof.height)-5*(+prof.age)+(prof.sex==='f'?-161:5);let k=bmr*(+prof.act||1.375)-(+prof.pace||0);return Math.round(Math.max(prof.sex==='f'?1200:1500,k))}catch(e){return null}}
 function mealVerdict(t){
-  const pk=t.k?t.p*4/t.k:0;const why=[];let s=0;
-  if(t.k>900){s-=1.5;why.push(['n','Too many calories for one meal'])}else if(t.k>700){s-=.75;why.push(['n','Quite a large meal'])}else if(t.k<=550){s+=.5;why.push(['p','Reasonable calories for a meal'])}
-  if(t.p>=30||pk>=.25){s+=1;why.push(['p','Good protein, filling'])}else if(t.p<15&&t.k>300){s-=.75;why.push(['n','Low protein'])}
-  if(t.k&&t.f*9/t.k>.45){s-=.75;why.push(['n','High fat'])}
+  const pk=t.k?t.p*4/t.k:0,fk=t.k?t.f*9/t.k:0;const why=[];let s=0;
+  if(t.k>1000){s-=1.5;why.push(['n','Too many calories for one meal'])}else if(t.k>800){s-=1;why.push(['n','Too many calories for one meal'])}else if(t.k>600){s-=.5;why.push(['n','Quite a large meal'])}
+  else if(t.k<=350){s+=1;why.push(['p','Light, low in calories'])}else{s+=.5;why.push(['p','Reasonable calories for a meal'])}
+  if(t.p>=30||(pk>=.25&&t.k>250)){s+=1;why.push(['p','Good protein, filling'])}else if(t.p<15&&t.k>400){s-=.75;why.push(['n','Low protein for the size of the meal'])}
+  if(t.f>35||(fk>.5&&t.k>450)){s-=.75;why.push(['n','High fat'])}
+  if(t.k<=350&&t.p<10)why.push(['i','Add a protein source (e.g. egg, tuna, chicken) to feel fuller'])
   return {v:s>=1?'good':s>=-.75?'mid':'bad',why};
 }
 function renderMeal(){
@@ -1830,7 +1832,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='12';
+const APP_VER='13';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
