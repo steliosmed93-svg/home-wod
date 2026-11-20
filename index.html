@@ -558,6 +558,12 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .dchips button.on{background:var(--acc);color:var(--ink);border-color:transparent}
 
 body.ret .landing,body.ret .features{display:none}
+#dash>*{min-width:0}.d-ph button{background:none;border:0;color:var(--acc);font:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:4px}
+.d-ph{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 8px}.d-ph b{font-size:17px}.d-ph .d-link{width:auto;margin:0}
+.d-pl{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.d-pl::-webkit-scrollbar{display:none}
+.d-pc{flex:0 0 150px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;text-align:left;color:var(--fg);font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.d-pc span{font-size:24px}.d-pc b{font-size:15px;line-height:1.25}.d-pc small{font-size:12px;color:var(--mut)}
+.d-pc.run{background:linear-gradient(135deg,rgba(111,214,184,.16),rgba(111,214,184,.04));border-color:rgba(111,214,184,.45)}
 #dash{display:grid;gap:14px;margin:6px 0 22px}
 body:not(.ret) #dash{display:none}
 .d-hello small{color:var(--mut);font-size:13px;font-weight:600;text-transform:capitalize}
@@ -665,6 +671,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
       <button data-v="library">Ασκήσεις</button>
       <button data-v="history">Πρόοδος</button>
       <button data-v="coach">💪 AI Coach</button>
+      <button data-v="progs">🏃 Προγράμματα & Μαραθώνιος</button>
     </nav></div>
     <a class="langsw" href="en.html" id="langSw" data-lang="en">EN</a><button class="acct" id="acctBtn"><span class="av" id="acctAv" hidden></span><span id="acctName">Σύνδεση</span></button>
     <a class="btn primary navcta" href="#builder" data-go="builder">Φτιάξε WOD</a>
@@ -1680,7 +1687,8 @@ function renderProgress(){try{renderToday($('#pcToday'));renderHeat();renderBadg
 function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));{const tb=document.querySelector('.tabs button[data-v="'+v+'"]');if(tb)$('#navCur').textContent=tb.textContent;const dd=$('#navdd');if(dd){dd.classList.remove('open');$('#navBtn').setAttribute('aria-expanded','false')}}
   if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();renderMealDay();getDecoder().catch(()=>{});window.MealAI&&MealAI.warm()}
   ['train','timer','library','fast','scan','history','coach'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='coach')renderCoach();{const fb=$('#cFab');if(fb)fb.hidden=v==='coach'}if(v==='fast')renderFast();if(v==='train')renderDash();if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
-document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
+function openProgs(){showView('train');const pm=$('#progMore');if(pm){pm.open=true;setTimeout(()=>pm.scrollIntoView({behavior:'smooth',block:'start'}),60)}}
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.v==='progs'){openProgs();return}showView(b.dataset.v)};
 $('#navBtn').onclick=e=>{e.stopPropagation();const dd=$('#navdd');const o=!dd.classList.contains('open');dd.classList.toggle('open',o);$('#navBtn').setAttribute('aria-expanded',String(o))};
 document.addEventListener('click',e=>{const dd=$('#navdd');if(dd&&dd.classList.contains('open')&&!dd.contains(e.target))dd.classList.remove('open')});
 document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
@@ -2673,7 +2681,10 @@ function renderDash(){const el=$('#dash');if(!el)return;const ret=!!LS.get('hw_s
     <button class="d-tile ${fa?'hot':''}" data-dt="fast"><span class="e">⏳</span><b>Νηστεία</b><span>${fTxt}</span></button>
     <button class="d-tile" data-dt="water"><span class="e">💧</span><b>+ 1 ποτήρι νερό</b><span>${(t.w/1000).toFixed(2).replace(/0$/,'')} / ${(T.water/1000).toFixed(1)} L σήμερα</span></button>
     <button class="d-tile" data-dt="coach"><span class="e">💪</span><b>AI Coach</b><span>Ρώτα με ό,τι θέλεις</span></button>
-   </div>`;
+   </div>
+   ${S&&!S.finished?'':`<div class="d-progs"><div class="d-ph"><b>Προγράμματα</b><button class="d-link" id="dAllP">Όλα →</button></div><div class="d-pl">${PROGRAMS.slice().sort((a,b)=>(b.run?1:0)-(a.run?1:0)).map(P0=>`<button class="d-pc ${P0.run?'run':''}" data-dp="${P0.id}"><span>${P0.run?'🏃':'📋'}</span><b>${P0.name}</b><small>${P0.weeks} εβδομάδες · ${P0.per}×/εβδομάδα</small></button>`).join('')}</div></div>`}`;
+  el.querySelectorAll('[data-dp]').forEach(b=>b.onclick=()=>{const id=b.dataset.dp;if(id==='marathon16'){marathonSetup();return}persist('hw_prog',{id,start:new Date().toISOString(),done:[]});renderProgBox();renderDash();window.scrollTo({top:0,behavior:'smooth'});toast('Το πρόγραμμα ξεκίνησε!')});
+  {const ap=$('#dAllP');if(ap)ap.onclick=openProgs}
   $('#dGo').onclick=()=>{if(S&&!S.finished)startProgSession();else{generate();$('#wodOut').scrollIntoView({behavior:'smooth'})}};
   $('#dSet').onclick=()=>{const sb=$('#setupBox');sb.open=true;sb.scrollIntoView({behavior:'smooth'})};
   el.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{const k=b.dataset.dt;if(k==='water'){addWater(250);toast('+250 ml νερό 💧');renderDash()}else showView(k==='food'?'scan':k)});
@@ -2818,7 +2829,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='30';
+const APP_VER='31';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
