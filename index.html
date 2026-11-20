@@ -519,6 +519,39 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .prog-card p{margin:0;font-size:13.5px;color:#bdbdc3;line-height:1.5;flex:1}
 .prog-card .btn{margin-top:8px;padding:11px;font-size:14px}
 .bres{font-size:13px;color:var(--mut)}.bres b{color:var(--mint)}
+.meal-text{grid-column:1/-1;display:grid;gap:8px}
+.meal-text textarea{width:100%;background:var(--card2);border:1px solid var(--line2);color:var(--fg);border-radius:16px;padding:12px 14px;font:inherit;font-size:16px;resize:vertical}
+.mt-row{display:flex;gap:8px}.mt-row .btn{padding:12px;font-size:15px}
+.mt-row .mic{flex:0 0 52px;width:52px}.mt-row .mic.on{background:#ff6b6b;color:#fff;border-color:transparent;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.today-ai{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.today-ai .btn{font-size:13.5px;padding:11px 8px}
+.fin-share{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.fin-share .btn{font-size:14px;padding:12px 8px}.fin-share .btn:only-child{grid-column:1/-1}
+.modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.7);display:grid;place-items:center;padding:16px;overflow:auto}
+.mbox{background:var(--card);border:1px solid var(--line2);border-radius:24px;padding:22px;max-width:520px;width:100%;max-height:90vh;overflow:auto}
+.mbox h3{margin:0 0 8px}.guide{padding-left:20px;font-size:14px;line-height:1.6;color:#d4d4d8}.guide li{margin:6px 0}
+.mrow{display:flex;gap:8px;margin-top:14px}.mrow .btn{font-size:14px;padding:12px}
+.mgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0}
+.mgrid div{background:var(--card2);border-radius:12px;padding:8px 6px;text-align:center}.mgrid small{display:block;font-size:11px;color:var(--mut)}.mgrid b{font-size:16px}.mgrid i{display:block;font-style:normal;font-size:11.5px;font-weight:700}
+.mfrow label{min-width:80px;flex:1}
+.ba{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:3/4;background:#000;margin:10px 0}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba-after{position:absolute;inset:0}
+.ba input{position:absolute;left:0;right:0;bottom:12px;width:90%;margin:0 5%;z-index:2}
+.ba-l,.ba-r{position:absolute;top:10px;z-index:2;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 8px;border-radius:8px}.ba-l{left:10px}.ba-r{right:10px}
+.ph-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ph{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:var(--card2)}
+.ph img{width:100%;height:100%;object-fit:cover}.ph span{position:absolute;left:6px;bottom:6px;font-size:11px;background:rgba(0,0,0,.6);padding:2px 6px;border-radius:6px}
+.ph .xbtn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);border-radius:50%;width:24px;height:24px}
+.ph.add{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:28px;color:var(--acc);cursor:pointer;border:1px dashed var(--line2)}.ph.add small{font-size:11px;color:var(--mut)}
+.ch{background:var(--card2);border-radius:18px;padding:14px;margin:10px 0}
+.ch-h{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}.ch-h b{font-size:16px}.ch-h span{font-size:12.5px;color:var(--mut)}.ch-h code{color:var(--acc);font-weight:800;letter-spacing:.08em}
+.lb{list-style:none;padding:0;margin:0 0 10px;display:grid;gap:6px}
+.lb li{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;font-size:14px;padding:8px 10px;border-radius:12px;background:var(--card)}
+.lb li.me{box-shadow:0 0 0 1px var(--acc) inset}.lb li i{font-style:normal;text-align:center}
+.ch-new{margin-top:10px;border-top:1px solid var(--line);padding-top:12px}
+.dchips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.dchips button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-weight:700;cursor:pointer}
+.dchips button.on{background:var(--acc);color:var(--ink);border-color:transparent}
 .scan-note{color:var(--mut2);font-size:12.5px;line-height:1.55;margin-top:22px}
 .fcard{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;margin-bottom:22px}
 .fhead{display:flex;gap:16px;align-items:center}
@@ -698,6 +731,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
         <div class="meal-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><path d="M2 4v6M2 7h0M22 4v16"/></svg></div>
         <div class="meal-txt"><b>Φωτογράφισε το πιάτο σου</b><span>Το AI αναγνωρίζει το φαγητό και υπολογίζει περίπου θερμίδες, πρωτεΐνη, υδατάνθρακες και λιπαρά.</span></div>
         <label class="btn primary meal-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Φωτογραφία πιάτου</span><input type="file" accept="image/*" capture="environment" id="mealPhoto" hidden></label>
+        <form class="meal-text" id="mealTextForm"><textarea id="mealText" rows="2" placeholder="ή γράψε / πες τι έφαγες, π.χ. «2 αυγά, 1 φρυγανιά και καφές με γάλα»"></textarea><div class="mt-row"><button type="button" class="btn mic" id="mealMic" hidden aria-label="Υπαγόρευση">🎤</button><button class="btn" type="submit">Υπολόγισε</button></div></form>
       </div>
       <div id="mealOut"></div>
       <div id="mealDay"></div>
@@ -734,6 +768,10 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
       <div class="pcard" id="pcNutri"></div>
       <div class="pcard" id="pcPR"></div>
       <div class="pcard wide" id="pcFav"></div>
+      <div class="pcard wide" id="pcChal"></div>
+      <div class="pcard" id="pcMeas"></div>
+      <div class="pcard" id="pcPhotos"></div>
+      <div class="pcard wide" id="pcRemind"></div>
       <div class="pcard wide" id="pcHeat"></div>
       <div class="pcard wide" id="pcBadges"></div>
     </div>
@@ -1361,7 +1399,7 @@ $('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='
 const RECAPTCHA_KEY='6LfEXyguAAAAAHeLvpcsuDqlOHWdCY_DaGChHADY';window.RECAPTCHA_KEY=RECAPTCHA_KEY;
 const FB_CONFIG={apiKey:"AIzaSyD6X7ZmnNE1QQn_YXpHIrAH5FkBi31kPrU",authDomain:"home-wod-3fa81.firebaseapp.com",projectId:"home-wod-3fa81",storageBucket:"home-wod-3fa81.firebasestorage.app",messagingSenderId:"83347049614",appId:"1:83347049614:web:0fca3b57f0327d83e24ddf"}; /*FBCONFIG*/
 window.FB_PUB=FB_CONFIG;
-const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals','hw_fast','hw_fasts','hw_water','hw_badges','hw_adapt','hw_loads','hw_prog','hw_bench'];
+const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals','hw_fast','hw_fasts','hw_water','hw_badges','hw_adapt','hw_loads','hw_prog','hw_bench','hw_meas','hw_chal','hw_remind'];
 const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
   init(){try{if(!FB_CONFIG||!window.firebase){this.updateUI();return}firebase.initializeApp(FB_CONFIG);this.auth=firebase.auth();this.db=firebase.firestore();this.ready=true;
     this.auth.getRedirectResult().catch(e=>{});
@@ -1373,7 +1411,7 @@ const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
       const hist=byKey(c.hist,l.hist,x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-400);
       const weights=byKey(c.weights,l.weights,x=>x.d).sort((a,b)=>a.d<b.d?-1:1);
       const favs=byKey(c.favs,l.favs,x=>x.key).sort((a,b)=>a.saved<b.saved?1:-1).slice(0,40);
-      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);if(l.adapt||c.adapt)LS.set('hw_adapt',l.adapt||c.adapt);LS.set('hw_loads',Object.assign({},c.loads||{},l.loads||{}));{const lp=l.prog,cp=c.prog;const pp=(lp&&cp)?(((cp.done||[]).length>(lp.done||[]).length)?cp:lp):(lp||cp||null);if(pp)LS.set('hw_prog',pp);const cb=c.bench||{},lb=l.bench||{},mb={};new Set([...Object.keys(cb),...Object.keys(lb)]).forEach(k=>{mb[k]=byKey(cb[k],lb[k],x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-30)});LS.set('hw_bench',mb)}{const cw=c.water||{},lw=l.water||{},mw=Object.assign({},cw);Object.keys(lw).forEach(k=>mw[k]=Math.max(lw[k]||0,cw[k]||0));LS.set('hw_water',mw);LS.set('hw_badges',Object.assign({},c.badges||{},l.badges||{}))}{const lf=l.fast,cf=c.fast;const f=(lf&&cf)?((cf.upd||0)>(lf.upd||0)?cf:lf):(lf||cf||null);if(f)LS.set('hw_fast',f);LS.set('hw_fasts',byKey(c.fasts,l.fasts,x=>x.id).sort((a,b)=>a.start<b.start?-1:1).slice(-200))}LS.set('hw_meals',byKey(c.meals,l.meals,x=>x.id).sort((a,b)=>a.t<b.t?-1:1).slice(-300));LS.set('hw_food_custom',Object.assign({},c.food_custom||{},l.food_custom||{}));
+      const scans=byKey(c.scans,l.scans,x=>x.code).sort((a,b)=>a.date<b.date?1:-1).slice(0,30);LS.set('hw_scans',scans);if(l.adapt||c.adapt)LS.set('hw_adapt',l.adapt||c.adapt);LS.set('hw_loads',Object.assign({},c.loads||{},l.loads||{}));{const lp=l.prog,cp=c.prog;const pp=(lp&&cp)?(((cp.done||[]).length>(lp.done||[]).length)?cp:lp):(lp||cp||null);if(pp)LS.set('hw_prog',pp);const cb=c.bench||{},lb=l.bench||{},mb={};new Set([...Object.keys(cb),...Object.keys(lb)]).forEach(k=>{mb[k]=byKey(cb[k],lb[k],x=>x.date).sort((a,b)=>a.date<b.date?-1:1).slice(-30)});LS.set('hw_bench',mb);LS.set('hw_meas',byKey(c.meas,l.meas,x=>x.d).sort((a,b)=>a.d<b.d?-1:1));LS.set('hw_chal',[...new Set([...(c.chal||[]),...(l.chal||[])])].slice(-20));if(l.remind||c.remind)LS.set('hw_remind',l.remind||c.remind)}{const cw=c.water||{},lw=l.water||{},mw=Object.assign({},cw);Object.keys(lw).forEach(k=>mw[k]=Math.max(lw[k]||0,cw[k]||0));LS.set('hw_water',mw);LS.set('hw_badges',Object.assign({},c.badges||{},l.badges||{}))}{const lf=l.fast,cf=c.fast;const f=(lf&&cf)?((cf.upd||0)>(lf.upd||0)?cf:lf):(lf||cf||null);if(f)LS.set('hw_fast',f);LS.set('hw_fasts',byKey(c.fasts,l.fasts,x=>x.id).sort((a,b)=>a.start<b.start?-1:1).slice(-200))}LS.set('hw_meals',byKey(c.meals,l.meals,x=>x.id).sort((a,b)=>a.t<b.t?-1:1).slice(-300));LS.set('hw_food_custom',Object.assign({},c.food_custom||{},l.food_custom||{}));
       const prs=Object.assign({},c.prs||{});Object.entries(l.prs||{}).forEach(([k,v])=>{const o=prs[k];if(!o||(v.type==='amrap'?v.val>o.val:v.val<o.val))prs[k]=v});
       const settings=c.settings||l.settings,goals=Object.assign({},l.goals||{},c.goals||{}),profile=Object.assign({},l.profile||{},c.profile||{});
       LS.set('hw_hist',hist);LS.set('hw_weights',weights);LS.set('hw_favs',favs);LS.set('hw_prs',prs);LS.set('hw_goals',goals);LS.set('hw_profile',profile);
@@ -1430,7 +1468,7 @@ $('#acctBtn').onclick=()=>openAccount();
 /* ================= PROGRESS ================= */
 const wkStart=d=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x.getTime()};
 const todayISO=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
-function renderProgress(){try{renderToday($('#pcToday'));renderHeat();renderBadges()}catch(e){console.warn(e)}
+function renderProgress(){try{renderToday($('#pcToday'));renderHeat();renderBadges();renderMeas();renderPhotos();renderChal();renderRemind()}catch(e){console.warn(e)}
   const h=LS.get('hw_hist',[]),goals=Object.assign({weekly:4},LS.get('hw_goals',{})),W=LS.get('hw_weights',[]),prof=Object.assign({sex:'m',age:'',height:'',act:'1.375',pace:'500'},LS.get('hw_profile',{}));
   // weekly goal + streak
   const cnt={};h.forEach(x=>{const k=wkStart(x.date);cnt[k]=(cnt[k]||0)+1});const now=wkStart(Date.now());const thisW=cnt[now]||0;
@@ -1607,8 +1645,10 @@ function endWorkout(complete){
    ${P.newPR?`<div class="prnote">Νέο ρεκόρ: ${P.newPR.join(', ')}!</div>`:''}
    <p class="note" style="margin-top:18px">${complete?'Μπράβο. Νερό, πρωτεΐνη στο επόμενο γεύμα και ύπνος: εκεί γίνεται η πρόοδος.':'Ό,τι έκανες μετράει. Την επόμενη φορά λίγο παραπάνω.'}</p>
    ${(mins>=3||complete)?rateHTML():''}
+   <div class="fin-share"><button class="btn" id="finShare">📸 Κάρτα για story</button>${isIOS()?'<button class="btn" id="finHealth">❤️ Apple Health</button>':''}</div>
    <button class="btn primary mt" id="finClose">ΚΛΕΙΣΙΜΟ</button>`;
   $('#finClose').onclick=()=>{saveRating(null);closePlayer()};P.running=false;bindRate();
+  {const fin={name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.slice(),complete,date:new Date()};$('#finShare').onclick=()=>shareCard(fin);const hb=$('#finHealth');if(hb)hb.onclick=()=>toHealth(fin)}
 }
 function closePlayer(){setTimeout(()=>{try{renderProgBox()}catch(e){}},50);try{speechSynthesis.cancel()}catch(e){}$('#player').hidden=true;document.body.style.overflow='';$('#plMenu').textContent='ΜΕΝΟΥ';clearInterval(timer);P=null;try{wake&&wake.release()}catch(e){}renderHist()}
 document.addEventListener('keydown',e=>{if(!P||$('#player').hidden)return;if(e.code==='Space'){e.preventDefault();$('#plMain').click()}if(e.code==='ArrowRight')$('#plFwd').click();if(e.code==='ArrowLeft')$('#plPrev').click()});
@@ -1998,7 +2038,7 @@ function mealVerdict(t){
 function renderMeal(){
   const R=MEAL.res,t=mealTotals(),V=mealVerdict(t),tgt=dailyTarget();const [vt]=VLBL[V.v];
   $('#mealOut').innerHTML=`<div class="fcard">
-    <div class="fhead"><img src="${MEAL.img.url}" alt="" style="object-fit:cover"><div><h3>${escH(R.dish)}</h3><p>Εκτίμηση AI${R.conf?` · βεβαιότητα: ${{low:'χαμηλή',medium:'μέτρια',high:'υψηλή'}[R.conf]||escH(R.conf)}`:''}</p></div></div>
+    <div class="fhead">${MEAL.img?`<img src="${MEAL.img.url}" alt="" style="object-fit:cover">`:'<div class="meal-ico" style="flex:none">🍽️</div>'}<div><h3>${escH(R.dish)}</h3><p>Εκτίμηση AI${R.conf?` · βεβαιότητα: ${{low:'χαμηλή',medium:'μέτρια',high:'υψηλή'}[R.conf]||escH(R.conf)}`:''}</p></div></div>
     <div class="mtot"><div class="k"><small>Θερμίδες</small><b>${Math.round(t.k)}</b></div><div><small>Πρωτεΐνη</small><b>${Math.round(t.p)} g</b></div><div><small>Υδατ/κες</small><b>${Math.round(t.c)} g</b></div><div><small>Λιπαρά</small><b>${Math.round(t.f)} g</b></div></div>
     <div class="verdict ${VCLS[V.v]}"><i class="dot"></i><div><b>${vt}</b><br><span>${tgt?`Περίπου ${Math.round(t.k/tgt*100)}% του ημερήσιου στόχου σου (${tgt} kcal).`:'Βάλε ηλικία, ύψος και βάρος στην «Πρόοδο» για να βλέπεις και το ποσοστό του ημερήσιου στόχου.'}</span></div></div>
     <ul class="why">${V.why.map(([k,x])=>`<li class="${k}">${x}</li>`).join('')}</ul>
@@ -2043,8 +2083,10 @@ function renderToday(el){if(!el)return;el.setAttribute('data-rings','1');const T
    ${t.burn?`<small style="color:var(--mut)">Έκαψες ~${t.burn} kcal σε προπόνηση σήμερα</small>`:''}
   </div></div>
   <div class="wbtns"><button data-w="250">+ 250 ml</button><button data-w="500">+ 500 ml</button><button data-w="750">+ 750 ml</button><button class="m" data-w="-250">−</button></div>
+  <div class="today-ai"><button class="btn" data-ai="meal">🍽️ Τι να φάω;</button><button class="btn" data-ai="week">📊 Αναφορά εβδομάδας</button></div>
   ${t.n?'':`<p class="note" style="margin-top:12px">Φωτογράφισε τα γεύματά σου στη «Σάρωση» για να γεμίζουν οι θερμίδες και η πρωτεΐνη.</p>`}`;
   el.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>addWater(+b.dataset.w));
+  el.querySelectorAll('[data-ai]').forEach(b=>b.onclick=()=>b.dataset.ai==='meal'?suggestMeal():weeklyReport());
 }
 
 /* ===== Heatmap ===== */
@@ -2246,6 +2288,156 @@ function renderProgBox(){const el=$('#progBox');if(!el)return;const S=progState(
 }
 window.addEventListener('DOMContentLoaded',()=>{try{renderProgBox()}catch(e){}});
 
+/* ===== Text / voice meal logging ===== */
+function mealTextPrompt(t){return `Είσαι διαιτολόγος. Ο χρήστης περιγράφει τι έφαγε: «${t}». Ανάλυσε κάθε τρόφιμο ή ρόφημα. Αν δεν αναφέρει ποσότητα, υπόθεσε μια συνηθισμένη μερίδα (π.χ. 1 αυγό ≈ 50 g, 1 φέτα ψωμί ≈ 30 g, 1 κουταλιά ελαιόλαδο ≈ 10 g). Για κάθε στοιχείο δώσε γραμμάρια, θερμίδες, πρωτεΐνη, υδατάνθρακες και λιπαρά.
+Απάντησε ΜΟΝΟ με JSON:
+{"is_food":true,"dish":"σύντομο όνομα γεύματος","items":[{"name":"όνομα στα ελληνικά","grams":0,"kcal":0,"protein":0,"carbs":0,"fat":0}],"confidence":"low|medium|high","tip":"1 σύντομη πρόταση στα ελληνικά για το πώς ταιριάζει σε απώλεια βάρους"}
+Αν το κείμενο δεν περιγράφει φαγητό, βάλε "is_food":false.`}
+async function mealTextRun(){const t=($('#mealText').value||'').trim();if(t.length<2){toast('Γράψε τι έφαγες.');return}
+  stopScan();MEAL={img:null,note:t};const box=$('#mealOut');
+  box.innerHTML=`<div class="fcard"><p style="margin:0;color:var(--mut)"><i class="spin"></i>Υπολογίζω…</p></div>`;box.scrollIntoView({behavior:'smooth',block:'start'});
+  try{if(!window.MealAI)throw new Error('ai-not-loaded');
+    const j=JSON.parse(String(await MealAI.text(mealTextPrompt(t.slice(0,400)))).replace(/^```(json)?|```$/g,'').trim());
+    if(!j.is_food||!Array.isArray(j.items)||!j.items.length){box.innerHTML=`<div class="fcard"><p style="margin:0">Δεν κατάλαβα κάποιο φαγητό. Γράψε π.χ. «κοτόπουλο 150 g με ρύζι».</p></div>`;return}
+    MEAL.res={dish:String(j.dish||t).slice(0,60),conf:j.confidence,tip:String(j.tip||'').slice(0,240),items:j.items.slice(0,12).map(x=>{const g=Math.max(1,+x.grams||0);return{name:String(x.name||'').slice(0,50),g0:g,g,k:(+x.kcal||0)/g,p:(+x.protein||0)/g,c:(+x.carbs||0)/g,f:(+x.fat||0)/g}})};
+    $('#mealText').value='';renderMeal();
+  }catch(e){console.warn(e);const m=String(e&&e.message||e);box.innerHTML=`<div class="fcard"><p style="margin:0">${/429|quota|exhausted/i.test(m)?'Έφτασες το δωρεάν όριο για τώρα. Δοκίμασε ξανά σε λίγο.':'Δεν ολοκληρώθηκε ο υπολογισμός. Έλεγξε τη σύνδεση και δοκίμασε ξανά.'}</p></div>`}}
+$('#mealTextForm').onsubmit=e=>{e.preventDefault();mealTextRun()};
+(function(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const b=$('#mealMic');if(!SR||!b)return;b.hidden=false;let rec=null;
+  b.onclick=()=>{if(rec){try{rec.stop()}catch(e){}return}rec=new SR();rec.lang=VLANG;rec.interimResults=true;rec.continuous=false;const base=$('#mealText').value?$('#mealText').value+' ':'';b.classList.add('on');
+    rec.onresult=e=>{let t='';for(const r of e.results)t+=r[0].transcript;$('#mealText').value=base+t};
+    rec.onerror=()=>{};rec.onend=()=>{b.classList.remove('on');rec=null;if(($('#mealText').value||'').trim().length>2)mealTextRun()};try{rec.start()}catch(e){rec=null;b.classList.remove('on')}}})();
+
+/* ===== Meal suggestion & weekly report via coach ===== */
+function askCoach(q){showView('coach');window.scrollTo({top:0});setTimeout(()=>coachSend(q),150)}
+function suggestMeal(){const T=dayTargets(),t=dayTotals();const kl=T.kcal?Math.max(0,T.kcal-t.k):null,pl=T.prot?Math.max(0,T.prot-t.p):null;const h=new Date().getHours();
+  const meal=h<11?'πρωινό':h<16?'μεσημεριανό':h<19?'σνακ':'βραδινό';
+  askCoach(`Πρότεινέ μου ${meal}${kl!=null?` για περίπου ${Math.min(kl,900)} kcal`:''}${pl!=null?` με όσο γίνεται περισσότερη πρωτεΐνη (μου λείπουν ${pl} g σήμερα)`:''}. Δώσε 2-3 επιλογές με απλά ελληνικά υλικά, ποσότητες και περίπου θερμίδες/πρωτεΐνη.`)}
+function weekKey(){const d=new Date();const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return d.toISOString().slice(0,10)}
+function weeklyReport(){LS.set('hw_report_wk',weekKey());askCoach('Κάνε μου την εβδομαδιαία αναφορά: πόσες προπονήσεις έκανα, θερμίδες και πρωτεΐνη κατά μέσο όρο, νερό, νηστείες, πώς πήγε το βάρος, τι πήγε καλά και 2-3 συγκεκριμένοι στόχοι για την επόμενη εβδομάδα.')}
+function reportBanner(){const d=new Date();const day=d.getDay();if(!((day===0&&d.getHours()>=17)||day===1))return;if(LS.get('hw_report_wk','')===weekKey())return;
+  const H=LS.get('hw_hist',[])||[],M=LS.get('hw_meals',[])||[];if(!H.length&&!M.length)return;
+  fBanner('Η εβδομαδιαία αναφορά σου είναι έτοιμη','Πάτα για να δεις πώς πήγε η εβδομάδα σου και τι να αλλάξεις.','📊','coach');
+  const b=$('#fBanner');if(b)b._cb=weeklyReport}
+window.addEventListener('load',()=>setTimeout(reportBanner,5000));
+
+/* ===== Share card (Instagram story) ===== */
+function isIOS(){return /iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+async function shareCard(f){const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#16161b');bg.addColorStop(1,'#0b0b0e');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  const glow=g.createRadialGradient(W*.8,H*.18,40,W*.8,H*.18,700);glow.addColorStop(0,'rgba(255,138,91,.45)');glow.addColorStop(1,'rgba(255,138,91,0)');g.fillStyle=glow;g.fillRect(0,0,W,H);
+  const F='-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif';
+  g.fillStyle='#fff';g.font=`800 64px ${F}`;g.fillText('Home',90,170);const hw=g.measureText('Home ').width;
+  const og=g.createLinearGradient(90+hw,0,90+hw+230,0);og.addColorStop(0,'#ff8a5b');og.addColorStop(1,'#ff6b81');g.fillStyle=og;rr(g,90+hw,105,230,90,22);g.fill();g.fillStyle='#1c0f0a';g.fillText('WOD',90+hw+28,172);
+  g.fillStyle='#ff8a5b';g.font=`700 38px ${F}`;g.fillText((f.complete?'WOD ΟΛΟΚΛΗΡΩΘΗΚΕ':'WOD')+' · '+f.date.toLocaleDateString('el-GR',{day:'numeric',month:'long'}),90,380);
+  g.fillStyle='#fff';let size=120;g.font=`900 ${size}px ${F}`;while(g.measureText(f.name).width>900&&size>60){size-=6;g.font=`900 ${size}px ${F}`}g.fillText(f.name,90,520);
+  g.fillStyle='#9b9ba3';g.font=`600 42px ${F}`;g.fillText(f.fmt||'',90,590);
+  const stat=(x,y,v,l)=>{g.fillStyle='rgba(255,255,255,.06)';rr(g,x,y,430,250,40);g.fill();g.fillStyle='#fff';g.font=`900 110px ${F}`;g.fillText(v,x+44,y+140);g.fillStyle='#9b9ba3';g.font=`600 38px ${F}`;g.fillText(l,x+44,y+205)};
+  stat(90,690,f.min+"′",'λεπτά');stat(560,690,'~'+f.kcal,'kcal');
+  let y=1060;g.font=`600 40px ${F}`;(f.res||[]).slice(0,5).forEach(r=>{const [a,b]=String(r).split(': ');g.fillStyle='#9b9ba3';g.fillText(a,90,y);g.fillStyle='#6fd6b8';g.font=`800 40px ${F}`;g.fillText(b||'',990-g.measureText(b||'').width,y);g.font=`600 40px ${F}`;y+=78});
+  const nb=Object.keys(LS.get('hw_badges',{})||{}).length,nw=(LS.get('hw_hist',[])||[]).length;
+  g.fillStyle='#fff';g.font=`800 48px ${F}`;g.fillText(`💪 ${nw} WODs · 🏅 ${nb} badges`,90,1650);
+  g.fillStyle='#ff8a5b';g.font=`700 44px ${F}`;g.fillText('homewod.site',90,1780);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));const file=new File([blob],'homewod-story.png',{type:'image/png'});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Home WOD',text:'homewod.site'});return}}catch(e){if(e&&e.name==='AbortError')return}
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='homewod-story.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},3000);toast('Η εικόνα αποθηκεύτηκε.')}
+
+/* ===== Apple Health via Shortcuts ===== */
+const HEALTH_SC='Home WOD Health';
+function toHealth(f){if(!LS.get('hw_health_ok',false)){healthGuide(f);return}
+  const data={type:'HIIT',min:f.min,kcal:f.kcal,name:f.name,end:new Date().toISOString()};
+  location.href=`shortcuts://run-shortcut?name=${encodeURIComponent(HEALTH_SC)}&input=text&text=${encodeURIComponent(JSON.stringify(data))}`}
+function healthGuide(f){const d=document.createElement('div');d.className='modal';d.innerHTML=`<div class="mbox"><h3>❤️ Σύνδεση με Apple Health</h3>
+  <p class="note">Μία φορά μόνο: φτιάχνεις μια Συντόμευση που γράφει την προπόνηση στην Υγεία, ώστε να μετράει και στα δαχτυλίδια του Apple Watch.</p>
+  <ol class="guide"><li>Άνοιξε την εφαρμογή <b>Συντομεύσεις</b> → <b>+</b> (νέα συντόμευση) και ονόμασέ τη ακριβώς <b>${HEALTH_SC}</b>.</li>
+  <li>Πρόσθεσε την ενέργεια <b>«Λήψη λεξικού από»</b> (Get Dictionary from Input) με είσοδο την <b>Είσοδο συντόμευσης</b>.</li>
+  <li>Πρόσθεσε <b>«Λήψη τιμής για»</b> το κλειδί <b>min</b> και ξανά για το κλειδί <b>kcal</b>.</li>
+  <li>Πρόσθεσε την ενέργεια <b>«Καταγραφή προπόνησης»</b> (Log Workout): Τύπος <b>Προπόνηση διαλειμμάτων υψηλής έντασης</b> (ή Λειτουργική προπόνηση δύναμης), Διάρκεια = τιμή <b>min</b> σε λεπτά, Θερμίδες = τιμή <b>kcal</b>.</li>
+  <li>Στις ρυθμίσεις της συντόμευσης άναψε το <b>«Λήψη εισόδου»</b> αν σου ζητηθεί και δώσε άδεια στην Υγεία την πρώτη φορά.</li></ol>
+  <p class="note">Τα ονόματα των ενεργειών μπορεί να διαφέρουν λίγο ανάλογα με την έκδοση iOS.</p>
+  <div class="mrow"><button class="btn primary" id="hgOk">Την έφτιαξα, στείλε την προπόνηση</button><button class="btn" id="hgX">Αργότερα</button></div></div>`;
+  document.body.appendChild(d);d.querySelector('#hgX').onclick=()=>d.remove();d.querySelector('#hgOk').onclick=()=>{LS.set('hw_health_ok',true);d.remove();toHealth(f)}}
+
+/* ===== Body measurements ===== */
+const MEAS=[['waist','Μέση'],['hips','Γοφοί'],['chest','Στήθος'],['arm','Μπράτσο'],['thigh','Μηρός']];
+function renderMeas(){const el=$('#pcMeas');if(!el)return;const M=LS.get('hw_meas',[])||[];const first=M[0],last=M[M.length-1];
+  el.innerHTML=`<h4>Μετρήσεις σώματος</h4><p class="sub">Σε εκατοστά, με μεζούρα, κάθε 2 εβδομάδες. Συχνά τα εκατοστά πέφτουν ενώ η ζυγαριά «κολλάει».</p>
+   ${last?`<div class="mgrid">${MEAS.map(([k,l])=>{const v=last[k],f0=first&&first[k];const df=v!=null&&f0!=null&&M.length>1?v-f0:null;return `<div><small>${l}</small><b>${v!=null?v:'–'}</b>${df!=null?`<i style="color:${df<=0?'var(--mint)':'var(--acc)'}">${df>0?'+':''}${Math.round(df*10)/10}</i>`:''}</div>`}).join('')}</div>`:''}
+   <div class="frow mfrow">${MEAS.map(([k,l])=>`<label>${l}<input class="inp" type="number" step="0.5" inputmode="decimal" id="m_${k}"></label>`).join('')}<label>Ημερομηνία<input class="inp" type="date" id="m_d" value="${todayISO()}"></label><button class="btn primary sm" id="mAdd">Προσθήκη</button></div>
+   ${M.length?`<ul class="mini-list">${M.slice().reverse().slice(0,8).map(m=>`<li><div>${MEAS.filter(([k])=>m[k]!=null).map(([k,l])=>`${l} ${m[k]}`).join(' · ')}</div><div><span>${m.d.split('-').reverse().join('/')}</span><button class="xbtn" data-md="${m.d}">×</button></div></li>`).join('')}</ul>`:''}`;
+  $('#mAdd').onclick=()=>{const o={d:$('#m_d').value||todayISO()};let any=false;MEAS.forEach(([k])=>{const v=parseFloat($('#m_'+k).value);if(v>10&&v<250){o[k]=v;any=true}});if(!any){toast('Γράψε τουλάχιστον μία μέτρηση.');return}
+    const arr=M.filter(x=>x.d!==o.d);arr.push(o);arr.sort((a,b)=>a.d<b.d?-1:1);persist('hw_meas',arr);renderMeas()};
+  el.querySelectorAll('[data-md]').forEach(b=>b.onclick=()=>{persist('hw_meas',M.filter(x=>x.d!==b.dataset.md));renderMeas()})}
+
+/* ===== Progress photos (stored only on this device) ===== */
+const PDB={db:null,open(){if(this.db)return Promise.resolve(this.db);return new Promise((res,rej)=>{const r=indexedDB.open('homewod',1);r.onupgradeneeded=()=>r.result.createObjectStore('photos',{keyPath:'id'});r.onsuccess=()=>{this.db=r.result;res(this.db)};r.onerror=()=>rej(r.error)})},
+ async all(){const db=await this.open();return new Promise((res,rej)=>{const q=db.transaction('photos').objectStore('photos').getAll();q.onsuccess=()=>res(q.result.sort((a,b)=>a.d<b.d?-1:1));q.onerror=()=>rej(q.error)})},
+ async put(o){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').put(o);t.oncomplete=res;t.onerror=()=>rej(t.error)})},
+ async del(id){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').delete(id);t.oncomplete=res;t.onerror=()=>rej(t.error)})}};
+let photoURLs=[];
+async function renderPhotos(){const el=$('#pcPhotos');if(!el)return;let P0=[];try{P0=await PDB.all()}catch(e){}
+  photoURLs.forEach(u=>URL.revokeObjectURL(u));photoURLs=[];const urls=P0.map(p=>{const u=URL.createObjectURL(p.blob);photoURLs.push(u);return u});
+  el.innerHTML=`<h4>Φωτογραφίες προόδου</h4><p class="sub">Μένουν μόνο σε αυτή τη συσκευή, δεν ανεβαίνουν πουθενά. Ίδιο σημείο, ίδιο φως, κάθε 2–4 εβδομάδες.</p>
+   ${P0.length>=2?`<div class="ba" id="ba"><img src="${urls[0]}" alt=""><div class="ba-after" id="baA"><img src="${urls[urls.length-1]}" alt=""></div><input type="range" min="0" max="100" value="50" id="baR" aria-label="Σύγκριση"><span class="ba-l">${P0[0].d.split('-').reverse().join('/')}</span><span class="ba-r">${P0[P0.length-1].d.split('-').reverse().join('/')}</span></div>`:''}
+   <div class="ph-grid">${P0.slice().reverse().map((p,i)=>{const u=urls[P0.length-1-i];return `<div class="ph"><img src="${u}" alt=""><span>${p.d.split('-').reverse().join('/')}</span><button class="xbtn" data-pid="${p.id}">×</button></div>`}).join('')}
+   <label class="ph add">＋<small>Φωτογραφία</small><input type="file" accept="image/*" id="phIn" hidden></label></div>`;
+  const r=$('#baR');if(r){const set=()=>{$('#baA').style.clipPath=`inset(0 0 0 ${r.value}%)`};r.oninput=set;set()}
+  $('#phIn').onchange=async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;try{const img=await loadImg(f);const k=Math.min(1,1280/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(img.naturalWidth*k);c.height=Math.round(img.naturalHeight*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    const blob=await new Promise(res=>c.toBlob(res,'image/jpeg',.85));await PDB.put({id:Date.now().toString(36),d:todayISO(),blob});renderPhotos();toast('Η φωτογραφία αποθηκεύτηκε')}catch(err){toast('Δεν αποθηκεύτηκε η φωτογραφία.')}};
+  el.querySelectorAll('[data-pid]').forEach(b=>b.onclick=async()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent='?';setTimeout(()=>{b.dataset.c='';b.textContent='×'},2500);return}await PDB.del(b.dataset.pid);renderPhotos()})}
+
+/* ===== Friend challenges (Firestore) ===== */
+const CH_METRIC={wods:['Περισσότερα WODs','WODs'],minutes:['Περισσότερα λεπτά προπόνησης','λεπτά'],kcal:['Περισσότερες θερμίδες σε προπόνηση','kcal']};
+function chScore(ch){const st=new Date(ch.start).getTime(),en=new Date(ch.end).getTime()+864e5;const H=(LS.get('hw_hist',[])||[]).filter(x=>{const t=new Date(x.date).getTime();return t>=st&&t<en});
+  return ch.metric==='wods'?H.length:ch.metric==='minutes'?H.reduce((a,x)=>a+(x.min||0),0):H.reduce((a,x)=>a+(x.kcal||0),0)}
+function chCode(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<6;i++)c+=A[Math.floor(Math.random()*A.length)];return c}
+function myName(){const u=Cloud.user;return String((u&&(u.displayName||(u.email||'').split('@')[0]))||'Εγώ').slice(0,24)}
+const CHC={};
+async function chLoad(code){const d=await Cloud.db.collection('challenges').doc(code).get();return d.exists?Object.assign({code},d.data()):null}
+async function chSync(ch){const uid=Cloud.user.uid;const sc=chScore(ch);const me=(ch.members||{})[uid];if(!me||me.s!==sc||me.n!==myName()){await Cloud.db.collection('challenges').doc(ch.code).update({[`members.${uid}`]:{n:myName(),s:sc,u:Date.now()}});ch.members=Object.assign({},ch.members,{[uid]:{n:myName(),s:sc,u:Date.now()}})}return ch}
+async function renderChal(){const el=$('#pcChal');if(!el)return;
+  if(!(typeof Cloud!=='undefined'&&Cloud.user&&Cloud.db)){el.innerHTML=`<h4>🏁 Προκλήσεις με φίλους</h4><p class="sub">Φτιάξε μια πρόκληση, στείλε τον κωδικό σε φίλους και δείτε ποιος κάνει τις περισσότερες προπονήσεις. Χρειάζεται σύνδεση.</p><button class="btn primary" id="chLogin">Σύνδεση</button>`;$('#chLogin').onclick=()=>openAccount&&openAccount();return}
+  const codes=LS.get('hw_chal',[])||[];
+  el.innerHTML=`<h4>🏁 Προκλήσεις με φίλους</h4><p class="sub">Οι φίλοι σου βλέπουν μόνο το όνομά σου και το σκορ σου στην πρόκληση.</p><div id="chList">${codes.length?'<p class="sub"><i class="spin"></i>Φόρτωση…</p>':''}</div>
+   <div class="ch-new"><div class="frow"><label>Όνομα πρόκλησης<input class="inp" id="chName" placeholder="π.χ. Δεκέμβρης χωρίς δικαιολογίες"></label><label>Στόχος<select class="inp" id="chMetric">${Object.entries(CH_METRIC).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('')}</select></label><label>Διάρκεια<select class="inp" id="chDays"><option value="7">1 εβδομάδα</option><option value="14">2 εβδομάδες</option><option value="30" selected>30 μέρες</option></select></label></div>
+   <div class="frow"><button class="btn primary sm" id="chCreate">Νέα πρόκληση</button><label style="flex:1">ή κωδικός φίλου<input class="inp" id="chCode" placeholder="π.χ. K7M2QX" maxlength="6" style="text-transform:uppercase"></label><button class="btn sm" id="chJoin">Συμμετοχή</button></div></div>`;
+  $('#chCreate').onclick=async()=>{const name=($('#chName').value||'').trim().slice(0,40)||'Πρόκληση Home WOD';const days=+$('#chDays').value;const code=chCode();const st=todayISO();const en=new Date(Date.now()+(days-1)*864e5).toISOString().slice(0,10);
+    const ch={name,metric:$('#chMetric').value,start:st,end:en,owner:Cloud.user.uid,created:Date.now(),members:{[Cloud.user.uid]:{n:myName(),s:0,u:Date.now()}}};
+    try{await Cloud.db.collection('challenges').doc(code).set(ch);persist('hw_chal',codes.concat([code]));renderChal();chInvite(Object.assign({code},ch))}catch(e){console.warn(e);toast('Δεν δημιουργήθηκε η πρόκληση. Δοκίμασε ξανά.')}};
+  $('#chJoin').onclick=()=>chJoin(($('#chCode').value||'').trim().toUpperCase());
+  const list=$('#chList');const out=[];
+  for(const c of codes.slice().reverse()){try{let ch=CHC[c]||await chLoad(c);if(!ch)continue;if(!(ch.members||{})[Cloud.user.uid])continue;ch=await chSync(ch);CHC[c]=ch;out.push(ch)}catch(e){console.warn(e)}}
+  list.innerHTML=out.map(ch=>{const mem=Object.entries(ch.members||{}).map(([u,m])=>Object.assign({u},m)).sort((a,b)=>b.s-a.s);const end=new Date(ch.end+'T23:59:59');const left=Math.ceil((end-Date.now())/864e5);const unit=CH_METRIC[ch.metric][1];
+    return `<div class="ch"><div class="ch-h"><b>${escH(ch.name)}</b><span>${left>0?`απομένουν ${left} μέρες`:'ολοκληρώθηκε'} · κωδικός <code>${ch.code}</code></span></div>
+     <ol class="lb">${mem.map((m,i)=>`<li class="${m.u===Cloud.user.uid?'me':''}"><i>${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</i><span>${escH(m.n||'—')}</span><b>${m.s} ${unit}</b></li>`).join('')}</ol>
+     <button class="btn sm" data-inv="${ch.code}">Προσκάλεσε φίλους</button></div>`}).join('');
+  list.querySelectorAll('[data-inv]').forEach(b=>b.onclick=()=>chInvite(CHC[b.dataset.inv]))}
+async function chJoin(code){if(!/^[A-Z0-9]{6}$/.test(code)){toast('Ο κωδικός έχει 6 χαρακτήρες.');return}if(!(Cloud.user&&Cloud.db)){toast('Συνδέσου πρώτα.');return}
+  try{const ch=await chLoad(code);if(!ch){toast('Δεν βρέθηκε πρόκληση με αυτόν τον κωδικό.');return}
+    await Cloud.db.collection('challenges').doc(code).update({[`members.${Cloud.user.uid}`]:{n:myName(),s:chScore(ch),u:Date.now()}});
+    const codes=LS.get('hw_chal',[])||[];if(!codes.includes(code))persist('hw_chal',codes.concat([code]));delete CHC[code];toast(`Μπήκες στην πρόκληση «${ch.name}»`);renderChal()}catch(e){console.warn(e);toast('Δεν έγινε η συμμετοχή. Δοκίμασε ξανά.')}}
+async function chInvite(ch){if(!ch)return;const url=`https://homewod.site/?join=${ch.code}`;const text=`Μπες στην πρόκληση «${ch.name}» στο Home WOD! Κωδικός: ${ch.code}`;
+  try{if(navigator.share){await navigator.share({title:'Home WOD',text,url});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text+' '+url);toast('Ο σύνδεσμος αντιγράφηκε')}catch(e){toast(url)}}
+(function(){const m=location.search.match(/[?&]join=([A-Z0-9]{6})/i);if(!m)return;const code=m[1].toUpperCase();
+  const tryJoin=(n)=>{if(typeof Cloud!=='undefined'&&Cloud.user&&Cloud.db){chJoin(code);showView('history');return}if(n>20){showView('history');toast('Συνδέσου για να μπεις στην πρόκληση '+code);LS.set('hw_pending_join',code);return}setTimeout(()=>tryJoin(n+1),500)};
+  window.addEventListener('load',()=>setTimeout(()=>tryJoin(0),1200))})();
+
+/* ===== Training reminders (.ics) ===== */
+const DOW=[['MO','Δε'],['TU','Τρ'],['WE','Τε'],['TH','Πε'],['FR','Πα'],['SA','Σα'],['SU','Κυ']];
+function renderRemind(){const el=$('#pcRemind');if(!el)return;const R=Object.assign({days:['MO','WE','FR'],time:'18:30'},LS.get('hw_remind',{})||{});
+  el.innerHTML=`<h4>⏰ Υπενθυμίσεις προπόνησης</h4><p class="sub">Διάλεξε μέρες και ώρα. Μπαίνουν στο ημερολόγιο του κινητού σου και σου στέλνει ειδοποίηση κάθε εβδομάδα.</p>
+   <div class="dchips">${DOW.map(([k,l])=>`<button class="${R.days.includes(k)?'on':''}" data-d="${k}">${l}</button>`).join('')}</div>
+   <div class="frow"><label>Ώρα<input class="inp" type="time" id="rTime" value="${R.time}"></label><button class="btn primary sm" id="rIcs">📅 Πρόσθεσε στο ημερολόγιο</button></div>`;
+  el.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{const d=b.dataset.d;R.days=R.days.includes(d)?R.days.filter(x=>x!==d):R.days.concat([d]);persist('hw_remind',R);renderRemind()});
+  $('#rTime').onchange=e=>{R.time=e.target.value||'18:30';persist('hw_remind',R)};
+  $('#rIcs').onclick=()=>{if(!R.days.length){toast('Διάλεξε τουλάχιστον μία μέρα.');return}const [hh,mm]=(R.time||'18:30').split(':').map(Number);
+    const order=DOW.map(x=>x[0]);const now=new Date();let first=null;for(let i=0;i<8&&!first;i++){const d=new Date(now);d.setDate(now.getDate()+i);d.setHours(hh,mm,0,0);const k=order[(d.getDay()+6)%7];if(R.days.includes(k)&&d>now)first=d}
+    const pad=n=>String(n).padStart(2,'0');const loc=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;const end=new Date(first.getTime()+45*6e4);
+    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Home WOD//Reminders//EL','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:homewod-train-${Date.now()}@homewod.site`,`DTSTAMP:${loc(now)}`,`DTSTART:${loc(first)}`,`DTEND:${loc(end)}`,`RRULE:FREQ=WEEKLY;BYDAY=${R.days.join(',')}`,'SUMMARY:💪 Ώρα για WOD','DESCRIPTION:Άνοιξε το Home WOD: https://homewod.site','URL:https://homewod.site','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Ώρα για WOD!','TRIGGER:PT0S','END:VALARM','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Σε 30 λεπτά: WOD','TRIGGER:-PT30M','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n';
+    const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='homewod-proponisi.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},4000);toast('Πάτα «Προσθήκη» για να μπει στο ημερολόγιο.')}}
+
 /* ===== Fasting timer ===== */
 const FAST_PLANS=[12,14,16,18,20,24];
 const FSTAGES=[
@@ -2328,7 +2520,7 @@ async function fShowNotif(title,body){
   fBanner(title,body);
   try{if(fNotifSupported()&&Notification.permission==='granted'){const r=await navigator.serviceWorker.ready;await r.showNotification(title,{body,icon:'icon-192.png',badge:'icon-192.png',tag:'homewod-fast-'+title,renotify:true})}}catch(e){}
 }
-function fBanner(title,body,icon,view){let b=$('#fBanner');if(!b){b=document.createElement('div');b.id='fBanner';b.className='fbanner';document.body.appendChild(b);b.onclick=()=>{b.classList.remove('show');showView(b._v||'fast')}}b._v=view||'fast';
+function fBanner(title,body,icon,view){let b=$('#fBanner');if(!b){b=document.createElement('div');b.id='fBanner';b.className='fbanner';document.body.appendChild(b);b.onclick=()=>{b.classList.remove('show');if(b._cb){const c=b._cb;b._cb=null;c()}else showView(b._v||'fast')}}b._v=view||'fast';b._cb=null;
   b.innerHTML=`<div class="ic">${icon||'✓'}</div><div><b>${escH(title)}</b><p>${escH(body)}</p></div>`;requestAnimationFrame(()=>b.classList.add('show'));clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('show'),9000)}
 function fCheckMilestones(){const f=fActive();if(!f)return;const hrs=(Date.now()-f.start)/36e5;const done=new Set(f.notified||[]);let changed=false;
   const due=FSTAGES.filter(x=>x.h>0&&x.h<=hrs&&!done.has(x.h));
@@ -2366,7 +2558,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='22';
+const APP_VER='24';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
@@ -2405,6 +2597,16 @@ window.CoachAI={
 };
 window.MealAI={
   warm(){getModel().catch(()=>{})},
+  async text(prompt){
+    const {AI,ai}=await getModel();let last;
+    for(const [m,ms] of MODELS){
+      const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),ms);
+      try{const model=AI.getGenerativeModel(ai,{model:m,generationConfig:{responseMimeType:'application/json',temperature:0.2}});
+        const r=await model.generateContent(prompt,{signal:ctl.signal});clearTimeout(tm);const tx=(r.response.text()||'').trim();if(tx)return tx;last=new Error('empty');continue}
+      catch(e){clearTimeout(tm);last=e;if(!/404|not found|not supported|unsupported|429|quota|exhausted|50[0-9]|unavailable|abort|overloaded|fetch/i.test(String(e.message||e)))break}
+    }
+    throw last;
+  },
   async analyze(b64,mime,prompt){
     const {AI,ai}=await getModel();let last;
     for(const [m,ms] of MODELS){
