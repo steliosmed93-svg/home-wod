@@ -555,6 +555,42 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .dchips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
 .dchips button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-weight:700;cursor:pointer}
 .dchips button.on{background:var(--acc);color:var(--ink);border-color:transparent}
+
+body.ret .landing,body.ret .features{display:none}
+#dash{display:grid;gap:14px;margin:6px 0 22px}
+body:not(.ret) #dash{display:none}
+.d-hello small{color:var(--mut);font-size:13px;font-weight:600;text-transform:capitalize}
+.d-hello h1{font-size:clamp(28px,7vw,40px);margin:4px 0 6px;letter-spacing:-.02em;line-height:1.1}
+.d-hello p{margin:0;color:#c4c4ca;font-size:14.5px}
+.d-main{background:linear-gradient(135deg,rgba(255,138,91,.16),rgba(255,107,129,.08));border:1px solid rgba(255,138,91,.35);border-radius:28px;padding:22px}
+.d-main small{display:block;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.d-main h2{margin:6px 0 4px;font-size:26px;letter-spacing:-.01em}
+.d-main p{margin:0 0 16px;color:#c4c4ca;font-size:14px}
+.d-main .btn.big{font-size:18px;padding:18px}
+.d-main .d-link{display:block;text-align:center;margin-top:12px;color:var(--mut);font-size:14px;text-decoration:none;font-weight:600;background:none;border:0;width:100%;cursor:pointer;font-family:inherit}
+.d-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.d-tile{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;text-align:left;color:var(--fg);font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:112px}
+.d-tile .e{font-size:28px;line-height:1}
+.d-tile b{font-size:16px;margin-top:6px}
+.d-tile span{font-size:13px;color:var(--mut);line-height:1.35}
+.d-tile.hot{border-color:rgba(111,214,184,.45)}
+.d-more,.setup{background:var(--card);border:1px solid var(--line);border-radius:22px;margin:0 0 14px;padding:0 16px}
+.d-more>summary,.setup>summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:700;font-size:16px;display:flex;flex-direction:column;gap:3px}
+.d-more>summary::-webkit-details-marker,.setup>summary::-webkit-details-marker{display:none}
+.d-more>summary::after,.setup>summary::after{content:"▾";position:absolute;right:30px;color:var(--mut)}
+.d-more,.setup{position:relative}
+.d-more[open]>summary::after,.setup[open]>summary::after{content:"▴"}
+.setup>summary small{font-weight:500;font-size:13px;color:var(--mut)}
+.setup[open]{padding-bottom:16px}.setup .sec-head{margin-top:0}
+.ptabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 18px;padding-bottom:4px;scrollbar-width:none}
+.ptabs::-webkit-scrollbar{display:none}
+.ptabs button{flex:none;padding:10px 16px;border-radius:99px;border:1px solid var(--line2);background:var(--card);color:var(--fg);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
+.ptabs button.on{background:var(--fg);color:#111;border-color:transparent}
+[data-g].gh{display:none!important}
+.onb .q{margin:16px 0 8px;font-weight:700}
+.onb .opts{display:flex;flex-wrap:wrap;gap:8px}
+.onb .opts button{padding:11px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-size:14.5px;cursor:pointer}
+.onb .opts button.on{background:var(--acc);color:var(--ink);border-color:transparent;font-weight:700}
 .scan-note{color:var(--mut2);font-size:12.5px;line-height:1.55;margin-top:22px}
 .fcard{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px;margin-bottom:22px}
 .fhead{display:flex;gap:16px;align-items:center}
@@ -636,12 +672,13 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
 
 <div class="wrap">
   <section id="v-train">
+    <div id="dash"></div>
     <div class="landing">
       <div class="l-text">
         <div class="eyebrow">CrossFit · Στο σπίτι · Για απώλεια βάρους</div>
         <h1>Κάψε θερμίδες στο σπίτι με το <em>WOD της ημέρας</em>.</h1>
         <p class="lead">Διάλεξε τον εξοπλισμό που έχεις, την ένταση και τον χρόνο σου. Το Home WOD φτιάχνει την προπόνηση, σου δείχνει κάθε άσκηση και μετράει τον χρόνο για σένα.</p>
-        <div class="cta"><a class="btn primary" href="#builder" data-go="builder">Φτιάξε το WOD σου</a><button class="btn" data-go="timer">Άνοιξε το Timer</button></div>
+        <div class="cta"><a class="btn primary" href="#" id="startOnb">Ξεκίνα εδώ</a><button class="btn" data-go="timer">Άνοιξε το Timer</button></div>
         <div class="hero-links"><a href="#" data-go="library">Βιβλιοθήκη ασκήσεων →</a><a href="#" data-go="fast">Χρονόμετρο νηστείας →</a><a href="#" data-go="coach">💪 Ρώτα τον AI Coach →</a></div>
         <div class="kpis"><div><b id="exCount">70</b><span>ασκήσεις και διατάσεις</span></div><div><b>7</b><span>τύποι timer</span></div><div><b>20–60'</b><span>διάρκεια προπόνησης</span></div></div>
       </div>
@@ -653,7 +690,8 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
       <div class="feat"><i>03</i><h4>Timer όπως στο box</h4><p>AMRAP, EMOM, For Time, Tabata και intervals, με ηχητικά σήματα και μετρητή γύρων.</p></div>
       <div class="feat"><i>04</i><h4>Πρόοδος και μουσική</h4><p>Ιστορικό προπονήσεων, εκτίμηση θερμίδων και γρήγορη σύνδεση με Spotify ή YouTube.</p></div>
     </div>
-    <div id="progBox"></div>
+    <details class="d-more" id="progMore"><summary>📋 Προγράμματα & τεστ προόδου</summary><div id="progBox"></div></details>
+    <details class="setup" id="setupBox"><summary><span>⚙️ Ρυθμίσεις προπόνησης</span><small id="setupSum"></small></summary>
     <div class="sec-head" id="builder"><div class="eyebrow">Βήμα 1</div><h2>Φτιάξε το WOD σου</h2><p>Ρύθμισε τις επιλογές και πάτα «Φτιάξε το WOD». Οι ρυθμίσεις σου αποθηκεύονται.</p></div>
     <div class="builder"><div class="col">
     <h3 class="lbl">Ο εξοπλισμός σου</h3>
@@ -682,6 +720,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
     <button class="btn" id="stretchBtn" style="margin-top:10px">Μόνο διατάσεις (15') για τις περιοχές σου</button>
     </div></div>
     <p class="note tipline">Για απώλεια κιλών μετράει πρώτα το έλλειμμα θερμίδων από τη διατροφή. Η προπόνηση το μεγαλώνει και κρατάει τη μυϊκή μάζα. Στόχος: 3 έως 5 WOD την εβδομάδα.</p>
+    </details>
     <div id="wodOut"></div>
   </section>
 
@@ -764,24 +803,25 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
 
   <section id="v-history" hidden>
     <div class="sec-head top"><div class="eyebrow">Η πρόοδός σου</div><h2>Πρόοδος</h2><p id="syncNote">Η συνέπεια φέρνει το αποτέλεσμα.</p></div>
-    <div class="stats" id="hStats"></div>
+    <div class="ptabs" id="ptabs"><button data-t="today" class="on">Σήμερα</button><button data-t="body">Σώμα</button><button data-t="achieve">Επιτεύγματα</button><button data-t="friends">Φίλοι</button><button data-t="history">Ιστορικό</button></div>
+    <div class="stats" id="hStats" data-g="history"></div>
     <div class="pgrid">
-      <div class="pcard wide" id="pcToday"></div>
-      <div class="pcard" id="pcWeek"></div>
-      <div class="pcard" id="pcWeight"></div>
-      <div class="pcard" id="pcNutri"></div>
-      <div class="pcard" id="pcPR"></div>
-      <div class="pcard wide" id="pcFav"></div>
-      <div class="pcard wide" id="pcChal"></div>
-      <div class="pcard" id="pcMeas"></div>
-      <div class="pcard" id="pcPhotos"></div>
-      <div class="pcard wide" id="pcRemind"></div>
-      <div class="pcard wide" id="pcHeat"></div>
-      <div class="pcard wide" id="pcBadges"></div>
+      <div class="pcard wide" id="pcToday" data-g="today"></div>
+      <div class="pcard" id="pcWeek" data-g="today"></div>
+      <div class="pcard" id="pcWeight" data-g="body"></div>
+      <div class="pcard" id="pcNutri" data-g="today"></div>
+      <div class="pcard" id="pcPR" data-g="achieve"></div>
+      <div class="pcard wide" id="pcFav" data-g="achieve"></div>
+      <div class="pcard wide" id="pcChal" data-g="friends"></div>
+      <div class="pcard" id="pcMeas" data-g="body"></div>
+      <div class="pcard" id="pcPhotos" data-g="body"></div>
+      <div class="pcard wide" id="pcRemind" data-g="today"></div>
+      <div class="pcard wide" id="pcHeat" data-g="achieve"></div>
+      <div class="pcard wide" id="pcBadges" data-g="achieve"></div>
     </div>
-    <h3 class="lbl" style="margin-top:40px">Ιστορικό προπονήσεων</h3>
+    <div data-g="history" id="histBox"><h3 class="lbl" style="margin-top:10px">Ιστορικό προπονήσεων</h3>
     <ul class="hist" id="hList"></ul>
-    <button class="btn mt" id="hClear" style="font-size:14px;padding:13px;color:#8b8b92;max-width:860px">Διαγραφή ιστορικού</button>
+    <button class="btn mt" id="hClear" style="font-size:14px;padding:13px;color:#8b8b92;max-width:860px">Διαγραφή ιστορικού</button></div>
   </section>
 </div>
 
@@ -1162,7 +1202,7 @@ const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}
 const ST=Object.assign({eq:{kb:true,bike:true,tread:true,db:true,band:true},kbw:16,lvl:1,dur:30,fmt:'random',bw:'',music:{svc:'spotify',links:{}},tm:{mode:'amrap',v:{}}},LS.get('hw_settings',{}));
 if(!Array.isArray(ST.focus))ST.focus=[];
 if(!ST.music||!ST.music.links)ST.music={svc:'spotify',links:{}};if(!ST.tm||!ST.tm.v)ST.tm={mode:'amrap',v:{}};
-const save=()=>{LS.set('hw_settings',ST);Cloud.touch()};
+const save=()=>{LS.set('hw_settings',ST);Cloud.touch();const ss=document.getElementById('setupSum');if(ss&&typeof setupSummary==='function')ss.textContent=setupSummary()};
 function persist(k,v){LS.set(k,v);Cloud.touch();if(k!=='hw_badges'&&typeof queueBadges==='function')queueBadges()}
 const ICON={
  bw:'<svg viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="6" r="3.5"/><path d="M16 10.5c-2 0-3 1-3.5 2.5L11 20h3l.6 9h2.8l.6-9h3l-1.5-7c-.5-1.5-1.5-2.5-3.5-2.5z"/></svg>',
@@ -1534,7 +1574,7 @@ function renderProgress(){try{renderToday($('#pcToday'));renderHeat();renderBadg
 /* ================= TABS ================= */
 function showView(v){document.querySelectorAll('.tabs button,.mbar button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));{const tb=document.querySelector('.tabs button[data-v="'+v+'"]');if(tb)$('#navCur').textContent=tb.textContent;const dd=$('#navdd');if(dd){dd.classList.remove('open');$('#navBtn').setAttribute('aria-expanded','false')}}
   if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();renderMealDay();getDecoder().catch(()=>{});window.MealAI&&MealAI.warm()}
-  ['train','timer','library','fast','scan','history','coach'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='coach')renderCoach();{const fb=$('#cFab');if(fb)fb.hidden=v==='coach'}if(v==='fast')renderFast();if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
+  ['train','timer','library','fast','scan','history','coach'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='coach')renderCoach();{const fb=$('#cFab');if(fb)fb.hidden=v==='coach'}if(v==='fast')renderFast();if(v==='train')renderDash();if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
 $('#navBtn').onclick=e=>{e.stopPropagation();const dd=$('#navdd');const o=!dd.classList.contains('open');dd.classList.toggle('open',o);$('#navBtn').setAttribute('aria-expanded',String(o))};
 document.addEventListener('click',e=>{const dd=$('#navdd');if(dd&&dd.classList.contains('open')&&!dd.contains(e.target))dd.classList.remove('open')});
@@ -1657,7 +1697,7 @@ function endWorkout(complete){
   $('#finClose').onclick=()=>{saveRating(null);closePlayer()};P.running=false;bindRate();
   {const fin={name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.slice(),complete,date:new Date()};$('#finShare').onclick=()=>shareCard(fin);const hb=$('#finHealth');if(hb)hb.onclick=()=>toHealth(fin)}
 }
-function closePlayer(){setTimeout(()=>{try{renderProgBox()}catch(e){}},50);try{speechSynthesis.cancel()}catch(e){}$('#player').hidden=true;document.body.style.overflow='';$('#plMenu').textContent='ΜΕΝΟΥ';clearInterval(timer);P=null;try{wake&&wake.release()}catch(e){}renderHist()}
+function closePlayer(){setTimeout(()=>{try{renderProgBox();renderDash()}catch(e){}},50);try{speechSynthesis.cancel()}catch(e){}$('#player').hidden=true;document.body.style.overflow='';$('#plMenu').textContent='ΜΕΝΟΥ';clearInterval(timer);P=null;try{wake&&wake.release()}catch(e){}renderHist()}
 document.addEventListener('keydown',e=>{if(!P||$('#player').hidden)return;if(e.code==='Space'){e.preventDefault();$('#plMain').click()}if(e.code==='ArrowRight')$('#plFwd').click();if(e.code==='ArrowLeft')$('#plPrev').click()});
 
 /* ================= MUSIC ================= */
@@ -2445,6 +2485,53 @@ function renderRemind(){const el=$('#pcRemind');if(!el)return;const R=Object.ass
     const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Home WOD//Reminders//EL','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:homewod-train-${Date.now()}@homewod.site`,`DTSTAMP:${loc(now)}`,`DTSTART:${loc(first)}`,`DTEND:${loc(end)}`,`RRULE:FREQ=WEEKLY;BYDAY=${R.days.join(',')}`,'SUMMARY:💪 Ώρα για WOD','DESCRIPTION:Άνοιξε το Home WOD: https://homewod.site','URL:https://homewod.site','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Ώρα για WOD!','TRIGGER:PT0S','END:VALARM','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Σε 30 λεπτά: WOD','TRIGGER:-PT30M','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n';
     const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='homewod-proponisi.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},4000);toast('Πάτα «Προσθήκη» για να μπει στο ημερολόγιο.')}}
 
+/* ===== Simple home dashboard ===== */
+function greet(){const h=new Date().getHours();return h<12?'Καλημέρα':h<18?'Καλησπέρα':'Καλό βράδυ'}
+function setupSummary(){const eq=ST.bwOnly?['Μόνο βάρος σώματος']:Object.keys(ST.eq||{}).filter(k=>ST.eq[k]).map(k=>EQN[k]);
+  return [`${ST.dur}′`,LVL[ST.lvl],eq.length?eq.join(', '):'Βάρος σώματος',ST.focus&&ST.focus.length?ST.focus.map(m=>MUN[m]).join(', '):'Όλο το σώμα'].join(' · ')}
+function renderDash(){const el=$('#dash');if(!el)return;const ret=!!LS.get('hw_seen',false)||(LS.get('hw_hist',[])||[]).length>0;document.body.classList.toggle('ret',ret);
+  const ss=$('#setupSum');if(ss)ss.textContent=setupSummary();
+  if(!ret){el.innerHTML='';return}
+  const u=typeof Cloud!=='undefined'&&Cloud.user;const nm=u?String(u.displayName||(u.email||'').split('@')[0]).split(' ')[0]:'';
+  const H=LS.get('hw_hist',[])||[];const goals=Object.assign({weekly:4},LS.get('hw_goals',{}));const wk=H.filter(x=>wkStart(x.date)===wkStart(Date.now())).length;
+  const S=progState();const T=dayTargets(),t=dayTotals();const fa=fActive();
+  let main;
+  if(S&&!S.finished){const d=S.P.days[S.day];const dur=S.P.dur[S.week-1]||30;
+    main=`<small>Πρόγραμμα · ${S.P.name} · Εβδομάδα ${S.week}/${S.P.weeks}</small><h2>${d.t}</h2><p>${d.fmt.toUpperCase()} · ${dur}′ · προπόνηση ${S.day+1} από ${S.P.per} αυτής της εβδομάδας</p><button class="btn primary big" id="dGo">Ξεκίνα τη σημερινή ▶</button><button class="d-link" id="dSet">⚙️ Αλλαγή ρυθμίσεων</button>`}
+  else main=`<small>Γρήγορη προπόνηση</small><h2>Έτοιμος για WOD;</h2><p>${setupSummary()}</p><button class="btn primary big" id="dGo">Φτιάξε μου WOD ▶</button><button class="d-link" id="dSet">⚙️ Αλλαγή ρυθμίσεων</button>`;
+  const fTxt=fa?`Νηστεύεις ${fmtHMS(Date.now()-fa.start).slice(0,5)} · στόχος ${fa.plan} ώρες`:'Πάτα για να ξεκινήσεις';
+  el.innerHTML=`<div class="d-hello"><small>${new Date().toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'})}</small><h1>${greet()}${nm?', '+escH(nm):''} 👋</h1><p>${wk}/${goals.weekly} προπονήσεις αυτή την εβδομάδα${wk>=goals.weekly?' · 🎉 στόχος!':''}</p></div>
+   <div class="d-main">${main}</div>
+   <div class="d-tiles">
+    <button class="d-tile" data-dt="food"><span class="e">🍽️</span><b>Φαγητό</b><span>${t.k?`${t.k}${T.kcal?' / '+T.kcal:''} kcal σήμερα`:'Φωτογράφισε ή γράψε τι έφαγες'}</span></button>
+    <button class="d-tile ${fa?'hot':''}" data-dt="fast"><span class="e">⏳</span><b>Νηστεία</b><span>${fTxt}</span></button>
+    <button class="d-tile" data-dt="water"><span class="e">💧</span><b>+ 1 ποτήρι νερό</b><span>${(t.w/1000).toFixed(2).replace(/0$/,'')} / ${(T.water/1000).toFixed(1)} L σήμερα</span></button>
+    <button class="d-tile" data-dt="coach"><span class="e">💪</span><b>AI Coach</b><span>Ρώτα με ό,τι θέλεις</span></button>
+   </div>`;
+  $('#dGo').onclick=()=>{if(S&&!S.finished)startProgSession();else{generate();$('#wodOut').scrollIntoView({behavior:'smooth'})}};
+  $('#dSet').onclick=()=>{const sb=$('#setupBox');sb.open=true;sb.scrollIntoView({behavior:'smooth'})};
+  el.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{const k=b.dataset.dt;if(k==='water'){addWater(250);toast('+250 ml νερό 💧');renderDash()}else showView(k==='food'?'scan':k)});
+}
+function onboarding(){if(LS.get('hw_seen',false)||(LS.get('hw_hist',[])||[]).length)return;
+  const sel={eq:Object.assign({},ST.eq),bwOnly:!!ST.bwOnly,lvl:ST.lvl,dur:ST.dur};
+  const d=document.createElement('div');d.className='modal';
+  const draw=()=>{d.innerHTML=`<div class="mbox onb"><h3>Καλώς ήρθες στο Home WOD 👋</h3><p class="note">3 γρήγορες ερωτήσεις και φτιάχνουμε την πρώτη σου προπόνηση.</p>
+    <div class="q">1. Τι εξοπλισμό έχεις στο σπίτι;</div><div class="opts"><button data-e="none" class="${sel.bwOnly?'on':''}">Τίποτα</button>${['kb','db','band','bike','tread'].map(k=>`<button data-e="${k}" class="${!sel.bwOnly&&sel.eq[k]?'on':''}">${EQN[k]}</button>`).join('')}</div>
+    <div class="q">2. Πόσο γυμνασμένος είσαι;</div><div class="opts">${LVL.map((l,i)=>`<button data-l="${i}" class="${sel.lvl===i?'on':''}">${l}</button>`).join('')}</div>
+    <div class="q">3. Πόσο χρόνο έχεις συνήθως;</div><div class="opts">${[20,30,45,60].map(m=>`<button data-m="${m}" class="${sel.dur===m?'on':''}">${m} λεπτά</button>`).join('')}</div>
+    <div class="mrow"><button class="btn primary" id="onbGo">Έτοιμο ▶</button></div></div>`;
+    d.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{const k=b.dataset.e;if(k==='none'){sel.bwOnly=true}else{sel.bwOnly=false;sel.eq[k]=!sel.eq[k]}draw()});
+    d.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{sel.lvl=+b.dataset.l;draw()});
+    d.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{sel.dur=+b.dataset.m;draw()});
+    d.querySelector('#onbGo').onclick=()=>{ST.eq=sel.eq;ST.bwOnly=sel.bwOnly;ST.lvl=sel.lvl;ST.dur=sel.dur;save();LS.set('hw_seen',true);d.remove();renderSetup();renderDash();window.scrollTo({top:0});toast('Έτοιμο! Πάτα «Φτιάξε μου WOD».')}};
+  draw();document.body.appendChild(d)}
+function setPTab(t){document.querySelectorAll('#ptabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('#v-history [data-g]').forEach(e=>e.classList.toggle('gh',e.dataset.g!==t));LS.set('hw_ptab',t)}
+$('#ptabs').onclick=e=>{const b=e.target.closest('button');if(b)setPTab(b.dataset.t)};
+setPTab(LS.get('hw_ptab','today')||'today');
+document.querySelectorAll('[data-go="builder"]').forEach(a=>a.addEventListener('click',()=>{const sb=$('#setupBox');if(sb)sb.open=true},true));
+setInterval(()=>{if(!$('#v-train').hidden&&!document.hidden)renderDash()},30000);
+window.addEventListener('DOMContentLoaded',()=>{try{renderDash();setTimeout(onboarding,800);const so=$('#startOnb');if(so)so.onclick=e=>{e.preventDefault();onboarding()}}catch(e){console.warn(e)}});
+
 /* ===== Fasting timer ===== */
 const FAST_PLANS=[12,14,16,18,20,24];
 const FSTAGES=[
@@ -2565,7 +2652,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='26';
+const APP_VER='27';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
