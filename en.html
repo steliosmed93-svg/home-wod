@@ -166,6 +166,7 @@ h3.lbl{font-size:13px;font-weight:600;color:var(--mut);margin:28px 0 10px;letter
 .eq.dim{opacity:.4}
 .eq.bwopt.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:var(--ink);border-color:transparent}
 .eq.bwopt.on::after{background:var(--ink);color:var(--acc)}
+.seg.wrap{flex-wrap:wrap}.seg.wrap button{flex:1 0 64px}
 .seg{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:17px}
 .seg.wrap{display:grid;grid-template-columns:repeat(3,1fr)}
 .seg.wrap4{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
@@ -699,7 +700,19 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
     <p class="note" id="eqHint" style="margin-top:8px"></p>
     <div id="kbBox">
       <h3 class="lbl">Kettlebell weight</h3>
-      <div class="seg" id="kbSeg"></div>
+      <div class="seg wrap" id="kbSeg"></div>
+    </div>
+    <div id="dbBox">
+      <h3 class="lbl">Heaviest dumbbell you have</h3>
+      <div class="seg wrap" id="dbSeg"></div>
+    </div>
+    <div id="mbBox">
+      <h3 class="lbl">Ball weight</h3>
+      <div class="seg wrap" id="mbSeg"></div>
+    </div>
+    <div id="bbBox">
+      <h3 class="lbl">Max weight on the barbell (including the bar)</h3>
+      <div class="seg wrap" id="bbSeg"></div>
     </div>
     <h3 class="lbl">Areas you want to work</h3>
     <div class="mchips" id="focusChips"></div>
@@ -1126,6 +1139,9 @@ const EX=[
  {id:'run',m:['cardio'],name:'Treadmill Run',gr:'Treadmill run',eq:'tread',cat:['machine'],unit:'m',base:200,period:.72,anchor:'hip',ground:164,props:{tread:true},
   gen:p=>{const[l1,l2]=legRun(p),[m1,m2]=legRun((p+.5)%1),c=Math.cos(2*Math.PI*p);return {t:12,l1,l2,m1,m2,a1:-38*c,a2:-38*c+88,b1:38*c,b2:38*c+88,air:2.5*Math.abs(Math.sin(4*Math.PI*p))}},
   cues:['Light footstrike under the body','Arms at 90°','Without holding the handrails'],mu:'Cardio, legs'},
+ {id:'run_out',name:'Run',gr:'Running',eq:'bw',cat:['walk'],unit:'sec',base:60,period:.72,anchor:'hip',hide:true,
+  gen:p=>{const[l1,l2]=legRun(p),[m1,m2]=legRun((p+.5)%1),c=Math.cos(2*Math.PI*p);return {t:10,l1,l2,m1,m2,a1:-38*c,a2:-38*c+88,b1:38*c,b2:38*c+88,air:2.5*Math.abs(Math.sin(4*Math.PI*p))}},
+  cues:['Light footstrike under the body','Relaxed shoulders, arms at 90°','Rhythmic breathing'],mu:'Cardio, legs'},
  {id:'incline_walk',name:'Incline Walk',gr:'Incline walk',eq:'tread',cat:['walk'],unit:'sec',base:60,period:1.3,anchor:'hip',ground:164,props:{tread:true},hide:true,
   gen:p=>{const th=2*Math.PI*p;const f=x=>{const t=22*Math.sin(x);return [t,t-32*Math.max(0,Math.cos(x))]};const[l1,l2]=f(th),[m1,m2]=f(th+Math.PI);return {t:8,l1,l2,m1,m2,a1:-18*Math.sin(th),a2:-18*Math.sin(th)+22,b1:18*Math.sin(th),b2:18*Math.sin(th)+22}},
   cues:['Incline 8 to 12%','Without holding on','A pace where you can talk'],mu:'Low-intensity cardio'},
@@ -1268,7 +1284,7 @@ const EXM={};EX.forEach(e=>{EXM[e.id]=e;prepEx(e)});
 
 /* ================= STATE ================= */
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const ST=Object.assign({eq:{kb:true,bike:true,tread:true,db:true,band:true},kbw:16,lvl:1,dur:30,fmt:'random',bw:'',music:{svc:'spotify',links:{}},tm:{mode:'amrap',v:{}}},LS.get('hw_settings',{}));
+const ST=Object.assign({eq:{kb:true,bike:true,tread:true,db:true,band:true},kbw:16,dbMax:15,bbMax:60,mbw:0,lvl:1,dur:30,fmt:'random',bw:'',music:{svc:'spotify',links:{}},tm:{mode:'amrap',v:{}}},LS.get('hw_settings',{}));
 if(!Array.isArray(ST.focus))ST.focus=[];
 if(!ST.music||!ST.music.links)ST.music={svc:'spotify',links:{}};if(!ST.tm||!ST.tm.v)ST.tm={mode:'amrap',v:{}};
 const save=()=>{LS.set('hw_settings',ST);Cloud.touch();const ss=document.getElementById('setupSum');if(ss&&typeof setupSummary==='function')ss.textContent=setupSummary()};
@@ -1289,7 +1305,7 @@ const ICON={
  abw:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="16" cy="18" r="8" stroke-width="3"/><path d="M4 18h24" stroke-width="3"/></svg>'
 };
 const MUN={glutes:'Glutes',quads:'Quads',hams:'Hamstrings',chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',core:'Sit-ups',cardio:'Cardio'};
-const EQN={bw:'Bodyweight',kb:'Kettlebell',bike:'Air Bike',tread:'Treadmill',db:'Dumbbells ≤15 kg',band:'Bands',bar:'Pull-up bar',rope:'Jump rope',box:'Box / bench',mb:'Ball (medicine/slam)',rower:'Rowing machine',bb:'Barbell & plates',abw:'Ab wheel'};
+const EQN={bw:'Bodyweight',kb:'Kettlebell',bike:'Air Bike',tread:'Treadmill',db:'Dumbbells',band:'Bands',bar:'Pull-up bar',rope:'Jump rope',box:'Box / bench',mb:'Ball (medicine/slam)',rower:'Rowing machine',bb:'Barbell & plates',abw:'Ab wheel'};
 const EQK=['kb','db','band','bar','rope','box','mb','bb','abw','bike','tread','rower'];
 const EQS={bw:'BODYWEIGHT',kb:'KETTLEBELL',bike:'AIR BIKE',tread:'TREADMILL',db:'DUMBBELLS',band:'BANDS'};
 const LVL=['Beginner','Intermediate','Advanced'];
@@ -1300,11 +1316,14 @@ function segBtns(el,opts,cur,on){el.innerHTML=opts.map(([v,l])=>`<button data-v=
 function renderSetup(){
   const ch=$('#eqChips');
   const drawEq=()=>{ch.innerHTML=`<button class="eq bwopt ${ST.bwOnly?'on':''}" data-k="bw">${ICON.bw}${ST.bwOnly?'Bodyweight only':'Bodyweight'}</button>`+EQK.map(k=>`<button class="eq ${ST.eq[k]&&!ST.bwOnly?'on':''} ${ST.bwOnly?'dim':''}" data-k="${k}">${ICON[k]}${EQN[k]}</button>`).join('');
-    $('#kbBox').hidden=!ST.eq.kb||!!ST.bwOnly;$('#eqHint').textContent=ST.bwOnly?'The WOD will use bodyweight exercises only. Tap again to use your equipment too.':'Bodyweight exercises are always included. Tap “Bodyweight” for a WOD with no equipment at all.'};
+    $('#kbBox').hidden=!ST.eq.kb||!!ST.bwOnly;$('#dbBox').hidden=!ST.eq.db||!!ST.bwOnly;$('#mbBox').hidden=!ST.eq.mb||!!ST.bwOnly;$('#bbBox').hidden=!ST.eq.bb||!!ST.bwOnly;$('#eqHint').textContent=ST.bwOnly?'The WOD will use bodyweight exercises only. Tap again to use your equipment too.':'Bodyweight exercises are always included. Tap “Bodyweight” for a WOD with no equipment at all.'};
   drawEq();
   ch.onclick=e=>{const b=e.target.closest('button.eq');if(!b)return;const k=b.dataset.k;
     if(k==='bw'){ST.bwOnly=!ST.bwOnly}else{if(ST.bwOnly){ST.bwOnly=false;ST.eq[k]=true}else ST.eq[k]=!ST.eq[k]}save();drawEq()};
-  segBtns($('#kbSeg'),[8,12,16,20,24].map(v=>[v,v+' kg']),ST.kbw,v=>{ST.kbw=+v;save()});
+  segBtns($('#kbSeg'),[4,6,8,10,12,14,16,18,20,24,28,32,40].map(v=>[v,v+' kg']),ST.kbw,v=>{ST.kbw=+v;save()});
+  segBtns($('#dbSeg'),[2,3,4,5,6,8,10,12.5,15,17.5,20,22.5,25,30,35,40].map(v=>[v,String(v).replace('.',',')+' kg']),ST.dbMax||15,v=>{ST.dbMax=+v;save()});
+  segBtns($('#mbSeg'),[0,3,4,5,6,8,9,10,12,15].map(v=>[v,v?v+' kg':'Auto']),ST.mbw||0,v=>{ST.mbw=+v;save()});
+  segBtns($('#bbSeg'),[20,30,40,50,60,70,80,100,120,140,160].map(v=>[v,v+' kg']),ST.bbMax||60,v=>{ST.bbMax=+v;save()});
   segBtns($('#lvlSeg'),LVL.map((l,i)=>[i,l]),ST.lvl,v=>{ST.lvl=+v;save()});
   segBtns($('#durSeg'),[20,30,45,60].map(v=>[v,v+"'"]),ST.dur,v=>{ST.dur=+v;save()});
   segBtns($('#fmtSeg'),FMTS,ST.fmt,v=>{ST.fmt=v;save()});
@@ -1316,7 +1335,8 @@ function renderSetup(){
 
 /* ================= WOD GENERATOR ================= */
 function adaptM(){const a=LS.get('hw_adapt',{})||{};return Math.min(1.4,Math.max(.7,+a.m||1))}
-function dbKg(ex){const L=(LS.get('hw_loads',{})||{})[ex.id];const def=ex.dbw?ex.dbw[ST.lvl]:8;if(!L)return {kg:def,prev:null};const nx=L.next!=null?L.next:L.kg;return {kg:nx,prev:nx!==L.kg?L.kg:null}}
+function eqMax(ex){return ex.eq==='bb'?(ST.bbMax||60):(ST.dbMax||15)}
+function dbKg(ex){const L=(LS.get('hw_loads',{})||{})[ex.id];const mx=eqMax(ex);const def=Math.min(mx,ex.dbw?ex.dbw[ST.lvl]:8);if(!L)return {kg:def,prev:null};const nx=Math.min(mx,L.next!=null?L.next:L.kg);return {kg:nx,prev:nx!==L.kg?L.kg:null}}
 function renderAdaptNote(){const el=$('#adaptNote');if(!el)return;const m=adaptM();const pct=Math.round((m-1)*100);
   el.innerHTML=pct?`Auto-adjusted from your ratings: <b>${pct>0?'+':''}${pct}%</b> reps/time. <a href="#" id="adaptReset">Reset</a>`:'After every WOD, say whether it was easy or hard and the intensity will adjust itself.';
   const r=$('#adaptReset');if(r)r.onclick=e=>{e.preventDefault();persist('hw_adapt',{m:1});renderAdaptNote()}}
@@ -1337,7 +1357,7 @@ function load(ex,extra){
   if(ex.eq==='db'){const d=dbKg(ex);parts.push(`${ex.one?'1':'2'}×${String(d.kg).replace('.',',')} kg${d.prev!=null?(d.kg>d.prev?` ↑ (from ${String(d.prev).replace('.',',')})`:` ↓ (from ${String(d.prev).replace('.',',')})`):''}`)}
   if(ex.eq==='band')parts.push(['Light band','Medium band','Heavy band'][ST.lvl]);
   if(ex.eq==='bb'){const d=dbKg(ex);parts.push(`Barbell ${String(d.kg).replace('.',',')} kg${d.prev!=null?(d.kg>d.prev?` ↑ (from ${d.prev})`:` ↓ (from ${d.prev})`):''}`)}
-  if(ex.eq==='mb')parts.push(`Ball ${[4,6,9][ST.lvl]} kg`);
+  if(ex.eq==='mb')parts.push(`Ball ${ST.mbw||[4,6,9][ST.lvl]} kg`);
   if(ex.eq==='bar'&&ex.unit==='reps'&&ST.lvl===0)parts.push('with an assistance band');
   if(ex.eq==='box'&&/jump|step/.test(ex.id))parts.push(['30 cm box','45 cm box','60 cm box'][ST.lvl]);
   if(ex.id==='run')parts.push(['9 km/h','11 km/h','13 km/h'][ST.lvl]);
@@ -1496,7 +1516,7 @@ function renderWod(){
 /* ================= LIBRARY ================= */
 let libF='all',libM='all';
 function renderLib(){
-  const fs=[['all','All'],['bw','Bodyweight'],['kb','Kettlebell'],['db','Dumbbells'],['band','Bands'],['bike','Air Bike'],['tread','Treadmill'],['stretch','Stretches']];
+  const fs=[['all','All'],['bw','Bodyweight'],...EQK.map(k=>[k,EQN[k]]),['stretch','Stretches']];
   $('#libFilters').innerHTML=fs.map(([k,l])=>`<button data-k="${k}" class="${k===libF?'on':''}">${l}</button>`).join('');
   $('#libFilters').onclick=e=>{const b=e.target.closest('button');if(!b)return;libF=b.dataset.k;renderLib()};
   $('#libMus').innerHTML=[['all','All areas'],...Object.entries(MUN)].map(([k,l])=>`<button data-k="${k}" class="${k===libM?'on':''}">${l}</button>`).join('');
@@ -1769,7 +1789,7 @@ function endWorkout(complete){
   kcal=Math.round(kcal/5)*5;
   if(complete){beep(1200,.6);say('Done! Well done, you made it.',true)}
   if(complete&&WOD.prog){const pr=LS.get('hw_prog',null);if(pr&&pr.id===WOD.prog.id&&!(pr.done||[]).some(d=>d.i===WOD.prog.i)){pr.done=(pr.done||[]).concat([{i:WOD.prog.i,date:new Date().toISOString()}]);persist('hw_prog',pr)}}
-  if(mins>=3||complete){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.concat(complete?[]:['Stopped'])});persist('hw_hist',h.slice(-200))}
+  if(mins>=3||complete){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:WOD.name,fmt:WOD.fmt,min:mins,kcal,km:complete&&WOD.km?WOD.km:undefined,res:P.res.concat(complete?[]:['Stopped'])});persist('hw_hist',h.slice(-200))}
   $('#plRun').hidden=true;$('#plFin').hidden=false;$('#plBlock').textContent=complete?'COMPLETED':'END';$('#plMenu').textContent='CLOSE';
   $('#plFin').innerHTML=`<h2>${complete?'DONE!':'YOU STOPPED'}</h2><p class="note" style="font-size:15px;margin:10px 0 22px">${WOD.name} · ${WOD.fmt}</p>
    <div class="res"><span>Time</span><b>${mins}'</b></div><div class="res"><span>Calories (estimate)</span><b>~${kcal} kcal</b></div>
@@ -2350,7 +2370,7 @@ function saveRating(r){if(!RATE||RATE.saved)return;if(!r)return;RATE.saved=true;
   const A=LS.get('hw_adapt',{})||{};const m=+A.m||1;const nm=Math.min(1.4,Math.max(.7,m*(r==='easy'?1.08:r==='hard'?.92:1.02)));persist('hw_adapt',{m:Math.round(nm*1000)/1000,n:(A.n||0)+1,last:r});
   const H=LS.get('hw_hist',[])||[];if(H.length){H[H.length-1].rate=r;persist('hw_hist',H)}
   const Ld=LS.get('hw_loads',{})||{};const ups=[];
-  document.querySelectorAll('#plFin .rkg input').forEach(inp=>{const id=inp.dataset.ex,e=EXM[id];let kg=parseFloat(String(inp.value).replace(',','.'));const BB=e&&e.eq==='bb',CAP=BB?250:15;if(!(kg>0&&kg<=(BB?300:60)))return;
+  document.querySelectorAll('#plFin .rkg input').forEach(inp=>{const id=inp.dataset.ex,e=EXM[id];let kg=parseFloat(String(inp.value).replace(',','.'));const BB=e&&e.eq==='bb',CAP=e?eqMax(e):15;if(!(kg>0&&kg<=(BB?300:60)))return;
     const o=Ld[id]||{};const step=BB?5:kg<6?1:2;let st=o.kg===kg?(o.streak||0):0;let next=kg,hs=o.kg===kg?(o.hard||0):0;
     if(r==='easy'){next=Math.min(CAP,kg+step);st=0;hs=0}else if(r==='right'){st++;hs=0;if(st>=2){next=Math.min(CAP,kg+step);st=0}}else{st=0;hs++;if(hs>=2){next=Math.max(1,kg-step);hs=0}}
     Ld[id]={kg,next,streak:st,hard:hs,date:todayISO()};if(next>kg)ups.push(`${e.name} → ${next} kg`)});
@@ -2372,6 +2392,64 @@ const PROGRAMS=[
  {id:'upper4',name:'Upper body & core',weeks:4,per:3,desc:'Shoulders, back, chest, arms and abs.',
   days:[{t:'Back & biceps',fmt:'emom',focus:['back','biceps']},{t:'Chest, shoulders & triceps',fmt:'amrap',focus:['chest','shoulders','triceps']},{t:'Core & cardio',fmt:'tabata',focus:['core','cardio']}],dur:[30,30,45,45]},
 ];
+PROGRAMS.push({id:'marathon16',run:true,name:'Marathon 42.2 km',weeks:16,per:5,desc:'16 weeks of preparation for 42.2 km: 4 runs (easy, quality, long) and 1 strength session a week. Paces based on your goal, for road or treadmill.',
+  days:[{t:'Easy run'},{t:'Quality run'},{t:'Strength for runners'},{t:'Easy run'},{t:'Long run'}],dur:[]});
+const RUN_GOALS=['3:00','3:15','3:30','3:45','4:00','4:15','4:30','4:45','5:00','5:30','6:00'];
+const RUN={E:[6,6,7,6,8,8,8,7,9,9,10,8,10,10,8,5],E2:[5,6,6,5,7,7,8,6,8,8,8,7,8,8,6,4],L:[12,14,16,12,18,20,22,16,24,26,28,20,30,24,18,42.2],LMP:{9:5,12:6},
+  Q:[{k:'fart',n:6,on:60,off:120},{k:'tempo',min:15},{k:'int',n:6,km:.4,rec:90},{k:'tempo',min:20},{k:'int',n:5,km:.8,rec:120},{k:'mp',km:6},{k:'int',n:6,km:.8,rec:120},{k:'tempo',min:25},
+     {k:'int',n:4,km:1.2,rec:150},{k:'mp',km:10},{k:'int',n:5,km:1.2,rec:150},{k:'tempo',min:30},{k:'mp',km:14},{k:'int',n:6,km:1,rec:120},{k:'mp',km:8},{k:'fart',n:4,on:60,off:120}]};
+function runPaces(goal){const[h,m]=String(goal||'4:30').split(':').map(Number);const mp=(h*3600+m*60)/42.195;return {easy:mp+70,long:mp+55,mp,tempo:mp-18,int:mp-45,rec:mp+120}}
+const fmtPace=sec=>`${Math.floor(sec/60)}:${String(Math.round(sec%60)).padStart(2,'0')}/km`;
+const kmhTxt=sec=>(3600/sec).toFixed(1).replace('.',',')+' km/h';
+const fmtKm=k=>String(Math.round(k*10)/10).replace('.',',')+' km';
+const RPN={easy:'easy',long:'easy',mp:'marathon pace',tempo:'tempo (comfortably hard)',int:'fast',rec:'easy jog'};
+function runSpec(w,d,p){const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
+  if(d===2)return {t:'Strength for runners',sub:`WOD ${w>=15?20:30}′ · legs, glutes & core`,strength:true};
+  if(w===16&&d===4){parts=[{p:'mp',km:42.195}];return {t:'🏁 THE MARATHON',sub:`42.2 km · goal ${p.goal} · ${fmtPace(R.mp)}`,parts,race:true,R}}
+  if(d===0||d===3){const km=(d===0?RUN.E:RUN.E2)[i];parts=[{p:'easy',km}];if(d===3&&w%2===0&&w<16){parts.push({p:'int',sec:20,n:6,rec:60})}
+    return {t:`Easy run ${fmtKm(km)}`,sub:`${fmtPace(R.easy)}${parts.length>1?' · + 6 × 20″ strides':''} · you should be able to talk`,parts,R}}
+  if(d===4){const L=RUN.L[i],m=RUN.LMP[i]||0;parts=m?[{p:'long',km:L-m},{p:'mp',km:m}]:[{p:'long',km:L}];
+    return {t:`Long run ${fmtKm(L)}`,sub:m?`last ${m} km at marathon pace (${fmtPace(R.mp)})`:`easy · ${fmtPace(R.long)}`,parts,R}}
+  const q=RUN.Q[i];parts=[{p:'easy',km:2}];
+  if(q.k==='fart'){parts.push({p:'int',sec:q.on,n:q.n,rec:q.off});t=`Fartlek ${q.n}×${q.on/60}′`;sub=`${q.n} × ${q.on/60}′ fast / ${q.off/60}′ easy`}
+  else if(q.k==='tempo'){parts.push({p:'tempo',sec:q.min*60});t=`Tempo ${q.min}′`;sub=`${q.min}′ at ${fmtPace(R.tempo)}`}
+  else if(q.k==='int'){parts.push({p:'int',km:q.km,n:q.n,rec:q.rec});t=`Intervals ${q.n}×${q.km*1000} m`;sub=`${q.n} × ${q.km*1000} m at ${fmtPace(R.int)} · ${q.rec}″ jog`}
+  else{parts.push({p:'mp',km:q.km});t=`${q.km} km at marathon pace`;sub=`${q.km} km at ${fmtPace(R.mp)}`}
+  parts.push({p:'easy',km:1.5});return {t,sub:sub+' · with a 2 km warm-up',parts,R,q:true}}
+function runSegs(spec,where){const R=spec.R,ex=where==='tread'?'run':'run_out',segs=[],list=[];let km=0;
+  const one=(pk,o,info)=>{const sec=o.sec||Math.round(o.km*R[pk]);km+=o.km||sec/R[pk];
+    segs.push({ex,label:`${o.km?fmtKm(o.km):(o.sec>=60?Math.round(o.sec/60)+'′':o.sec+'″')} ${RPN[pk]}`,sub:`${fmtPace(R[pk])} · treadmill ${kmhTxt(R[pk])}`,dur:sec,info,rest:pk==='rec'})};
+  spec.parts.forEach(o=>{if(o.n){for(let r=0;r<o.n;r++){one(o.p,o,`REP ${r+1}/${o.n}`);one('rec',{sec:o.rec},`REP ${r+1}/${o.n}`)}
+      list.push({ex,label:`${o.n} × ${o.km?fmtKm(o.km):(o.sec>=60?o.sec/60+'′':o.sec+'″')} ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · ${o.rec}″ jog in between`})}
+    else{one(o.p,o,o.p==='easy'||o.p==='long'?'RUN':RPN[o.p].toUpperCase());list.push({ex,label:`${o.km?fmtKm(o.km):Math.round(o.sec/60)+'′'} ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · treadmill ${kmhTxt(R[o.p])}`})}});
+  return {segs,list,km}}
+function startRunSession(S){const spec=runSpec(S.week,S.day,S.p);
+  if(spec.strength){genWith({fmt:'emom',dur:S.week>=15?20:30,focus:['glutes','hams','quads','core']});WOD.prog={id:S.P.id,i:S.i};WOD.name=`MARATHON · W${S.week} · STRENGTH`;renderWod();return}
+  const r=runSegs(spec,S.p.where);const bw=parseFloat(ST.bw)||75;
+  const mv=['butt_kicks','high_knees','lunge','air_squat'];const wsegs=mv.map(id=>({ex:id,label:EXM[id].name,sub:'Light pace',dur:30,info:'WARM-UP'}));
+  const warm={name:'WARM-UP',type:'timeline',segs:wsegs,list:mv.map(id=>({ex:id,label:`30" ${EXM[id].name}`,sub:EXM[id].gr})),desc:'Dynamic warm-up before the run.',min:2,met:5};
+  const runMin=r.segs.reduce((a,x)=>a+x.dur,0)/60;
+  const main={name:spec.race?'MARATHON':'RUN',type:'timeline',segs:r.segs,list:r.list,desc:`${spec.sub}. Total ~${fmtKm(r.km)}.${S.p.where==='tread'?'':' If you don’t have a GPS watch, follow the time of each segment.'}`,min:runMin,met:spec.race||spec.q?11:9.5};
+  const cool=buildCool(['quads','hams','glutes']);const blocks=[warm,main,cool];
+  WOD={key:'run-'+S.i,focus:[],name:`MARATHON · W${S.week} · ${capsGR(spec.t)}`,blocks,total:Math.round(blocks.reduce((a,b)=>a+b.min,0)+1),kcal:Math.round(blocks.reduce((a,b)=>a+b.min*b.met*3.5*bw/200,0)/10)*10,fmt:'RUN',bw:!!parseFloat(ST.bw),km:Math.round(r.km*10)/10,prog:{id:S.P.id,i:S.i}};
+  renderWod()}
+function progInfo(S){const d=S.P.days[S.day];if(S.P.run){const r=runSpec(S.week,S.day,S.p);return {t:r.t,sub:r.sub}}
+  const dur=S.P.dur[S.week-1]||30;return {t:d.t,sub:`${d.fmt.toUpperCase()} · ${dur}′${S.week>1?` · +${(S.week-1)*4}% intensity`:''}`}}
+function markProgDone(){const S=progState();if(!S)return;const pr=LS.get('hw_prog',null);if(!pr)return;
+  const info=progInfo(S);let min=30,km=null;if(S.P.run){const sp=runSpec(S.week,S.day,S.p);if(!sp.strength){const r=runSegs(sp,pr.where);min=Math.round(r.segs.reduce((a,x)=>a+x.dur,0)/60);km=Math.round(r.km*10)/10}}
+  const bw=parseFloat(ST.bw)||75;pr.done=(pr.done||[]).concat([{i:S.i,date:new Date().toISOString(),manual:true}]);persist('hw_prog',pr);
+  const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:`${capsGR(S.P.name)} · ${capsGR(info.t)}`,fmt:S.P.run?'RUN':'WOD',min,kcal:Math.round(min*(S.P.run?10:8)*3.5*bw/200/5)*5,km,res:['Logged manually']});persist('hw_hist',h.slice(-200));
+  toast('Nice work! Logged ✅');renderProgBox();try{renderDash()}catch(e){}}
+function marathonSetup(){const d=document.createElement('div');d.className='modal';const sel={goal:'4:30',where:'out'};
+  const draw=()=>{const R=runPaces(sel.goal);d.innerHTML=`<div class="mbox onb"><h3>🏃 Marathon training</h3><p class="note">Start 16 weeks before race day. You should already be able to run 5–6 km comfortably.</p>
+    <div class="q">Goal time</div><div class="opts">${RUN_GOALS.map(g=>`<button data-g="${g}" class="${sel.goal===g?'on':''}">${g}</button>`).join('')}</div>
+    <p class="note" style="margin-top:8px">Race pace <b>${fmtPace(R.mp)}</b> · easy <b>${fmtPace(R.easy)}</b> · tempo <b>${fmtPace(R.tempo)}</b></p>
+    <div class="q">Where will you mostly run?</div><div class="opts"><button data-w="out" class="${sel.where==='out'?'on':''}">Outdoors</button><button data-w="tread" class="${sel.where==='tread'?'on':''}">Treadmill</button></div>
+    <div class="mrow"><button class="btn primary" id="mGo">Start the program</button><button class="btn" id="mX">Cancel</button></div></div>`;
+    d.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{sel.goal=b.dataset.g;draw()});d.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{sel.where=b.dataset.w;draw()});
+    d.querySelector('#mX').onclick=()=>d.remove();
+    d.querySelector('#mGo').onclick=()=>{persist('hw_prog',{id:'marathon16',start:new Date().toISOString(),done:[],goal:sel.goal,where:sel.where});d.remove();renderProgBox();try{renderDash()}catch(e){}toast('Marathon program started! 🏃')}};
+  draw();document.body.appendChild(d)}
 const BENCH=[
  {id:'burpee5',name:'Burpee 5′',desc:'As many burpees as you can in 5 minutes. Score: reps.',need:null,type:'amrap',cap:5,items:[['burpee','1 Burpee']]},
  {id:'cindy',name:'Home Cindy',desc:'AMRAP 15′: 5 push-ups, 10 sit-ups, 15 air squats. Score: rounds.',need:null,type:'amrap',cap:15,items:[['pushup','5 Push-ups'],['situp','10 Sit-ups'],['air_squat','15 Air Squats']]},
@@ -2383,7 +2461,7 @@ function progState(){const p=LS.get('hw_prog',null);if(!p||!p.id)return null;con
 function genWith(o){const keep={fmt:ST.fmt,dur:ST.dur,focus:ST.focus.slice(),lvl:ST.lvl};
   try{if(o.fmt)ST.fmt=o.fmt;if(o.dur)ST.dur=o.dur;if(o.focus)ST.focus=o.focus.slice();if(o.lvl!=null)ST.lvl=o.lvl;window.PROG_MULT=o.mult||1;generate()}
   finally{ST.fmt=keep.fmt;ST.dur=keep.dur;ST.focus=keep.focus;ST.lvl=keep.lvl;window.PROG_MULT=1}}
-function startProgSession(){const S=progState();if(!S)return;const d=S.P.days[S.day];const dur=S.P.dur[S.week-1]||30;
+function startProgSession(){const S=progState();if(!S)return;if(S.P.run){startRunSession(S);$('#wodOut').scrollIntoView({behavior:'smooth'});return}const d=S.P.days[S.day];const dur=S.P.dur[S.week-1]||30;
   genWith({fmt:d.fmt,dur,focus:d.focus,lvl:S.P.lvl,mult:1+0.04*(S.week-1)});
   WOD.prog={id:S.P.id,i:S.i};WOD.name=`${capsGR(S.P.name)} · W${S.week} D${S.day+1}`;renderWod();$('#wodOut').scrollIntoView({behavior:'smooth'})}
 function startBench(id){const B=BENCH.find(x=>x.id===id);if(!B)return;
@@ -2400,20 +2478,23 @@ function benchBest(id,type){const L=((LS.get('hw_bench',{})||{})[id]||[]).filter
   const best=L.reduce((a,x)=>!a||(type==='amrap'?x.val>a.val:x.val<a.val)?x:a,null);return {best,last:L[L.length-1],n:L.length,first:L[0]}}
 function renderProgBox(){const el=$('#progBox');if(!el)return;const S=progState();
   let h='';
-  if(S&&!S.finished){const d=S.P.days[S.day];const dur=S.P.dur[S.week-1]||30;const pct=Math.round(S.done/S.total*100);
+  if(S&&!S.finished){const pct=Math.round(S.done/S.total*100);
     h+=`<div class="prog-act"><div class="eyebrow">Your program</div><h3>${S.P.name}</h3><p class="note">Week ${S.week}/${S.P.weeks} · Workout ${S.day+1}/${S.P.per} · ${S.done}/${S.total} completed</p>
      <div class="pbar"><i style="width:${pct}%"></i></div>
-     <div class="prog-today"><small>Next workout</small><b>${d.t}</b><span>${d.fmt.toUpperCase()} · ${dur}′${S.week>1?` · +${(S.week-1)*4}% intensity`:''}</span></div>
-     <div class="prog-btns"><button class="btn primary" id="progGo">Today’s workout →</button><button class="btn" id="progStop">Stop</button></div></div>`}
+     <div class="prog-today"><small>Next workout</small><b>${progInfo(S).t}</b><span>${progInfo(S).sub}</span></div>
+     ${S.P.run?`<p class="note" style="margin-top:10px">Goal ${S.p.goal} · race pace ${fmtPace(runPaces(S.p.goal).mp)} · ${S.p.where==='tread'?'treadmill':'outdoors'}</p>`:''}
+     <div class="prog-btns"><button class="btn primary" id="progGo">Today’s workout →</button><button class="btn" id="progStop">Stop</button></div>
+     <button class="d-link" id="progDone">✓ I did it without the app</button></div>`}
   else{if(S&&S.finished)h+=`<div class="prog-act done"><h3>🎉 You finished “${S.P.name}”!</h3><p class="note">Do a benchmark to see how much you’ve improved, or start a new program.</p></div>`;
     h+=`<div class="sec-head" style="margin-top:8px"><div class="eyebrow">Programs</div><h2>Follow a program</h2><p>Every workout is ready-made and the difficulty rises each week.</p></div>
-     <div class="prog-list">${PROGRAMS.map(P0=>`<div class="prog-card"><b>${P0.name}</b><span>${P0.weeks} weeks · ${P0.per}×/week</span><p>${P0.desc}</p><button class="btn" data-prog="${P0.id}">Start</button></div>`).join('')}</div>`}
+     <div class="prog-list">${PROGRAMS.map(P0=>`<div class="prog-card"><b>${P0.name}</b><span>${P0.run?'🏃 ':''}${P0.weeks} weeks · ${P0.per}×/week</span><p>${P0.desc}</p><button class="btn" data-prog="${P0.id}">Start</button></div>`).join('')}</div>`}
   const eqs=ST.eq||{};
   h+=`<div class="sec-head" style="margin-top:22px"><div class="eyebrow">Benchmarks</div><h2>Progress tests</h2><p>Fixed WODs. Repeat them every 4 weeks to see how much you improve.</p></div>
    <div class="prog-list">${BENCH.filter(B=>!B.need||(eqs[B.need]&&!ST.bwOnly)).map(B=>{const r=benchBest(B.id,B.type);
      return `<div class="prog-card"><b>${B.name}</b><span>${B.type==='amrap'?'AMRAP':'FOR TIME'} · ${B.cap}′</span><p>${B.desc}</p>${r?`<div class="bres">Best: <b>${r.best.txt}</b>${r.n>1?` · ${r.n} times`:''}</div>`:'<div class="bres">Not done yet</div>'}<button class="btn" data-bench="${B.id}">Take the test</button></div>`}).join('')}</div>`;
   el.innerHTML=h;
-  el.querySelectorAll('[data-prog]').forEach(b=>b.onclick=()=>{persist('hw_prog',{id:b.dataset.prog,start:new Date().toISOString(),done:[]});renderProgBox();toast('Program started!')});
+  const pd=$('#progDone');if(pd)pd.onclick=markProgDone;
+  el.querySelectorAll('[data-prog]').forEach(b=>b.onclick=()=>{if(b.dataset.prog==='marathon16'){marathonSetup();return}persist('hw_prog',{id:b.dataset.prog,start:new Date().toISOString(),done:[]});renderProgBox();toast('Program started!')});
   el.querySelectorAll('[data-bench]').forEach(b=>b.onclick=()=>startBench(b.dataset.bench));
   const g=$('#progGo');if(g)g.onclick=startProgSession;
   const st=$('#progStop');if(st)st.onclick=()=>{if(st.dataset.c){persist('hw_prog',null);LS.set('hw_prog',null);renderProgBox()}else{st.dataset.c=1;st.textContent='Sure?'}};
@@ -2581,8 +2662,8 @@ function renderDash(){const el=$('#dash');if(!el)return;const ret=!!LS.get('hw_s
   const H=LS.get('hw_hist',[])||[];const goals=Object.assign({weekly:4},LS.get('hw_goals',{}));const wk=H.filter(x=>wkStart(x.date)===wkStart(Date.now())).length;
   const S=progState();const T=dayTargets(),t=dayTotals();const fa=fActive();
   let main;
-  if(S&&!S.finished){const d=S.P.days[S.day];const dur=S.P.dur[S.week-1]||30;
-    main=`<small>Program · ${S.P.name} · Week ${S.week}/${S.P.weeks}</small><h2>${d.t}</h2><p>${d.fmt.toUpperCase()} · ${dur}′ · workout ${S.day+1} of ${S.P.per} this week</p><button class="btn primary big" id="dGo">Start today’s workout ▶</button><button class="d-link" id="dSet">⚙️ Change settings</button>`}
+  if(S&&!S.finished){const pi=progInfo(S);
+    main=`<small>Program · ${S.P.name} · Week ${S.week}/${S.P.weeks}</small><h2>${pi.t}</h2><p>${pi.sub} · session ${S.day+1} of ${S.P.per} this week</p><button class="btn primary big" id="dGo">Start today’s workout ▶</button><button class="d-link" id="dSet">⚙️ Change settings</button>`}
   else main=`<small>Quick workout</small><h2>Ready for a WOD?</h2><p>${setupSummary()}</p><button class="btn primary big" id="dGo">Build my WOD ▶</button><button class="d-link" id="dSet">⚙️ Change settings</button>`;
   const fTxt=fa?`Fasting ${fmtHMS(Date.now()-fa.start).slice(0,5)} · goal ${fa.plan} h`:'Tap to start';
   el.innerHTML=`<div class="d-hello"><small>${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</small><h1>${greet()}${nm?', '+escH(nm):''} 👋</h1><p>${wk}/${goals.weekly} workouts this week${wk>=goals.weekly?' · 🎉 goal hit!':''}</p></div>
@@ -2737,7 +2818,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='29';
+const APP_VER='30';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
