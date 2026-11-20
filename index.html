@@ -2558,7 +2558,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='24';
+const APP_VER='25';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
@@ -2599,7 +2599,7 @@ window.MealAI={
   warm(){getModel().catch(()=>{})},
   async text(prompt){
     const {AI,ai}=await getModel();let last;
-    for(const [m,ms] of MODELS){
+    for(const [m,ms] of [['gemini-3.5-flash-lite',25000],['gemini-4-hydrogen',45000]]){
       const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),ms);
       try{const model=AI.getGenerativeModel(ai,{model:m,generationConfig:{responseMimeType:'application/json',temperature:0.2}});
         const r=await model.generateContent(prompt,{signal:ctl.signal});clearTimeout(tm);const tx=(r.response.text()||'').trim();if(tx)return tx;last=new Error('empty');continue}
