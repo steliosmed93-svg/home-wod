@@ -1503,7 +1503,7 @@ function openAccount(mode){
    <button class="btn close" id="mClose">Κλείσιμο</button></div>`;
   $('#modal').hidden=false;$('#mClose').onclick=()=>$('#modal').hidden=true;
   box.querySelectorAll('.auth-tabs button').forEach(b=>b.onclick=()=>openAccount(b.dataset.m));
-  $('#gIn').onclick=async()=>{const pr=new firebase.auth.GoogleAuthProvider();try{await Cloud.auth.signInWithPopup(pr);$('#modal').hidden=true;toast('Συνδέθηκες!')}catch(e){if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'){Cloud.auth.signInWithRedirect(pr)}else $('#aErr').textContent=aerr(e)}};
+  let gBusy=false;$('#gIn').onclick=async()=>{if(gBusy)return;gBusy=true;const b=$('#gIn');b.disabled=true;b.style.opacity=.6;$('#aErr').textContent='';const pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:'select_account'});try{await Cloud.auth.signInWithPopup(pr);$('#modal').hidden=true;toast('Συνδέθηκες!')}catch(e){const c=e&&e.code;if(c==='auth/cancelled-popup-request'){}else if(c==='auth/popup-closed-by-user'){$('#aErr').textContent='Το παράθυρο της Google έκλεισε πριν ολοκληρωθεί η σύνδεση. Πάτα ξανά «Συνέχεια με Google».'}else if(c==='auth/popup-blocked'||c==='auth/operation-not-supported-in-this-environment'){Cloud.auth.signInWithRedirect(pr)}else $('#aErr').textContent=aerr(e)}finally{gBusy=false;b.disabled=false;b.style.opacity=''}};
   $('#aForm').onsubmit=async ev=>{ev.preventDefault();const em=$('#aEmail').value.trim(),pw=$('#aPass').value;$('#aErr').textContent='';
     try{if(mode==='up'){const c=await Cloud.auth.createUserWithEmailAndPassword(em,pw);const nm=$('#aName').value.trim();if(nm)await c.user.updateProfile({displayName:nm});Cloud.updateUI()}else await Cloud.auth.signInWithEmailAndPassword(em,pw);
       $('#modal').hidden=true;toast(mode==='up'?'Ο λογαριασμός δημιουργήθηκε!':'Συνδέθηκες!')}catch(e){$('#aErr').textContent=aerr(e)}};
@@ -2652,7 +2652,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='27';
+const APP_VER='28';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
