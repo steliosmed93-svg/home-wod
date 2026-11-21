@@ -3015,7 +3015,7 @@ function partnerNames(ask){const N=LS.get('hw_partner',null);if(N&&N.a&&N.b)retu
 function partnerSetup(cb){const N=LS.get('hw_partner',{})||{};const d=document.createElement('div');d.className='modal';
   d.innerHTML=`<div class="mbox"><h3>👥 Προπόνηση για δύο</h3><p class="note">Εναλλάσσεστε: όσο ο ένας κάνει την άσκηση, ο άλλος ξεκουράζεται. Στο τέλος κάθε γύρου κάνετε κάτι μαζί.</p>
    <label class="note" style="display:block;margin-top:12px">Όνομα 1<input class="inp" id="pnA" maxlength="14" value="${escH(N.a||'')}" placeholder="π.χ. Στέλιος" style="width:100%;margin-top:4px"></label>
-   <label class="note" style="display:block;margin-top:10px">Όνομα 2<input class="inp" id="pnB" maxlength="14" value="${escH(N.b||'')}" placeholder="π.χ. Μαρία" style="width:100%;margin-top:4px"></label>
+   <label class="note" style="display:block;margin-top:10px">Όνομα 2<input class="inp" id="pnB" maxlength="14" value="${escH(N.b||'')}" placeholder="π.χ. Βέρα" style="width:100%;margin-top:4px"></label>
    <div class="mrow"><button class="btn primary" id="pnGo">Φτιάξε WOD για δύο</button><button class="btn" id="pnX">Άκυρο</button></div></div>`;
   document.body.appendChild(d);d.querySelector('#pnX').onclick=()=>d.remove();
   d.querySelector('#pnGo').onclick=()=>{const a=d.querySelector('#pnA').value.trim()||'Παίκτης 1',b=d.querySelector('#pnB').value.trim()||'Παίκτης 2';LS.set('hw_partner',{a,b});d.remove();if(cb)cb()}}
@@ -3211,7 +3211,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='35';
+const APP_VER='36';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
