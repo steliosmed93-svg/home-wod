@@ -2400,7 +2400,9 @@ const PROGRAMS=[
  {id:'upper4',name:'Πάνω σώμα & κορμός',weeks:4,per:3,desc:'Ώμοι, πλάτη, στήθος, χέρια και κοιλιακοί.',
   days:[{t:'Πλάτη & δικέφαλοι',fmt:'emom',focus:['back','biceps']},{t:'Στήθος, ώμοι & τρικέφαλοι',fmt:'amrap',focus:['chest','shoulders','triceps']},{t:'Κορμός & καρδιο',fmt:'tabata',focus:['core','cardio']}],dur:[30,30,45,45]},
 ];
-PROGRAMS.push({id:'marathon16',run:true,name:'Μαραθώνιος 42,2 km',weeks:16,per:5,desc:'16 εβδομάδες προετοιμασία για 42,2 km: 4 τρεξίματα (χαλαρά, ποιοτικό, μεγάλο) και 1 προπόνηση δύναμης την εβδομάδα. Ρυθμοί με βάση τον στόχο σου, για δρόμο ή διάδρομο.',
+PROGRAMS.push({id:'marathon20b',run:true,beg:true,name:'Μαραθώνιος για αρχάριους',weeks:20,per:4,desc:'20 εβδομάδες με τρέξιμο-περπάτημα: ξεκινάς με 2′ τρέξιμο / 1′ περπάτημα και φτάνεις σιγά σιγά στα 42,2 km. 3 τρεξίματα και 1 προπόνηση δύναμης την εβδομάδα, όλα σε ρυθμό που μπορείς να μιλάς.',
+  days:[{t:'Τρέξιμο-περπάτημα'},{t:'Χαλαρό τρέξιμο'},{t:'Δύναμη για δρομείς'},{t:'Μεγάλο τρέξιμο'}],dur:[]});
+PROGRAMS.push({id:'marathon16',run:true,name:'Μαραθώνιος · μέσο επίπεδο',weeks:16,per:5,desc:'Για όσους τρέχουν ήδη άνετα 8–10 km. 16 εβδομάδες προετοιμασία για 42,2 km: 4 τρεξίματα (χαλαρά, ποιοτικό, μεγάλο) και 1 προπόνηση δύναμης την εβδομάδα. Ρυθμοί με βάση τον στόχο σου, για δρόμο ή διάδρομο.',
   days:[{t:'Χαλαρό τρέξιμο'},{t:'Ποιοτικό τρέξιμο'},{t:'Δύναμη για δρομείς'},{t:'Χαλαρό τρέξιμο'},{t:'Μεγάλο τρέξιμο'}],dur:[]});
 const RUN_GOALS=['3:00','3:15','3:30','3:45','4:00','4:15','4:30','4:45','5:00','5:30','6:00'];
 const RUN={E:[6,6,7,6,8,8,8,7,9,9,10,8,10,10,8,5],E2:[5,6,6,5,7,7,8,6,8,8,8,7,8,8,6,4],L:[12,14,16,12,18,20,22,16,24,26,28,20,30,24,18,42.2],LMP:{9:5,12:6},
@@ -2410,8 +2412,17 @@ function runPaces(goal){const[h,m]=String(goal||'4:30').split(':').map(Number);c
 const fmtPace=sec=>`${Math.floor(sec/60)}:${String(Math.round(sec%60)).padStart(2,'0')}/km`;
 const kmhTxt=sec=>(3600/sec).toFixed(1).replace('.',',')+' km/h';
 const fmtKm=k=>String(Math.round(k*10)/10).replace('.',',')+' km';
-const RPN={easy:'χαλαρά',long:'χαλαρά',mp:'ρυθμός μαραθωνίου',tempo:'tempo (άνετα δύσκολα)',int:'γρήγορα',rec:'χαλαρό τροχάδην'};
-function runSpec(w,d,p){const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
+const RPN={walk:'περπάτημα',easy:'χαλαρά',long:'χαλαρά',mp:'ρυθμός μαραθωνίου',tempo:'tempo (άνετα δύσκολα)',int:'γρήγορα',rec:'χαλαρό τροχάδην'};
+const RUNB={E:[2.5,3,3,3,3.5,4,4,4,4.5,5,5,5,5.5,6,6,6,6,6,5,3],E2:[2.5,3,3.5,3,4,4,4.5,4,5,5,5.5,5,6,6,6,6,6.5,6,5,3],
+  L:[4,5,6,5,7,8,9,7,10,12,13,10,15,16,13,18,21,16,11,42.2],
+  RW:w=>w<=3?[2,1]:w<=6?[3,1]:w<=9?[5,1]:w<=13?[8,1]:[9,1]};
+const RUN_GOALS_B=['6:00','5:30','5:00','4:45'];
+function runSpecB(w,d,p){const R=runPaces(p.goal||'6:00');R.easy=R.mp-20;R.long=R.mp-10;R.walk=600;const i=w-1,rw=RUNB.RW(w),rwT=`${rw[0]}′ τρέξιμο / ${rw[1]}′ περπάτημα`;
+  if(d===2)return {t:'Δύναμη για δρομείς',sub:`WOD ${w>=19?15:20}′ · πόδια, γλουτοί & κορμός`,strength:true};
+  if(w===20&&d===3)return {t:'🏁 Ο ΜΑΡΑΘΩΝΙΟΣ',sub:`42,2 km · ${rwT} · ξεκίνα πιο αργά από όσο νομίζεις`,parts:[{p:'mp',km:42.195,rw}],race:true,R};
+  if(d===0||d===1){const km=(d===0?RUNB.E:RUNB.E2)[i];return {t:`${d===0?'Τρέξιμο-περπάτημα':'Χαλαρό τρέξιμο'} ${fmtKm(km)}`,sub:`${rwT} · πολύ χαλαρά, πρέπει να μπορείς να μιλάς`,parts:[{p:'easy',km,rw}],R}}
+  const L=RUNB.L[i];return {t:`Μεγάλο τρέξιμο ${fmtKm(L)}`,sub:`${rwT} · ο χρόνος μετράει, όχι η ταχύτητα`,parts:[{p:'long',km:L,rw}],R}}
+function runSpec(w,d,p){if(p&&p.id==='marathon20b')return runSpecB(w,d,p);const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
   if(d===2)return {t:'Δύναμη για δρομείς',sub:`WOD ${w>=15?20:30}′ · πόδια, γλουτοί & κορμός`,strength:true};
   if(w===16&&d===4){parts=[{p:'mp',km:42.195}];return {t:'🏁 Ο ΜΑΡΑΘΩΝΙΟΣ',sub:`42,2 km · στόχος ${p.goal} · ${fmtPace(R.mp)}`,parts,race:true,R}}
   if(d===0||d===3){const km=(d===0?RUN.E:RUN.E2)[i];parts=[{p:'easy',km}];if(d===3&&w%2===0&&w<16){parts.push({p:'int',sec:20,n:6,rec:60})}
@@ -2427,12 +2438,16 @@ function runSpec(w,d,p){const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
 function runSegs(spec,where){const R=spec.R,ex=where==='tread'?'run':'run_out',segs=[],list=[];let km=0;
   const one=(pk,o,info)=>{const sec=o.sec||Math.round(o.km*R[pk]);km+=o.km||sec/R[pk];
     segs.push({ex,label:`${o.km?fmtKm(o.km):(o.sec>=60?Math.round(o.sec/60)+'′':o.sec+'″')} ${RPN[pk]}`,sub:`${fmtPace(R[pk])} · διάδρομος ${kmhTxt(R[pk])}`,dur:sec,info,rest:pk==='rec'})};
-  spec.parts.forEach(o=>{if(o.n){for(let r=0;r<o.n;r++){one(o.p,o,`ΕΠΑΝΑΛΗΨΗ ${r+1}/${o.n}`);one('rec',{sec:o.rec},`ΕΠΑΝΑΛΗΨΗ ${r+1}/${o.n}`)}
+  spec.parts.forEach(o=>{if(o.rw){const tot=Math.round(o.km*R[o.p]),cyc=(o.rw[0]+o.rw[1])*60,n=Math.max(1,Math.round(tot/cyc));
+      for(let r=0;r<n;r++){segs.push({ex,label:`${o.rw[0]}′ ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · διάδρομος ${kmhTxt(R[o.p])}`,dur:o.rw[0]*60,info:`ΓΥΡΟΣ ${r+1}/${n}`});
+        segs.push({ex:where==='tread'?'incline_walk':'run_out',label:`${o.rw[1]}′ περπάτημα`,sub:'γρήγορο περπάτημα · διάδρομος 5,5–6 km/h',dur:o.rw[1]*60,info:`ΓΥΡΟΣ ${r+1}/${n}`,rest:true})}
+      km+=o.km;list.push({ex,label:`${n} × (${o.rw[0]}′ τρέξιμο + ${o.rw[1]}′ περπάτημα)`,sub:`~${fmtKm(o.km)} · τρέξιμο ${fmtPace(R[o.p])} · διάδρομος ${kmhTxt(R[o.p])}`});return}
+    if(o.n){for(let r=0;r<o.n;r++){one(o.p,o,`ΕΠΑΝΑΛΗΨΗ ${r+1}/${o.n}`);one('rec',{sec:o.rec},`ΕΠΑΝΑΛΗΨΗ ${r+1}/${o.n}`)}
       list.push({ex,label:`${o.n} × ${o.km?fmtKm(o.km):(o.sec>=60?o.sec/60+'′':o.sec+'″')} ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · ${o.rec}″ τροχάδην ανάμεσα`})}
     else{one(o.p,o,o.p==='easy'||o.p==='long'?'ΤΡΕΞΙΜΟ':RPN[o.p].toUpperCase());list.push({ex,label:`${o.km?fmtKm(o.km):Math.round(o.sec/60)+'′'} ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · διάδρομος ${kmhTxt(R[o.p])}`})}});
   return {segs,list,km}}
 function startRunSession(S){const spec=runSpec(S.week,S.day,S.p);
-  if(spec.strength){genWith({fmt:'emom',dur:S.week>=15?20:30,focus:['glutes','hams','quads','core']});WOD.prog={id:S.P.id,i:S.i};WOD.name=`ΜΑΡΑΘΩΝΙΟΣ · Ε${S.week} · ΔΥΝΑΜΗ`;renderWod();return}
+  if(spec.strength){genWith({fmt:'emom',dur:S.P.beg?(S.week>=19?15:20):(S.week>=15?20:30),focus:['glutes','hams','quads','core']});WOD.prog={id:S.P.id,i:S.i};WOD.name=`ΜΑΡΑΘΩΝΙΟΣ · Ε${S.week} · ΔΥΝΑΜΗ`;renderWod();return}
   const r=runSegs(spec,S.p.where);const bw=parseFloat(ST.bw)||75;
   const mv=['butt_kicks','high_knees','lunge','air_squat'];const wsegs=mv.map(id=>({ex:id,label:EXM[id].name,sub:'Ελαφρύς ρυθμός',dur:30,info:'ΖΕΣΤΑΜΑ'}));
   const warm={name:'ΖΕΣΤΑΜΑ',type:'timeline',segs:wsegs,list:mv.map(id=>({ex:id,label:`30" ${EXM[id].name}`,sub:EXM[id].gr})),desc:'Δυναμικό ζέσταμα πριν το τρέξιμο.',min:2,met:5};
@@ -2448,15 +2463,19 @@ function markProgDone(){const S=progState();if(!S)return;const pr=LS.get('hw_pro
   const bw=parseFloat(ST.bw)||75;pr.done=(pr.done||[]).concat([{i:S.i,date:new Date().toISOString(),manual:true}]);persist('hw_prog',pr);
   const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:`${capsGR(S.P.name)} · ${capsGR(info.t)}`,fmt:S.P.run?'ΤΡΕΞΙΜΟ':'WOD',min,kcal:Math.round(min*(S.P.run?10:8)*3.5*bw/200/5)*5,km,res:['Καταχωρήθηκε χειροκίνητα']});persist('hw_hist',h.slice(-200));
   toast('Μπράβο! Καταχωρήθηκε ✅');renderProgBox();try{renderDash()}catch(e){}}
-function marathonSetup(){const d=document.createElement('div');d.className='modal';const sel={goal:'4:30',where:'out'};
-  const draw=()=>{const R=runPaces(sel.goal);d.innerHTML=`<div class="mbox onb"><h3>🏃 Προετοιμασία μαραθωνίου</h3><p class="note">Ξεκίνα 16 εβδομάδες πριν τον αγώνα. Χρειάζεται να μπορείς ήδη να τρέξεις άνετα 5–6 km.</p>
-    <div class="q">Χρόνος-στόχος</div><div class="opts">${RUN_GOALS.map(g=>`<button data-g="${g}" class="${sel.goal===g?'on':''}">${g}</button>`).join('')}</div>
-    <p class="note" style="margin-top:8px">Ρυθμός αγώνα <b>${fmtPace(R.mp)}</b> · χαλαρά <b>${fmtPace(R.easy)}</b> · tempo <b>${fmtPace(R.tempo)}</b></p>
-    <div class="q">Πού θα τρέχεις κυρίως;</div><div class="opts"><button data-w="out" class="${sel.where==='out'?'on':''}">Έξω</button><button data-w="tread" class="${sel.where==='tread'?'on':''}">Διάδρομο</button></div>
+function marathonSetup(lv){const d=document.createElement('div');d.className='modal';const sel={lv:lv||'beg',goal:'6:00',where:'out'};
+  const draw=()=>{const B=sel.lv==='beg',G=B?RUN_GOALS_B:RUN_GOALS;if(!G.includes(sel.goal))sel.goal=B?'6:00':'4:30';const R=runPaces(sel.goal);const ez=B?R.mp-20:R.easy;
+    d.innerHTML=`<div class="mbox onb"><h3>🏃 Προετοιμασία μαραθωνίου</h3>
+    <div class="q">1. Πού βρίσκεσαι τώρα;</div><div class="opts"><button data-l="beg" class="${B?'on':''}">Αρχάριος: τρέχω λίγο ή καθόλου</button><button data-l="int" class="${B?'':'on'}">Τρέχω ήδη άνετα 8–10 km</button></div>
+    <p class="note" style="margin-top:8px">${B?'20 εβδομάδες · 4 μέρες/εβδομάδα · τρέξιμο-περπάτημα από 2′/1′. Αρκεί να μπορείς να περπατήσεις γρήγορα 30′.':'16 εβδομάδες · 5 μέρες/εβδομάδα · με intervals και tempo.'}</p>
+    <div class="q">2. Χρόνος-στόχος</div><div class="opts">${G.map(g=>`<button data-g="${g}" class="${sel.goal===g?'on':''}">${B&&g==='6:00'?'Απλώς να τερματίσω':g}</button>`).join('')}</div>
+    <p class="note" style="margin-top:8px">Χαλαρό τρέξιμο <b>${fmtPace(ez)}</b> (διάδρομος <b>${kmhTxt(ez)}</b>)${B?'':` · ρυθμός αγώνα <b>${fmtPace(R.mp)}</b>`}</p>
+    <div class="q">3. Πού θα τρέχεις κυρίως;</div><div class="opts"><button data-w="out" class="${sel.where==='out'?'on':''}">Έξω</button><button data-w="tread" class="${sel.where==='tread'?'on':''}">Διάδρομο</button></div>
     <div class="mrow"><button class="btn primary" id="mGo">Ξεκίνα το πρόγραμμα</button><button class="btn" id="mX">Άκυρο</button></div></div>`;
+    d.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{sel.lv=b.dataset.l;draw()});
     d.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{sel.goal=b.dataset.g;draw()});d.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{sel.where=b.dataset.w;draw()});
     d.querySelector('#mX').onclick=()=>d.remove();
-    d.querySelector('#mGo').onclick=()=>{persist('hw_prog',{id:'marathon16',start:new Date().toISOString(),done:[],goal:sel.goal,where:sel.where});d.remove();renderProgBox();try{renderDash()}catch(e){}toast('Το πρόγραμμα μαραθωνίου ξεκίνησε! 🏃')}};
+    d.querySelector('#mGo').onclick=()=>{persist('hw_prog',{id:sel.lv==='beg'?'marathon20b':'marathon16',start:new Date().toISOString(),done:[],goal:sel.goal,where:sel.where});d.remove();renderProgBox();try{renderDash()}catch(e){}window.scrollTo({top:0,behavior:'smooth'});toast('Το πρόγραμμα μαραθωνίου ξεκίνησε! 🏃')}};
   draw();document.body.appendChild(d)}
 const BENCH=[
  {id:'burpee5',name:'Burpee 5′',desc:'Όσα burpees μπορείς σε 5 λεπτά. Σκορ: επαναλήψεις.',need:null,type:'amrap',cap:5,items:[['burpee','1 Burpee']]},
@@ -2490,7 +2509,7 @@ function renderProgBox(){const el=$('#progBox');if(!el)return;const S=progState(
     h+=`<div class="prog-act"><div class="eyebrow">Το πρόγραμμά σου</div><h3>${S.P.name}</h3><p class="note">Εβδομάδα ${S.week}/${S.P.weeks} · Προπόνηση ${S.day+1}/${S.P.per} · ${S.done}/${S.total} ολοκληρωμένες</p>
      <div class="pbar"><i style="width:${pct}%"></i></div>
      <div class="prog-today"><small>Επόμενη προπόνηση</small><b>${progInfo(S).t}</b><span>${progInfo(S).sub}</span></div>
-     ${S.P.run?`<p class="note" style="margin-top:10px">Στόχος ${S.p.goal} · ρυθμός αγώνα ${fmtPace(runPaces(S.p.goal).mp)} · ${S.p.where==='tread'?'διάδρομος':'έξω'}</p>`:''}
+     ${S.P.run?`<p class="note" style="margin-top:10px">Στόχος ${S.P.beg&&S.p.goal==='6:00'?'τερματισμός':S.p.goal} · ${S.P.beg?'χαλαρό '+fmtPace(runPaces(S.p.goal).mp-20):'ρυθμός αγώνα '+fmtPace(runPaces(S.p.goal).mp)} · ${S.p.where==='tread'?'διάδρομος':'έξω'}</p>`:''}
      <div class="prog-btns"><button class="btn primary" id="progGo">Σημερινή προπόνηση →</button><button class="btn" id="progStop">Διακοπή</button></div>
      <button class="d-link" id="progDone">✓ Την έκανα χωρίς το app</button></div>`}
   else{if(S&&S.finished)h+=`<div class="prog-act done"><h3>🎉 Ολοκλήρωσες το «${S.P.name}»!</h3><p class="note">Κάνε ένα benchmark για να δεις πόσο βελτιώθηκες, ή ξεκίνα νέο πρόγραμμα.</p></div>`;
@@ -2502,7 +2521,7 @@ function renderProgBox(){const el=$('#progBox');if(!el)return;const S=progState(
      return `<div class="prog-card"><b>${B.name}</b><span>${B.type==='amrap'?'AMRAP':'FOR TIME'} · ${B.cap}′</span><p>${B.desc}</p>${r?`<div class="bres">Καλύτερο: <b>${r.best.txt}</b>${r.n>1?` · ${r.n} φορές`:''}</div>`:'<div class="bres">Δεν το έχεις κάνει ακόμα</div>'}<button class="btn" data-bench="${B.id}">Κάνε το τεστ</button></div>`}).join('')}</div>`;
   el.innerHTML=h;
   const pd=$('#progDone');if(pd)pd.onclick=markProgDone;
-  el.querySelectorAll('[data-prog]').forEach(b=>b.onclick=()=>{if(b.dataset.prog==='marathon16'){marathonSetup();return}persist('hw_prog',{id:b.dataset.prog,start:new Date().toISOString(),done:[]});renderProgBox();toast('Το πρόγραμμα ξεκίνησε!')});
+  el.querySelectorAll('[data-prog]').forEach(b=>b.onclick=()=>{if(b.dataset.prog==='marathon16'||b.dataset.prog==='marathon20b'){marathonSetup(b.dataset.prog==='marathon16'?'int':'beg');return}persist('hw_prog',{id:b.dataset.prog,start:new Date().toISOString(),done:[]});renderProgBox();toast('Το πρόγραμμα ξεκίνησε!')});
   el.querySelectorAll('[data-bench]').forEach(b=>b.onclick=()=>startBench(b.dataset.bench));
   const g=$('#progGo');if(g)g.onclick=startProgSession;
   const st=$('#progStop');if(st)st.onclick=()=>{if(st.dataset.c){persist('hw_prog',null);LS.set('hw_prog',null);renderProgBox()}else{st.dataset.c=1;st.textContent='Σίγουρα;'}};
@@ -2682,8 +2701,8 @@ function renderDash(){const el=$('#dash');if(!el)return;const ret=!!LS.get('hw_s
     <button class="d-tile" data-dt="water"><span class="e">💧</span><b>+ 1 ποτήρι νερό</b><span>${(t.w/1000).toFixed(2).replace(/0$/,'')} / ${(T.water/1000).toFixed(1)} L σήμερα</span></button>
     <button class="d-tile" data-dt="coach"><span class="e">💪</span><b>AI Coach</b><span>Ρώτα με ό,τι θέλεις</span></button>
    </div>
-   ${S&&!S.finished?'':`<div class="d-progs"><div class="d-ph"><b>Προγράμματα</b><button class="d-link" id="dAllP">Όλα →</button></div><div class="d-pl">${PROGRAMS.slice().sort((a,b)=>(b.run?1:0)-(a.run?1:0)).map(P0=>`<button class="d-pc ${P0.run?'run':''}" data-dp="${P0.id}"><span>${P0.run?'🏃':'📋'}</span><b>${P0.name}</b><small>${P0.weeks} εβδομάδες · ${P0.per}×/εβδομάδα</small></button>`).join('')}</div></div>`}`;
-  el.querySelectorAll('[data-dp]').forEach(b=>b.onclick=()=>{const id=b.dataset.dp;if(id==='marathon16'){marathonSetup();return}persist('hw_prog',{id,start:new Date().toISOString(),done:[]});renderProgBox();renderDash();window.scrollTo({top:0,behavior:'smooth'});toast('Το πρόγραμμα ξεκίνησε!')});
+   ${S&&!S.finished?'':`<div class="d-progs"><div class="d-ph"><b>Προγράμματα</b><button class="d-link" id="dAllP">Όλα →</button></div><div class="d-pl">${PROGRAMS.slice().sort((a,b)=>(b.run?(b.beg?2:1):0)-(a.run?(a.beg?2:1):0)).map(P0=>`<button class="d-pc ${P0.run?'run':''}" data-dp="${P0.id}"><span>${P0.run?'🏃':'📋'}</span><b>${P0.name}</b><small>${P0.weeks} εβδομάδες · ${P0.per}×/εβδομάδα</small></button>`).join('')}</div></div>`}`;
+  el.querySelectorAll('[data-dp]').forEach(b=>b.onclick=()=>{const id=b.dataset.dp;if(id==='marathon16'||id==='marathon20b'){marathonSetup(id==='marathon16'?'int':'beg');return}persist('hw_prog',{id,start:new Date().toISOString(),done:[]});renderProgBox();renderDash();window.scrollTo({top:0,behavior:'smooth'});toast('Το πρόγραμμα ξεκίνησε!')});
   {const ap=$('#dAllP');if(ap)ap.onclick=openProgs}
   $('#dGo').onclick=()=>{if(S&&!S.finished)startProgSession();else{generate();$('#wodOut').scrollIntoView({behavior:'smooth'})}};
   $('#dSet').onclick=()=>{const sb=$('#setupBox');sb.open=true;sb.scrollIntoView({behavior:'smooth'})};
@@ -2829,7 +2848,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Διατάσεις για: ${names.join(', ')}. Ήρεμες ανάσες, χωρίς πόνο.`:'Διατάσεις για όλο το σώμα. Ήρεμες ανάσες, χωρίς πόνο.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='31';
+const APP_VER='32';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));

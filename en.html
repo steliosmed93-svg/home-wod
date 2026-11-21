@@ -2400,7 +2400,9 @@ const PROGRAMS=[
  {id:'upper4',name:'Upper body & core',weeks:4,per:3,desc:'Shoulders, back, chest, arms and abs.',
   days:[{t:'Back & biceps',fmt:'emom',focus:['back','biceps']},{t:'Chest, shoulders & triceps',fmt:'amrap',focus:['chest','shoulders','triceps']},{t:'Core & cardio',fmt:'tabata',focus:['core','cardio']}],dur:[30,30,45,45]},
 ];
-PROGRAMS.push({id:'marathon16',run:true,name:'Marathon 42.2 km',weeks:16,per:5,desc:'16 weeks of preparation for 42.2 km: 4 runs (easy, quality, long) and 1 strength session a week. Paces based on your goal, for road or treadmill.',
+PROGRAMS.push({id:'marathon20b',run:true,beg:true,name:'Marathon for beginners',weeks:20,per:4,desc:'20 weeks of run-walk: you start with 2′ run / 1′ walk and build up gradually to 42.2 km. 3 runs and 1 strength session a week, all at a pace where you can talk.',
+  days:[{t:'Run-walk'},{t:'Easy run'},{t:'Strength for runners'},{t:'Long run'}],dur:[]});
+PROGRAMS.push({id:'marathon16',run:true,name:'Marathon · intermediate',weeks:16,per:5,desc:'For people who already run 8–10 km comfortably. 16 weeks of preparation for 42.2 km: 4 runs (easy, quality, long) and 1 strength session a week. Paces based on your goal, for road or treadmill.',
   days:[{t:'Easy run'},{t:'Quality run'},{t:'Strength for runners'},{t:'Easy run'},{t:'Long run'}],dur:[]});
 const RUN_GOALS=['3:00','3:15','3:30','3:45','4:00','4:15','4:30','4:45','5:00','5:30','6:00'];
 const RUN={E:[6,6,7,6,8,8,8,7,9,9,10,8,10,10,8,5],E2:[5,6,6,5,7,7,8,6,8,8,8,7,8,8,6,4],L:[12,14,16,12,18,20,22,16,24,26,28,20,30,24,18,42.2],LMP:{9:5,12:6},
@@ -2410,8 +2412,17 @@ function runPaces(goal){const[h,m]=String(goal||'4:30').split(':').map(Number);c
 const fmtPace=sec=>`${Math.floor(sec/60)}:${String(Math.round(sec%60)).padStart(2,'0')}/km`;
 const kmhTxt=sec=>(3600/sec).toFixed(1).replace('.',',')+' km/h';
 const fmtKm=k=>String(Math.round(k*10)/10).replace('.',',')+' km';
-const RPN={easy:'easy',long:'easy',mp:'marathon pace',tempo:'tempo (comfortably hard)',int:'fast',rec:'easy jog'};
-function runSpec(w,d,p){const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
+const RPN={walk:'walk',easy:'easy',long:'easy',mp:'marathon pace',tempo:'tempo (comfortably hard)',int:'fast',rec:'easy jog'};
+const RUNB={E:[2.5,3,3,3,3.5,4,4,4,4.5,5,5,5,5.5,6,6,6,6,6,5,3],E2:[2.5,3,3.5,3,4,4,4.5,4,5,5,5.5,5,6,6,6,6,6.5,6,5,3],
+  L:[4,5,6,5,7,8,9,7,10,12,13,10,15,16,13,18,21,16,11,42.2],
+  RW:w=>w<=3?[2,1]:w<=6?[3,1]:w<=9?[5,1]:w<=13?[8,1]:[9,1]};
+const RUN_GOALS_B=['6:00','5:30','5:00','4:45'];
+function runSpecB(w,d,p){const R=runPaces(p.goal||'6:00');R.easy=R.mp-20;R.long=R.mp-10;R.walk=600;const i=w-1,rw=RUNB.RW(w),rwT=`${rw[0]}′ run / ${rw[1]}′ walk`;
+  if(d===2)return {t:'Strength for runners',sub:`WOD ${w>=19?15:20}′ · legs, glutes & core`,strength:true};
+  if(w===20&&d===3)return {t:'🏁 THE MARATHON',sub:`42.2 km · ${rwT} · start slower than you think`,parts:[{p:'mp',km:42.195,rw}],race:true,R};
+  if(d===0||d===1){const km=(d===0?RUNB.E:RUNB.E2)[i];return {t:`${d===0?'Run-walk':'Easy run'} ${fmtKm(km)}`,sub:`${rwT} · very easy, you should be able to talk`,parts:[{p:'easy',km,rw}],R}}
+  const L=RUNB.L[i];return {t:`Long run ${fmtKm(L)}`,sub:`${rwT} · time on feet matters, not speed`,parts:[{p:'long',km:L,rw}],R}}
+function runSpec(w,d,p){if(p&&p.id==='marathon20b')return runSpecB(w,d,p);const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
   if(d===2)return {t:'Strength for runners',sub:`WOD ${w>=15?20:30}′ · legs, glutes & core`,strength:true};
   if(w===16&&d===4){parts=[{p:'mp',km:42.195}];return {t:'🏁 THE MARATHON',sub:`42.2 km · goal ${p.goal} · ${fmtPace(R.mp)}`,parts,race:true,R}}
   if(d===0||d===3){const km=(d===0?RUN.E:RUN.E2)[i];parts=[{p:'easy',km}];if(d===3&&w%2===0&&w<16){parts.push({p:'int',sec:20,n:6,rec:60})}
@@ -2427,12 +2438,16 @@ function runSpec(w,d,p){const R=runPaces(p&&p.goal),i=w-1;let parts,t,sub;
 function runSegs(spec,where){const R=spec.R,ex=where==='tread'?'run':'run_out',segs=[],list=[];let km=0;
   const one=(pk,o,info)=>{const sec=o.sec||Math.round(o.km*R[pk]);km+=o.km||sec/R[pk];
     segs.push({ex,label:`${o.km?fmtKm(o.km):(o.sec>=60?Math.round(o.sec/60)+'′':o.sec+'″')} ${RPN[pk]}`,sub:`${fmtPace(R[pk])} · treadmill ${kmhTxt(R[pk])}`,dur:sec,info,rest:pk==='rec'})};
-  spec.parts.forEach(o=>{if(o.n){for(let r=0;r<o.n;r++){one(o.p,o,`REP ${r+1}/${o.n}`);one('rec',{sec:o.rec},`REP ${r+1}/${o.n}`)}
+  spec.parts.forEach(o=>{if(o.rw){const tot=Math.round(o.km*R[o.p]),cyc=(o.rw[0]+o.rw[1])*60,n=Math.max(1,Math.round(tot/cyc));
+      for(let r=0;r<n;r++){segs.push({ex,label:`${o.rw[0]}′ ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · treadmill ${kmhTxt(R[o.p])}`,dur:o.rw[0]*60,info:`ROUND ${r+1}/${n}`});
+        segs.push({ex:where==='tread'?'incline_walk':'run_out',label:`${o.rw[1]}′ walk`,sub:'brisk walk · treadmill 5.5–6 km/h',dur:o.rw[1]*60,info:`ROUND ${r+1}/${n}`,rest:true})}
+      km+=o.km;list.push({ex,label:`${n} × (${o.rw[0]}′ run + ${o.rw[1]}′ walk)`,sub:`~${fmtKm(o.km)} · run ${fmtPace(R[o.p])} · treadmill ${kmhTxt(R[o.p])}`});return}
+    if(o.n){for(let r=0;r<o.n;r++){one(o.p,o,`REP ${r+1}/${o.n}`);one('rec',{sec:o.rec},`REP ${r+1}/${o.n}`)}
       list.push({ex,label:`${o.n} × ${o.km?fmtKm(o.km):(o.sec>=60?o.sec/60+'′':o.sec+'″')} ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · ${o.rec}″ jog in between`})}
     else{one(o.p,o,o.p==='easy'||o.p==='long'?'RUN':RPN[o.p].toUpperCase());list.push({ex,label:`${o.km?fmtKm(o.km):Math.round(o.sec/60)+'′'} ${RPN[o.p]}`,sub:`${fmtPace(R[o.p])} · treadmill ${kmhTxt(R[o.p])}`})}});
   return {segs,list,km}}
 function startRunSession(S){const spec=runSpec(S.week,S.day,S.p);
-  if(spec.strength){genWith({fmt:'emom',dur:S.week>=15?20:30,focus:['glutes','hams','quads','core']});WOD.prog={id:S.P.id,i:S.i};WOD.name=`MARATHON · W${S.week} · STRENGTH`;renderWod();return}
+  if(spec.strength){genWith({fmt:'emom',dur:S.P.beg?(S.week>=19?15:20):(S.week>=15?20:30),focus:['glutes','hams','quads','core']});WOD.prog={id:S.P.id,i:S.i};WOD.name=`MARATHON · W${S.week} · STRENGTH`;renderWod();return}
   const r=runSegs(spec,S.p.where);const bw=parseFloat(ST.bw)||75;
   const mv=['butt_kicks','high_knees','lunge','air_squat'];const wsegs=mv.map(id=>({ex:id,label:EXM[id].name,sub:'Light pace',dur:30,info:'WARM-UP'}));
   const warm={name:'WARM-UP',type:'timeline',segs:wsegs,list:mv.map(id=>({ex:id,label:`30" ${EXM[id].name}`,sub:EXM[id].gr})),desc:'Dynamic warm-up before the run.',min:2,met:5};
@@ -2448,15 +2463,19 @@ function markProgDone(){const S=progState();if(!S)return;const pr=LS.get('hw_pro
   const bw=parseFloat(ST.bw)||75;pr.done=(pr.done||[]).concat([{i:S.i,date:new Date().toISOString(),manual:true}]);persist('hw_prog',pr);
   const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:`${capsGR(S.P.name)} · ${capsGR(info.t)}`,fmt:S.P.run?'RUN':'WOD',min,kcal:Math.round(min*(S.P.run?10:8)*3.5*bw/200/5)*5,km,res:['Logged manually']});persist('hw_hist',h.slice(-200));
   toast('Nice work! Logged ✅');renderProgBox();try{renderDash()}catch(e){}}
-function marathonSetup(){const d=document.createElement('div');d.className='modal';const sel={goal:'4:30',where:'out'};
-  const draw=()=>{const R=runPaces(sel.goal);d.innerHTML=`<div class="mbox onb"><h3>🏃 Marathon training</h3><p class="note">Start 16 weeks before race day. You should already be able to run 5–6 km comfortably.</p>
-    <div class="q">Goal time</div><div class="opts">${RUN_GOALS.map(g=>`<button data-g="${g}" class="${sel.goal===g?'on':''}">${g}</button>`).join('')}</div>
-    <p class="note" style="margin-top:8px">Race pace <b>${fmtPace(R.mp)}</b> · easy <b>${fmtPace(R.easy)}</b> · tempo <b>${fmtPace(R.tempo)}</b></p>
-    <div class="q">Where will you mostly run?</div><div class="opts"><button data-w="out" class="${sel.where==='out'?'on':''}">Outdoors</button><button data-w="tread" class="${sel.where==='tread'?'on':''}">Treadmill</button></div>
+function marathonSetup(lv){const d=document.createElement('div');d.className='modal';const sel={lv:lv||'beg',goal:'6:00',where:'out'};
+  const draw=()=>{const B=sel.lv==='beg',G=B?RUN_GOALS_B:RUN_GOALS;if(!G.includes(sel.goal))sel.goal=B?'6:00':'4:30';const R=runPaces(sel.goal);const ez=B?R.mp-20:R.easy;
+    d.innerHTML=`<div class="mbox onb"><h3>🏃 Marathon training</h3>
+    <div class="q">1. Where are you now?</div><div class="opts"><button data-l="beg" class="${B?'on':''}">Beginner: I run a little or not at all</button><button data-l="int" class="${B?'':'on'}">I already run 8–10 km comfortably</button></div>
+    <p class="note" style="margin-top:8px">${B?'20 weeks · 4 days/week · run-walk starting at 2′/1′. You just need to be able to walk briskly for 30′.':'16 weeks · 5 days/week · with intervals and tempo.'}</p>
+    <div class="q">2. Goal time</div><div class="opts">${G.map(g=>`<button data-g="${g}" class="${sel.goal===g?'on':''}">${B&&g==='6:00'?'Just finish':g}</button>`).join('')}</div>
+    <p class="note" style="margin-top:8px">Easy run <b>${fmtPace(ez)}</b> (treadmill <b>${kmhTxt(ez)}</b>)${B?'':` · race pace <b>${fmtPace(R.mp)}</b>`}</p>
+    <div class="q">3. Where will you mostly run?</div><div class="opts"><button data-w="out" class="${sel.where==='out'?'on':''}">Outdoors</button><button data-w="tread" class="${sel.where==='tread'?'on':''}">Treadmill</button></div>
     <div class="mrow"><button class="btn primary" id="mGo">Start the program</button><button class="btn" id="mX">Cancel</button></div></div>`;
+    d.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{sel.lv=b.dataset.l;draw()});
     d.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{sel.goal=b.dataset.g;draw()});d.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{sel.where=b.dataset.w;draw()});
     d.querySelector('#mX').onclick=()=>d.remove();
-    d.querySelector('#mGo').onclick=()=>{persist('hw_prog',{id:'marathon16',start:new Date().toISOString(),done:[],goal:sel.goal,where:sel.where});d.remove();renderProgBox();try{renderDash()}catch(e){}toast('Marathon program started! 🏃')}};
+    d.querySelector('#mGo').onclick=()=>{persist('hw_prog',{id:sel.lv==='beg'?'marathon20b':'marathon16',start:new Date().toISOString(),done:[],goal:sel.goal,where:sel.where});d.remove();renderProgBox();try{renderDash()}catch(e){}window.scrollTo({top:0,behavior:'smooth'});toast('Marathon program started! 🏃')}};
   draw();document.body.appendChild(d)}
 const BENCH=[
  {id:'burpee5',name:'Burpee 5′',desc:'As many burpees as you can in 5 minutes. Score: reps.',need:null,type:'amrap',cap:5,items:[['burpee','1 Burpee']]},
@@ -2490,7 +2509,7 @@ function renderProgBox(){const el=$('#progBox');if(!el)return;const S=progState(
     h+=`<div class="prog-act"><div class="eyebrow">Your program</div><h3>${S.P.name}</h3><p class="note">Week ${S.week}/${S.P.weeks} · Workout ${S.day+1}/${S.P.per} · ${S.done}/${S.total} completed</p>
      <div class="pbar"><i style="width:${pct}%"></i></div>
      <div class="prog-today"><small>Next workout</small><b>${progInfo(S).t}</b><span>${progInfo(S).sub}</span></div>
-     ${S.P.run?`<p class="note" style="margin-top:10px">Goal ${S.p.goal} · race pace ${fmtPace(runPaces(S.p.goal).mp)} · ${S.p.where==='tread'?'treadmill':'outdoors'}</p>`:''}
+     ${S.P.run?`<p class="note" style="margin-top:10px">Goal ${S.P.beg&&S.p.goal==='6:00'?'finish':S.p.goal} · ${S.P.beg?'easy '+fmtPace(runPaces(S.p.goal).mp-20):'race pace '+fmtPace(runPaces(S.p.goal).mp)} · ${S.p.where==='tread'?'treadmill':'outdoors'}</p>`:''}
      <div class="prog-btns"><button class="btn primary" id="progGo">Today’s workout →</button><button class="btn" id="progStop">Stop</button></div>
      <button class="d-link" id="progDone">✓ I did it without the app</button></div>`}
   else{if(S&&S.finished)h+=`<div class="prog-act done"><h3>🎉 You finished “${S.P.name}”!</h3><p class="note">Do a benchmark to see how much you’ve improved, or start a new program.</p></div>`;
@@ -2502,7 +2521,7 @@ function renderProgBox(){const el=$('#progBox');if(!el)return;const S=progState(
      return `<div class="prog-card"><b>${B.name}</b><span>${B.type==='amrap'?'AMRAP':'FOR TIME'} · ${B.cap}′</span><p>${B.desc}</p>${r?`<div class="bres">Best: <b>${r.best.txt}</b>${r.n>1?` · ${r.n} times`:''}</div>`:'<div class="bres">Not done yet</div>'}<button class="btn" data-bench="${B.id}">Take the test</button></div>`}).join('')}</div>`;
   el.innerHTML=h;
   const pd=$('#progDone');if(pd)pd.onclick=markProgDone;
-  el.querySelectorAll('[data-prog]').forEach(b=>b.onclick=()=>{if(b.dataset.prog==='marathon16'){marathonSetup();return}persist('hw_prog',{id:b.dataset.prog,start:new Date().toISOString(),done:[]});renderProgBox();toast('Program started!')});
+  el.querySelectorAll('[data-prog]').forEach(b=>b.onclick=()=>{if(b.dataset.prog==='marathon16'||b.dataset.prog==='marathon20b'){marathonSetup(b.dataset.prog==='marathon16'?'int':'beg');return}persist('hw_prog',{id:b.dataset.prog,start:new Date().toISOString(),done:[]});renderProgBox();toast('Program started!')});
   el.querySelectorAll('[data-bench]').forEach(b=>b.onclick=()=>startBench(b.dataset.bench));
   const g=$('#progGo');if(g)g.onclick=startProgSession;
   const st=$('#progStop');if(st)st.onclick=()=>{if(st.dataset.c){persist('hw_prog',null);LS.set('hw_prog',null);renderProgBox()}else{st.dataset.c=1;st.textContent='Sure?'}};
@@ -2682,8 +2701,8 @@ function renderDash(){const el=$('#dash');if(!el)return;const ret=!!LS.get('hw_s
     <button class="d-tile" data-dt="water"><span class="e">💧</span><b>+ 1 glass of water</b><span>${(t.w/1000).toFixed(2).replace(/0$/,'')} / ${(T.water/1000).toFixed(1)} L today</span></button>
     <button class="d-tile" data-dt="coach"><span class="e">💪</span><b>AI Coach</b><span>Ask me anything</span></button>
    </div>
-   ${S&&!S.finished?'':`<div class="d-progs"><div class="d-ph"><b>Programs</b><button class="d-link" id="dAllP">All →</button></div><div class="d-pl">${PROGRAMS.slice().sort((a,b)=>(b.run?1:0)-(a.run?1:0)).map(P0=>`<button class="d-pc ${P0.run?'run':''}" data-dp="${P0.id}"><span>${P0.run?'🏃':'📋'}</span><b>${P0.name}</b><small>${P0.weeks} weeks · ${P0.per}×/week</small></button>`).join('')}</div></div>`}`;
-  el.querySelectorAll('[data-dp]').forEach(b=>b.onclick=()=>{const id=b.dataset.dp;if(id==='marathon16'){marathonSetup();return}persist('hw_prog',{id,start:new Date().toISOString(),done:[]});renderProgBox();renderDash();window.scrollTo({top:0,behavior:'smooth'});toast('Program started!')});
+   ${S&&!S.finished?'':`<div class="d-progs"><div class="d-ph"><b>Programs</b><button class="d-link" id="dAllP">All →</button></div><div class="d-pl">${PROGRAMS.slice().sort((a,b)=>(b.run?(b.beg?2:1):0)-(a.run?(a.beg?2:1):0)).map(P0=>`<button class="d-pc ${P0.run?'run':''}" data-dp="${P0.id}"><span>${P0.run?'🏃':'📋'}</span><b>${P0.name}</b><small>${P0.weeks} weeks · ${P0.per}×/week</small></button>`).join('')}</div></div>`}`;
+  el.querySelectorAll('[data-dp]').forEach(b=>b.onclick=()=>{const id=b.dataset.dp;if(id==='marathon16'||id==='marathon20b'){marathonSetup(id==='marathon16'?'int':'beg');return}persist('hw_prog',{id,start:new Date().toISOString(),done:[]});renderProgBox();renderDash();window.scrollTo({top:0,behavior:'smooth'});toast('Program started!')});
   {const ap=$('#dAllP');if(ap)ap.onclick=openProgs}
   $('#dGo').onclick=()=>{if(S&&!S.finished)startProgSession();else{generate();$('#wodOut').scrollIntoView({behavior:'smooth'})}};
   $('#dSet').onclick=()=>{const sb=$('#setupBox');sb.open=true;sb.scrollIntoView({behavior:'smooth'})};
@@ -2829,7 +2848,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='31';
+const APP_VER='32';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
