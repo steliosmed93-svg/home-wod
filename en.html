@@ -557,6 +557,29 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .dchips button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-weight:700;cursor:pointer}
 .dchips button.on{background:var(--acc);color:var(--ink);border-color:transparent}
 
+
+.camov{position:fixed;inset:0;z-index:90;background:#000;display:flex;flex-direction:column}
+.camov .cv{position:relative;flex:1;overflow:hidden;background:#000}
+.camov video,.camov canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.camov.mir video,.camov.mir canvas{transform:scaleX(-1)}
+.camov .cnt{position:absolute;top:14px;left:0;right:0;text-align:center;font-size:96px;font-weight:900;line-height:1;text-shadow:0 4px 20px rgba(0,0,0,.7)}
+.camov .cnt small{display:block;font-size:16px;font-weight:700;color:#ddd;margin-top:6px}
+.camov .fb{position:absolute;left:12px;right:12px;bottom:12px;text-align:center;padding:12px;border-radius:16px;background:rgba(0,0,0,.6);font-weight:700;font-size:17px}
+.camov .fb.ok{color:#6fd6b8}.camov .fb.bad{color:#ff8a5b}
+.camov .cbar{padding:12px 12px calc(12px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;background:#0b0b0c}
+.camov .cbar .opts{display:flex;gap:6px;overflow-x:auto}
+.camov .cbar .opts button{flex:none;padding:9px 13px;border-radius:12px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-size:14px}
+.camov .cbar .opts button.on{background:var(--acc);color:var(--ink);border-color:transparent;font-weight:700}
+.camov .cbar .row{display:flex;gap:8px}.camov .cbar .row .btn{flex:1}
+.rdy{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px}
+.rdy h3{margin:0 0 4px;font-size:17px}.rdy .q{font-size:13.5px;color:var(--mut);margin:12px 0 6px;font-weight:600}
+.rdy .opts{display:flex;flex-wrap:wrap;gap:6px}
+.rdy .opts button{padding:9px 12px;border-radius:12px;border:1px solid var(--line2);background:var(--card2);color:var(--fg);font:inherit;font-size:14px;cursor:pointer}
+.rdy .opts button.on{background:var(--acc);color:var(--ink);border-color:transparent;font-weight:700}
+.rdy-s{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;font-size:14.5px}
+.rdy-s b{font-size:15px}.rdy-s button{background:none;border:0;color:var(--acc);font:inherit;font-weight:700;cursor:pointer}
+.d-tile.wide{grid-column:1/-1;min-height:auto;flex-direction:row;align-items:center;gap:12px}
+.d-tile.wide .e{font-size:30px}.d-tile.wide div{display:flex;flex-direction:column;gap:2px}.d-tile.wide b{margin:0}
 body.ret .landing,body.ret .features{display:none}
 #dash>*{min-width:0}.d-ph button{background:none;border:0;color:var(--acc);font:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:4px}
 .d-ph{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 8px}.d-ph b{font-size:17px}.d-ph .d-link{width:auto;margin:0}
@@ -672,6 +695,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
       <button data-v="history">Progress</button>
       <button data-v="coach">💪 AI Coach</button>
       <button data-v="progs">🏃 Programs & Marathon</button>
+      <button data-v="cam">📷 Rep counter</button>
     </nav></div>
     <a class="langsw" href="./" id="langSw" data-lang="el">ΕΛ</a><button class="acct" id="acctBtn"><span class="av" id="acctAv" hidden></span><span id="acctName">Sign in</span></button>
     <a class="btn primary navcta" href="#builder" data-go="builder">Build WOD</a>
@@ -856,7 +880,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
 <div id="player" hidden>
   <div class="pl-top">
     <div class="bn" id="plBlock">WARM-UP</div>
-    <div class="r"><a id="plMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="plVoice">VOICE ON</button><button id="plSound">SOUND ON</button><button id="plMenu">MENU</button></div>
+    <div class="r"><a id="plMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="plCam">📷</button><button id="plVoice">VOICE ON</button><button id="plSound">SOUND ON</button><button id="plMenu">MENU</button></div>
   </div>
   <div id="plRun" class="pl-body">
     <div class="pl-timer" id="plTimer">00:00</div>
@@ -1351,7 +1375,7 @@ const rand=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const LVM=[.7,1,1.3];
 function amount(ex,mult){
-  let v=ex.base*LVM[ST.lvl]*(mult||1)*adaptM()*(window.PROG_MULT||1),n,txt;
+  let v=ex.base*LVM[ST.lvl]*(mult||1)*adaptM()*(window.PROG_MULT||1)*readyM(),n,txt;
   if(ex.unit==='reps'){n=Math.max(2,Math.round(v));if(ex.note==='alternating'||ex.note==='total'||ex.note==='half per arm')n=Math.round(n/2)*2;txt=`${n} ${ex.name}`}
   else if(ex.unit==='cal'){n=Math.max(4,Math.round(v));txt=`${n} cal ${ex.name}`}
   else if(ex.unit==='m'){n=Math.max(100,Math.round(v/50)*50);txt=`${n} m Run`}
@@ -1375,7 +1399,7 @@ function load(ex,extra){
 }
 function pickFocus(k,opt){
   const eqs=new Set(['bw',...Object.keys(ST.eq).filter(x=>ST.eq[x])]);
-  const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&e.m&&e.m.length&&!e.cat.includes('rest')&&!(opt.noSec&&e.unit==='sec'));
+  const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&e.m&&e.m.length&&!e.cat.includes('rest')&&!(opt.noSec&&e.unit==='sec')&&exOK(e));
   const f=ST.focus.slice();const wantEngine=!f.includes('cardio')&&k>=3&&!opt.noEngine;
   const slots=[];let i=0;while(slots.length<(wantEngine?k-1:k)){slots.push(f[i%f.length]);i++}
   if(wantEngine)slots.splice(Math.min(1,slots.length),0,'cardio');
@@ -1394,7 +1418,7 @@ function pickFocus(k,opt){
 function pickMoves(k,opt){
   if(ST.focus&&ST.focus.length)return pickFocus(k,opt||{});
   const eqs=new Set(['bw',...Object.keys(ST.eq).filter(x=>ST.eq[x])]);
-  const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&!e.cat.includes('rest'));
+  const avail=EX.filter(e=>!e.hide&&eqs.has(e.eq)&&!e.cat.includes('rest')&&exOK(e));
   const used=new Set(),out=[];
   const machines=avail.filter(e=>e.cat.includes('machine'));
   let slots=['engine','lower','upper','core'];
@@ -1450,11 +1474,11 @@ function buildFinisher(){
   const segs=[],list=[];let desc;
   if(ST.eq.bike){for(let i=0;i<4;i++){segs.push({ex:'bike',label:'SPRINT',sub:'Air Bike · all out',dur:20,info:`FINISHER · ${i+1}/4`},{ex:'bike',label:'Easy',sub:'Air Bike · active rest',dur:40,info:`FINISHER · ${i+1}/4`,rest:true})}
     list.push({ex:'bike',label:'4 × 20" Air Bike sprint',sub:'40" easy in between'});desc='One last burst for more calories burned.'}
-  else if(ST.eq.tread){for(let i=0;i<4;i++){segs.push({ex:'run',label:'FAST',sub:['10 km/h','12 km/h','14 km/h'][ST.lvl],dur:30,info:`FINISHER · ${i+1}/4`},{ex:'incline_walk',label:'Walk',sub:'5 km/h',dur:30,info:`FINISHER · ${i+1}/4`,rest:true})}
+  else if(ST.eq.tread&&exOK(EXM.run)){for(let i=0;i<4;i++){segs.push({ex:'run',label:'FAST',sub:['10 km/h','12 km/h','14 km/h'][ST.lvl],dur:30,info:`FINISHER · ${i+1}/4`},{ex:'incline_walk',label:'Walk',sub:'5 km/h',dur:30,info:`FINISHER · ${i+1}/4`,rest:true})}
     list.push({ex:'run',label:'4 × 30" fast run',sub:'30" walk in between'});desc='One last burst for more calories burned.'}
   else if(ST.eq.rower){for(let i=0;i<4;i++){segs.push({ex:'row',label:'SPRINT',sub:'Rower · all-out',dur:20,info:`FINISHER · ${i+1}/4`},{ex:'row',label:'Easy',sub:'Rower · active rest',dur:40,info:`FINISHER · ${i+1}/4`,rest:true})}
     list.push({ex:'row',label:'4 × 20" rowing sprints',sub:'40" easy in between'});desc='One last burst for more calories burned.'}
-  else{const mv=['burpee','mountain_climber'];for(let i=0;i<8;i++){const id=mv[i%2];segs.push({ex:id,label:EXM[id].name,sub:'Max reps',dur:20,info:`FINISHER · TABATA ${i+1}/8`},{ex:'rest',label:'REST',sub:'',dur:10,info:`FINISHER · TABATA ${i+1}/8`,rest:true})}
+  else{const mv=['burpee','mountain_climber'].map(x=>exOK(EXM[x])?x:(exOK(EXM.high_knees)?'high_knees':'situp'));for(let i=0;i<8;i++){const id=mv[i%2];segs.push({ex:id,label:EXM[id].name,sub:'Max reps',dur:20,info:`FINISHER · TABATA ${i+1}/8`},{ex:'rest',label:'REST',sub:'',dur:10,info:`FINISHER · TABATA ${i+1}/8`,rest:true})}
     list.push({ex:'burpee',label:'Burpee',sub:'20" work / 10" rest'},{ex:'mountain_climber',label:'Mountain Climbers',sub:'alternating, 8 rounds'});desc='4-minute Tabata.'}
   return {name:'FINISHER',type:'timeline',segs,list,desc,min:4,met:9};
 }
@@ -1484,7 +1508,7 @@ function buildMain(fmt,M){
     return [{name:`TABATA × ${n}`,type:'timeline',segs,list:mv.map(e=>({ex:e.id,label:e.name,sub:'8 × 20" / 10" · '+(load(e)||e.gr)})),desc:`${n} stations, each 8 rounds of 20" work and 10" rest. 1' break in between.`,min:segs.reduce((s,x)=>s+x.dur,0)/60,met:9,fmt:'TABATA'}];
   }
   // intervals
-  const machines=EX.filter(e=>e.cat.includes('machine')&&ST.eq[e.eq]);const mach=rand(machines);const st=pickMoves(2,{noSec:true});const R=Math.max(3,Math.floor(M*60/150));const segs=[];
+  const machines0=EX.filter(e=>e.cat.includes('machine')&&ST.eq[e.eq]);const machines=machines0.filter(exOK).length?machines0.filter(exOK):machines0;const mach=rand(machines);const st=pickMoves(2,{noSec:true});const R=Math.max(3,Math.floor(M*60/150));const segs=[];
   for(let r=0;r<R;r++){const s=st[r%2];
     segs.push({ex:mach.id,label:mach.name,sub:(mach.id==='bike'||mach.id==='row')?'Hard · rack up calories':'Fast · '+['10 km/h','12 km/h','14 km/h'][ST.lvl],dur:60,info:`ROUND ${r+1}/${R}`});
     segs.push({ex:s.id,label:s.name,sub:'Steady pace · '+(load(s)||s.gr),dur:60,info:`ROUND ${r+1}/${R}`});
@@ -1558,7 +1582,7 @@ $('#hClear').onclick=()=>{if(!clearArm){clearArm=true;$('#hClear').textContent='
 const RECAPTCHA_KEY='6LfEXyguAAAAAHeLvpcsuDqlOHWdCY_DaGChHADY';window.RECAPTCHA_KEY=RECAPTCHA_KEY;
 const FB_CONFIG={apiKey:"AIzaSyD6X7ZmnNE1QQn_YXpHIrAH5FkBi31kPrU",authDomain:"home-wod-3fa81.firebaseapp.com",projectId:"home-wod-3fa81",storageBucket:"home-wod-3fa81.firebasestorage.app",messagingSenderId:"83347049614",appId:"1:83347049614:web:0fca3b57f0327d83e24ddf"}; /*FBCONFIG*/
 window.FB_PUB=FB_CONFIG;
-const SYNC_KEYS=['hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals','hw_fast','hw_fasts','hw_water','hw_badges','hw_adapt','hw_loads','hw_prog','hw_bench','hw_meas','hw_chal','hw_remind'];
+const SYNC_KEYS=['hw_ready','hw_hist','hw_settings','hw_weights','hw_prs','hw_favs','hw_goals','hw_profile','hw_scans','hw_food_custom','hw_meals','hw_fast','hw_fasts','hw_water','hw_badges','hw_adapt','hw_loads','hw_prog','hw_bench','hw_meas','hw_chal','hw_remind'];
 const Cloud={user:null,db:null,auth:null,ready:false,t:null,busy:false,
   init(){try{if(!FB_CONFIG||!window.firebase){this.updateUI();return}firebase.initializeApp(FB_CONFIG);this.auth=firebase.auth();this.db=firebase.firestore();this.ready=true;
     this.auth.getRedirectResult().catch(e=>{});
@@ -1688,7 +1712,7 @@ function showView(v){document.querySelectorAll('.tabs button,.mbar button').forE
   if(v!=='scan')stopScan();if(v==='scan'){renderScanRecent();renderMealDay();getDecoder().catch(()=>{});window.MealAI&&MealAI.warm()}
   ['train','timer','library','fast','scan','history','coach'].forEach(x=>$('#v-'+x).hidden=x!==v);if(v==='coach')renderCoach();{const fb=$('#cFab');if(fb)fb.hidden=v==='coach'}if(v==='fast')renderFast();if(v==='train')renderDash();if(v==='library')renderLib();if(v==='timer')renderTimer();if(v==='history')renderHist();window.scrollTo(0,0)}
 function openProgs(){showView('train');const pm=$('#progMore');if(pm){pm.open=true;setTimeout(()=>pm.scrollIntoView({behavior:'smooth',block:'start'}),60)}}
-document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.v==='progs'){openProgs();return}showView(b.dataset.v)};
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.v==='progs'){openProgs();return}if(b.dataset.v==='cam'){$('#navdd').classList.remove('open');camOpen('squat');return}showView(b.dataset.v)};
 $('#navBtn').onclick=e=>{e.stopPropagation();const dd=$('#navdd');const o=!dd.classList.contains('open');dd.classList.toggle('open',o);$('#navBtn').setAttribute('aria-expanded',String(o))};
 document.addEventListener('click',e=>{const dd=$('#navdd');if(dd&&dd.classList.contains('open')&&!dd.contains(e.target))dd.classList.remove('open')});
 document.getElementById('mbar').onclick=e=>{const b=e.target.closest('button');if(b)showView(b.dataset.v)};
@@ -1784,6 +1808,7 @@ $('#plFwd').onclick=()=>P&&done();
 $('#plPrev').onclick=()=>P&&prev();
 $('#plSound').onclick=()=>{SOUND=!SOUND;$('#plSound').textContent=SOUND?'SOUND ON':'SOUND OFF';if(!SOUND)try{speechSynthesis.cancel()}catch(e){}};
 $('#plVoice').textContent=VOICE?'VOICE ON':'VOICE OFF';
+$('#plCam').onclick=()=>camFromPlayer();
 $('#plVoice').onclick=()=>{VOICE=!VOICE;LS.set('hw_voice',VOICE);$('#plVoice').textContent=VOICE?'VOICE ON':'VOICE OFF';if(!VOICE)try{speechSynthesis.cancel()}catch(e){}else{lastSay='';say('Voice on')}};
 $('#plMenu').onclick=()=>{if(!P)return;if(!$('#plFin').hidden){closePlayer();return}P.wasRunning=P.running;P.running=false;$('#plDlg').hidden=false;update()};
 $('#dResume').onclick=()=>{$('#plDlg').hidden=true;P.running=true;last=performance.now();update()};
@@ -2319,6 +2344,7 @@ function coachContext(){
   const eq=['bodyweight',...Object.keys(ST.bwOnly?{}:(ST.eq||{})).filter(k=>ST.eq[k]).map(k=>EQN[k]+(k==='kb'&&ST.kbw?` ${ST.kbw} kg`:''))].join(', ');
   const L=[];const now=new Date();
   L.push(`Current date/time: ${now.toLocaleString('en-GB')}.`);
+  {const r=rdyToday();if(r){const pn=(r.pain||[]).map(k=>(RDY_PAIN.find(x=>x[0]===k)||[])[1]);L.push(`Today’s check-in: sleep ${['poor','ok','good'][r.sleep]}, energy ${['low','normal','high'][r.energy]}, soreness ${['none','a little','a lot'][r.sore]}${pn.length?`, pain in: ${pn.join(', ')}`:''}.`)}}
   L.push(`Profile: ${pr.sex==='f'?'woman':pr.sex==='m'?'man':'sex unknown'}${pr.age?`, ${pr.age} years old`:''}${pr.height?`, ${pr.height} cm`:''}${T.kg?`, ${T.kg} kg`:''}. Goal: weight loss.${goals.target?` Target weight ${goals.target} kg.`:''}`);
   L.push(`Home equipment: ${eq}. Level: ${ST.lvl||'unknown'}.`);
   if(W.length)L.push(`Weight: ${W.slice(-6).map(w=>`${String(w.d||w.date).slice(0,10)} ${w.kg} kg`).join('; ')}.`);
@@ -2678,6 +2704,107 @@ function renderRemind(){const el=$('#pcRemind');if(!el)return;const R=Object.ass
     const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Home WOD//Reminders//EL','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:homewod-train-${Date.now()}@homewod.site`,`DTSTAMP:${loc(now)}`,`DTSTART:${loc(first)}`,`DTEND:${loc(end)}`,`RRULE:FREQ=WEEKLY;BYDAY=${R.days.join(',')}`,'SUMMARY:💪 Time for a WOD','DESCRIPTION:Open Home WOD: https://homewod.site','URL:https://homewod.site','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Time for a WOD!','TRIGGER:PT0S','END:VALARM','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:In 30 minutes: WOD','TRIGGER:-PT30M','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n';
     const url=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='homewod-proponisi.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},4000);toast('Tap “Add” to put it in your calendar.')}}
 
+/* ===== Readiness check-in ===== */
+const RDY_PAIN=[['knee','Knee'],['back','Waist'],['shoulder','Shoulder'],['wrist','Wrist'],['ankle','Ankle']];
+function rdyToday(){const r=LS.get('hw_ready',null);return r&&r.d===todayISO()?r:null}
+function readyScore(r){return r?(r.sleep+r.energy+(2-r.sore)):4}
+function readyM(){const r=rdyToday();if(!r)return 1;const sc=readyScore(r);return sc<=2?.75:sc<=4?.9:sc===5?1:1.05}
+function readyLabel(r){const sc=readyScore(r);return sc<=2?['🟥','Low','light day, −25%']:sc<=4?['🟨','Moderate','−10% intensity']:sc===5?['🟩','Good','normal intensity']:['💚','Great','+5% intensity']}
+function exJoints(e){const id=e.id,m=e.m||[],J=new Set();if(e.cat&&e.cat.includes('stretch'))return J;
+  if((m.includes('quads')&&!/^(bike|row)$/.test(id))||/lunge|jump|burpee|run|single_under|high_knees|butt_kicks|box|wall_sit/.test(id))J.add('knee');
+  if(/deadlift|swing|_row|^row$|_gm|rdl|superman|slam|snatch|kb_hp|situp|rollout|renegade|pullover|bicycle|leg_raise|back_squat/.test(id))J.add('back');
+  if(m.includes('shoulders')||/pushup|press|pull_up|chin|dip|burpee|hang|plank|inchworm|pullover|upright/.test(id))J.add('shoulder');
+  if(/pushup|plank|burpee|mountain|shoulder_taps|inchworm|dip|rollout|renegade|floor_press/.test(id))J.add('wrist');
+  if(/jump|single_under|run|high_knees|butt_kicks|burpee|calf/.test(id))J.add('ankle');return J}
+function exOK(e){const r=rdyToday();if(!r||!r.pain||!r.pain.length)return true;const J=exJoints(e);return !r.pain.some(x=>J.has(x))}
+function renderReady(){const r=rdyToday();
+  if(r){const L=readyLabel(r);const pn=(r.pain||[]).map(k=>(RDY_PAIN.find(x=>x[0]===k)||[])[1]).filter(Boolean);
+    return `<div class="rdy-s"><span>${L[0]} Readiness: <b>${L[1]}</b> · ${L[2]}${pn.length?` · no exercises for: ${pn.join(', ')}`:''}</span><button id="rdyEdit">Change</button></div>`}
+  const sel=window._rdySel||(window._rdySel={sleep:-1,energy:-1,sore:-1,pain:[]});const o=(k,v,t)=>`<button data-rk="${k}" data-rv="${v}" class="${sel[k]===v?'on':''}">${t}</button>`;
+  return `<div class="rdy"><h3>☀️ How are you today?</h3><p class="note" style="margin:0">3 quick questions and I’ll adapt your workout.</p>
+   <div class="q">Sleep</div><div class="opts">${o('sleep',0,'😴 Poor')}${o('sleep',1,'🙂 OK')}${o('sleep',2,'😃 Good')}</div>
+   <div class="q">Energy</div><div class="opts">${o('energy',0,'🔋 Low')}${o('energy',1,'⚡ Normal')}${o('energy',2,'🚀 High')}</div>
+   <div class="q">Muscle soreness</div><div class="opts">${o('sore',0,'None')}${o('sore',1,'A little')}${o('sore',2,'A lot')}</div>
+   <div class="q">Any pain? (optional)</div><div class="opts">${RDY_PAIN.map(([k,t])=>`<button data-rp="${k}" class="${sel.pain.includes(k)?'on':''}">${t}</button>`).join('')}</div>
+   <div class="mrow" style="margin-top:14px"><button class="btn primary" id="rdySave" ${sel.sleep<0||sel.energy<0||sel.sore<0?'disabled style="opacity:.5"':''}>Save</button><button class="btn" id="rdySkip">Not now</button></div></div>`}
+function bindReady(el){const sel=window._rdySel;
+  el.querySelectorAll('[data-rk]').forEach(b=>b.onclick=()=>{sel[b.dataset.rk]=+b.dataset.rv;renderDash()});
+  el.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>{const k=b.dataset.rp;sel.pain=sel.pain.includes(k)?sel.pain.filter(x=>x!==k):sel.pain.concat([k]);renderDash()});
+  const sv=el.querySelector('#rdySave');if(sv)sv.onclick=()=>{if(sel.sleep<0||sel.energy<0||sel.sore<0)return;persist('hw_ready',{d:todayISO(),sleep:sel.sleep,energy:sel.energy,sore:sel.sore,pain:sel.pain});window._rdySel=null;
+    const L=readyLabel(rdyToday());toast(`${L[0]} ${L[1]} readiness · ${L[2]}`);renderDash()};
+  const sk=el.querySelector('#rdySkip');if(sk)sk.onclick=()=>{LS.set('hw_ready_skip',todayISO());renderDash()};
+  const ed=el.querySelector('#rdyEdit');if(ed)ed.onclick=()=>{const r=rdyToday();window._rdySel={sleep:r.sleep,energy:r.energy,sore:r.sore,pain:(r.pain||[]).slice()};LS.set('hw_ready',null);renderDash()}}
+
+/* ===== Camera rep counter (MediaPipe Pose, on-device) ===== */
+const CAMT={squat:'Squats',lunge:'Lunges',pushup:'Push-ups',press:'Shoulder press',curl:'Biceps curls',situp:'Sit-ups'};
+function camTypeFor(id){if(!id)return null;if(/lunge|bulgarian/.test(id))return 'lunge';if(/squat|thruster|wall_ball/.test(id)&&!/hold|wall_sit/.test(id))return 'squat';
+  if(/pushup/.test(id))return 'pushup';if(/_press$/.test(id)&&!/floor/.test(id))return 'press';if(/curl/.test(id))return 'curl';if(id==='situp')return 'situp';return null}
+const CAM={lm:null,loading:null,stream:null,raf:0,on:false,type:'squat',n:0,st:'up',minA:999,sm:null,lastT:-1,lastFb:0,facing:'user',target:0};
+function camLoad(){if(CAM.lm)return Promise.resolve(CAM.lm);if(CAM.loading)return CAM.loading;
+  const V='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+  CAM.loading=(async()=>{const v=await import(V+'/vision_bundle.mjs');const fs=await v.FilesetResolver.forVisionTasks(V+'/wasm');
+    const mk=d=>v.PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',delegate:d},runningMode:'VIDEO',numPoses:1});
+    try{CAM.lm=await mk('GPU')}catch(e){CAM.lm=await mk('CPU')}return CAM.lm})();
+  CAM.loading.catch(()=>{CAM.loading=null});return CAM.loading}
+function ang(a,b,c){const v1=[a[0]-b[0],a[1]-b[1]],v2=[c[0]-b[0],c[1]-b[1]];const d=Math.hypot(...v1)*Math.hypot(...v2)||1;return Math.acos(Math.max(-1,Math.min(1,(v1[0]*v2[0]+v1[1]*v2[1])/d)))*180/Math.PI}
+function camFb(t,cls){const f=document.querySelector('.camov .fb');if(f){f.textContent=t;f.className='fb '+(cls||'')}}
+function camSayFb(t){const now=Date.now();camFb(t,'bad');if(now-CAM.lastFb>2500){CAM.lastFb=now;say(t,true)}}
+function camRep(){CAM.n++;const c=document.querySelector('.camov .cnt');if(c)c.firstChild.textContent=CAM.n;say(String(CAM.n),true);camFb('Good rep! 💪','ok');
+  if(CAM.target&&CAM.n===CAM.target){setTimeout(()=>{say('Great! You finished your reps.',true);camFb(`🎉 ${CAM.target}/${CAM.target}! Tap “Done”.`,'ok')},400)}}
+/* core counting logic; L = 33 landmarks [{x,y,visibility}] in pixel space */
+function camStep(L){const T=CAM.type,vis=i=>(L[i]&&L[i].visibility!=null?L[i].visibility:1),P=i=>[L[i].x,L[i].y];
+  const side=(vis(11)+vis(13)+vis(15)+vis(23)+vis(25)+vis(27))>=(vis(12)+vis(14)+vis(16)+vis(24)+vis(26)+vis(28))?0:1;
+  const S=11+side,E=13+side,W=15+side,H=23+side,K=25+side,A=27+side;
+  const need=T==='pushup'||T==='press'||T==='curl'?[S,E,W]:T==='situp'?[S,H,K]:[H,K,A];
+  if(need.some(i=>vis(i)<.5)){camFb('I can’t see your whole body, step back a little','bad');return}
+  let a,down,up,extra=null;
+  if(T==='squat'||T==='lunge'){a=T==='lunge'?Math.min(ang(P(23),P(25),P(27)),ang(P(24),P(26),P(28))):ang(P(H),P(K),P(A));down=T==='lunge'?105:100;up=155;
+    const tor=Math.abs(Math.atan2(P(S)[0]-P(H)[0],P(H)[1]-P(S)[1])*180/Math.PI);if(CAM.st==='down'&&T==='squat'&&tor>55)extra='Chest up!'}
+  else if(T==='pushup'){a=ang(P(S),P(E),P(W));down=95;up=150;if(vis(A)>.5&&ang(P(S),P(H),P(A))<150)extra='Straight body, brace your core!'}
+  else if(T==='press'){a=ang(P(S),P(E),P(W));down=100;up=155;if(CAM.st==='down'&&a>up&&P(W)[1]>P(S)[1])a=up-1}
+  else if(T==='curl'){a=180-ang(P(S),P(E),P(W));down=40;up=125;}
+  else{a=ang(P(S),P(H),P(K));down=999;up=0}
+  CAM.sm=CAM.sm==null?a:CAM.sm*.6+a*.4;const x=CAM.sm;
+  if(T==='situp'){if(CAM.st==='up'&&x>125){CAM.st='down'}else if(CAM.st==='down'&&x<70){CAM.st='up';camRep()}return}
+  if(T==='press'||T==='curl'){ /* count on reaching the top after being at the bottom */
+    if(CAM.st==='up'&&x<down){CAM.st='down'}else if(CAM.st==='down'&&x>up){CAM.st='up';camRep()}return}
+  if(CAM.st==='up'){CAM.minA=Math.min(CAM.minA,x);if(x<down){CAM.st='down';CAM.minA=999}
+    else if(x>up&&CAM.minA<up-25&&CAM.minA>=down){camSayFb(T==='pushup'?'Lower, chest close to the floor':'Go lower!');CAM.minA=999}
+    else if(x>up)CAM.minA=999}
+  else{if(extra)camSayFb(extra);if(x>up){CAM.st='up';CAM.minA=999;camRep()}}
+  if(extra&&CAM.st==='up'&&T==='pushup')camSayFb(extra)}
+function camDraw(ctx,L,w,h){ctx.clearRect(0,0,w,h);const C=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28]];
+  ctx.lineWidth=Math.max(3,w/160);ctx.strokeStyle='rgba(111,214,184,.9)';ctx.fillStyle='#ff8a5b';
+  for(const[a,b]of C){if((L[a].visibility||0)>.4&&(L[b].visibility||0)>.4){ctx.beginPath();ctx.moveTo(L[a].x,L[a].y);ctx.lineTo(L[b].x,L[b].y);ctx.stroke()}}
+  for(const i of [11,12,13,14,15,16,23,24,25,26,27,28])if((L[i].visibility||0)>.4){ctx.beginPath();ctx.arc(L[i].x,L[i].y,Math.max(4,w/110),0,7);ctx.fill()}}
+function camLoop(){if(!CAM.on)return;const v=document.querySelector('.camov video'),cv=document.querySelector('.camov canvas');
+  if(v&&cv&&v.readyState>=2&&CAM.lm&&v.currentTime!==CAM.lastT){CAM.lastT=v.currentTime;const w=v.videoWidth,h=v.videoHeight;if(cv.width!==w){cv.width=w;cv.height=h}
+    try{const r=CAM.lm.detectForVideo(v,performance.now());const lm=r.landmarks&&r.landmarks[0];const ctx=cv.getContext('2d');
+      if(lm){const L=lm.map(p=>({x:p.x*w,y:p.y*h,visibility:p.visibility}));camDraw(ctx,L,w,h);camStep(L)}else{ctx.clearRect(0,0,w,h);camFb('Step into frame so your whole body is visible','bad')}}catch(e){console.warn(e)}}
+  CAM.raf=requestAnimationFrame(camLoop)}
+async function camStart(){const v=document.querySelector('.camov video');if(CAM.stream)CAM.stream.getTracks().forEach(t=>t.stop());
+  try{CAM.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.facing,width:{ideal:640},height:{ideal:480}},audio:false})}catch(e){camFb('Camera permission was not granted. Allow it in your browser settings.','bad');return}
+  v.srcObject=CAM.stream;await v.play().catch(()=>{});document.querySelector('.camov').classList.toggle('mir',CAM.facing==='user');
+  camFb('Loading motion tracking…');try{await camLoad();camFb(CAM.type==='pushup'||CAM.type==='squat'?'Ready! Stand side-on to the camera and start.':'Ready! Start.','ok');say('Ready, go',true)}catch(e){camFb('Motion tracking didn’t load. Check your internet and try again.','bad');return}
+  CAM.on=true;cancelAnimationFrame(CAM.raf);camLoop()}
+function camClose(){CAM.on=false;cancelAnimationFrame(CAM.raf);if(CAM.stream)CAM.stream.getTracks().forEach(t=>t.stop());CAM.stream=null;const o=document.querySelector('.camov');if(o)o.remove();
+  if(CAM.n>0){const L=LS.get('hw_camlog',[])||[];L.push({d:new Date().toISOString(),t:CAM.type,n:CAM.n});LS.set('hw_camlog',L.slice(-100))}}
+function camReset(){CAM.n=0;CAM.st='up';CAM.minA=999;CAM.sm=null;const c=document.querySelector('.camov .cnt');if(c)c.firstChild.textContent='0'}
+function camOpen(type,target){CAM.type=type||CAM.type||'squat';CAM.target=target||0;
+  const o=document.createElement('div');o.className='camov';
+  o.innerHTML=`<div class="cv"><video playsinline muted autoplay></video><canvas></canvas><div class="cnt">0<small>${CAM.target?`target ${CAM.target} · `:''}<span id="camTn">${CAMT[CAM.type]}</span></small></div><div class="fb">Opening camera…</div></div>
+   <div class="cbar"><div class="opts">${Object.keys(CAMT).map(k=>`<button data-ct="${k}" class="${k===CAM.type?'on':''}">${CAMT[k]}</button>`).join('')}</div>
+   <p class="note" style="margin:0">Place your phone 2–3 m away so your whole body is visible. Stand side-on for squats and push-ups. The video never leaves your phone.</p>
+   <div class="row"><button class="btn" id="camFlip">🔄 Camera</button><button class="btn" id="camZero">↺ Reset</button><button class="btn primary" id="camEnd">Done</button></div></div>`;
+  document.body.appendChild(o);camReset();
+  o.querySelectorAll('[data-ct]').forEach(b=>b.onclick=()=>{CAM.type=b.dataset.ct;o.querySelectorAll('[data-ct]').forEach(x=>x.classList.toggle('on',x===b));$('#camTn').textContent=CAMT[CAM.type];camReset()});
+  o.querySelector('#camFlip').onclick=()=>{CAM.facing=CAM.facing==='user'?'environment':'user';camStart()};
+  o.querySelector('#camZero').onclick=camReset;
+  o.querySelector('#camEnd').onclick=()=>{const n=CAM.n;camClose();if(n)toast(`${n} reps ✅`)};
+  camStart()}
+function camFromPlayer(){let id=null,tg=0;try{const it=curIt(blk());id=it.ex;tg=parseInt(String(it.label||''),10)||0}catch(e){}
+  const t=camTypeFor(id);camOpen(t||'squat',t?tg:0);if(!t)setTimeout(()=>camFb('This exercise can’t be counted yet. Pick a type below.','bad'),1200)}
+
 /* ===== Simple home dashboard ===== */
 function greet(){const h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
 function setupSummary(){const eq=ST.bwOnly?['Bodyweight only']:Object.keys(ST.eq||{}).filter(k=>ST.eq[k]).map(k=>EQN[k]);
@@ -2691,22 +2818,25 @@ function renderDash(){const el=$('#dash');if(!el)return;const ret=!!LS.get('hw_s
   let main;
   if(S&&!S.finished){const pi=progInfo(S);
     main=`<small>Program · ${S.P.name} · Week ${S.week}/${S.P.weeks}</small><h2>${pi.t}</h2><p>${pi.sub} · session ${S.day+1} of ${S.P.per} this week</p><button class="btn primary big" id="dGo">Start today’s workout ▶</button><button class="d-link" id="dSet">⚙️ Change settings</button>`}
-  else main=`<small>Quick workout</small><h2>Ready for a WOD?</h2><p>${setupSummary()}</p><button class="btn primary big" id="dGo">Build my WOD ▶</button><button class="d-link" id="dSet">⚙️ Change settings</button>`;
+  else main=`<small>Quick workout</small><h2>${rdyToday()&&readyScore(rdyToday())<=2?'Let’s go light today':'Ready for a WOD?'}</h2><p>${setupSummary()}${rdyToday()&&readyScore(rdyToday())<=2?' · intensity −25%. If you’re very tired, just stretch.':''}</p><button class="btn primary big" id="dGo">Build my WOD ▶</button><button class="d-link" id="dSet">⚙️ Change settings</button>`;
   const fTxt=fa?`Fasting ${fmtHMS(Date.now()-fa.start).slice(0,5)} · goal ${fa.plan} h`:'Tap to start';
   el.innerHTML=`<div class="d-hello"><small>${new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</small><h1>${greet()}${nm?', '+escH(nm):''} 👋</h1><p>${wk}/${goals.weekly} workouts this week${wk>=goals.weekly?' · 🎉 goal hit!':''}</p></div>
+   ${LS.get('hw_ready_skip','')===todayISO()&&!rdyToday()?'':renderReady()}
    <div class="d-main">${main}</div>
    <div class="d-tiles">
     <button class="d-tile" data-dt="food"><span class="e">🍽️</span><b>Food</b><span>${t.k?`${t.k}${T.kcal?' / '+T.kcal:''} kcal today`:'Snap or type what you ate'}</span></button>
     <button class="d-tile ${fa?'hot':''}" data-dt="fast"><span class="e">⏳</span><b>Fasting</b><span>${fTxt}</span></button>
     <button class="d-tile" data-dt="water"><span class="e">💧</span><b>+ 1 glass of water</b><span>${(t.w/1000).toFixed(2).replace(/0$/,'')} / ${(T.water/1000).toFixed(1)} L today</span></button>
     <button class="d-tile" data-dt="coach"><span class="e">💪</span><b>AI Coach</b><span>Ask me anything</span></button>
+    <button class="d-tile wide" data-dt="cam"><span class="e">📷</span><div><b>Rep counter</b><span>The camera counts squats, push-ups and more, and corrects your form</span></div></button>
    </div>
    ${S&&!S.finished?'':`<div class="d-progs"><div class="d-ph"><b>Programs</b><button class="d-link" id="dAllP">All →</button></div><div class="d-pl">${PROGRAMS.slice().sort((a,b)=>(b.run?(b.beg?2:1):0)-(a.run?(a.beg?2:1):0)).map(P0=>`<button class="d-pc ${P0.run?'run':''}" data-dp="${P0.id}"><span>${P0.run?'🏃':'📋'}</span><b>${P0.name}</b><small>${P0.weeks} weeks · ${P0.per}×/week</small></button>`).join('')}</div></div>`}`;
   el.querySelectorAll('[data-dp]').forEach(b=>b.onclick=()=>{const id=b.dataset.dp;if(id==='marathon16'||id==='marathon20b'){marathonSetup(id==='marathon16'?'int':'beg');return}persist('hw_prog',{id,start:new Date().toISOString(),done:[]});renderProgBox();renderDash();window.scrollTo({top:0,behavior:'smooth'});toast('Program started!')});
   {const ap=$('#dAllP');if(ap)ap.onclick=openProgs}
   $('#dGo').onclick=()=>{if(S&&!S.finished)startProgSession();else{generate();$('#wodOut').scrollIntoView({behavior:'smooth'})}};
   $('#dSet').onclick=()=>{const sb=$('#setupBox');sb.open=true;sb.scrollIntoView({behavior:'smooth'})};
-  el.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{const k=b.dataset.dt;if(k==='water'){addWater(250);toast('+250 ml water 💧');renderDash()}else showView(k==='food'?'scan':k)});
+  bindReady(el);
+  el.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{const k=b.dataset.dt;if(k==='cam'){camOpen('squat');return}if(k==='water'){addWater(250);toast('+250 ml water 💧');renderDash()}else showView(k==='food'?'scan':k)});
 }
 function onboarding(){if(LS.get('hw_seen',false)||(LS.get('hw_hist',[])||[]).length)return;
   const sel={eq:Object.assign({},ST.eq),bwOnly:!!ST.bwOnly,lvl:ST.lvl,dur:ST.dur};
@@ -2848,7 +2978,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='32';
+const APP_VER='33';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
