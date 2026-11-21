@@ -233,6 +233,20 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .empty{color:var(--mut);text-align:center;padding:40px 0;font-size:14px}
 #player{position:fixed;inset:0;background:radial-gradient(circle at 50% 46%,#22191a 0,var(--bg) 62%);z-index:20;display:flex;flex-direction:column;overflow:hidden}
 #player[hidden]{display:none}
+.pl-top .r button{min-width:40px;font-size:15px!important;padding:7px 10px!important}.pl-top .bn{min-width:0}
+.pl-ex .who{display:inline-block;margin-bottom:8px;padding:6px 16px;border-radius:99px;font-weight:900;font-size:18px;letter-spacing:.02em}
+.pl-ex .who.a{background:var(--acc);color:var(--ink)}.pl-ex .who.b{background:#6fd6b8;color:#06231a}.pl-ex .who.both{background:#ffd36b;color:#2a1d00}
+#plTv.on{background:var(--acc);color:var(--ink);border-color:transparent}
+#player.tv .pl-top .r>*:not(#plTv):not(#plMenu){display:none}
+#player.tv .pl-body{max-width:none;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto auto auto 1fr auto auto;grid-template-areas:"stage timer" "stage info" "stage bar" "stage ex" "stage next" "stage ctrl";column-gap:4vw;align-items:center;padding:1vh 4vw 3vh}
+#player.tv .pl-stage{grid-area:stage;height:100%;min-height:0}#player.tv .pl-stage svg{max-height:82vh;height:82vh}
+#player.tv .pl-timer{grid-area:timer;font-size:min(24vh,15vw);text-align:center}#player.tv .pl-info{grid-area:info;font-size:2.4vh}
+#player.tv .pl-bar{grid-area:bar;height:1vh}#player.tv .pl-ex{grid-area:ex}
+#player.tv .pl-ex .lb{font-size:min(8vh,5vw)}#player.tv .pl-ex .sb{font-size:3vh}#player.tv .pl-ex .cu{font-size:2.4vh}
+#player.tv .pl-ex .who{font-size:4.5vh;padding:1vh 3vh}
+#player.tv .pl-next{grid-area:next;font-size:2.4vh;justify-self:center}#player.tv .pl-ctrl{grid-area:ctrl;max-width:520px;justify-self:center}
+#player.tv .prep{font-size:9vh}
+
 .pl-top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;gap:10px}
 .pl-top .bn{font-weight:800;font-size:14px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl-top button,.mbtn{font-weight:600;font-size:12px;border:1px solid var(--line2);background:rgba(255,255,255,.04);border-radius:99px;padding:8px 12px;color:var(--fg);text-decoration:none;display:inline-block;white-space:nowrap}
@@ -911,14 +925,14 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
 <div id="player" hidden>
   <div class="pl-top">
     <div class="bn" id="plBlock">WARM-UP</div>
-    <div class="r"><a id="plMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="plCam">📷</button><button id="plVoice">VOICE ON</button><button id="plSound">SOUND ON</button><button id="plMenu">MENU</button></div>
+    <div class="r"><a id="plMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="plTv" title="TV mode">📺</button><button id="plCam">📷</button><button id="plVoice" title="Voice">🗣️</button><button id="plSound" title="Sound">🔔</button><button id="plMenu" title="Menu">☰</button></div>
   </div>
   <div id="plRun" class="pl-body">
     <div class="pl-timer" id="plTimer">00:00</div>
     <div class="pl-info" id="plInfo"></div>
     <div class="pl-bar"><i id="plBar"></i></div>
     <div class="pl-stage"><svg class="fig" id="plAv"></svg><div class="prep" id="plPrep">GET READY</div></div>
-    <div class="pl-ex"><div class="lb" id="plLabel"></div><div class="sb" id="plSub"></div><div class="cu" id="plCue"></div></div>
+    <div class="pl-ex"><div class="who" id="plWho" hidden></div><div class="lb" id="plLabel"></div><div class="sb" id="plSub"></div><div class="cu" id="plCue"></div></div>
     <div class="pl-next">NEXT: <span id="plNext"></span></div>
     <div class="pl-ctrl">
       <button class="arrow" id="plPrev" aria-label="Previous">‹</button>
@@ -940,7 +954,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
 <div id="clock" hidden>
   <div class="pl-top">
     <div class="bn" id="ckName">AMRAP</div>
-    <div class="r"><a id="ckMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="ckSound">SOUND ON</button><button id="ckClose">CLOSE</button></div>
+    <div class="r"><a id="ckMusic" class="mbtn" target="_blank" rel="noopener">♫ ↗</a><button id="ckSound" title="Sound">🔔</button><button id="ckClose">CLOSE</button></div>
   </div>
   <div class="ck-body">
     <div class="ring"><svg viewBox="0 0 100 100"><circle class="trk" cx="50" cy="50" r="46"/><circle class="prg" id="ckRing" cx="50" cy="50" r="46" stroke-dashoffset="289.03"/></svg>
@@ -1371,7 +1385,7 @@ const EQN={bw:'Bodyweight',kb:'Kettlebell',bike:'Air Bike',tread:'Treadmill',db:
 const EQK=['kb','db','band','bar','rope','box','mb','bb','abw','bike','tread','rower'];
 const EQS={bw:'BODYWEIGHT',kb:'KETTLEBELL',bike:'AIR BIKE',tread:'TREADMILL',db:'DUMBBELLS',band:'BANDS'};
 const LVL=['Beginner','Intermediate','Advanced'];
-const FMTS=[['random','Random'],['amrap','AMRAP'],['emom','EMOM'],['fortime','FOR TIME'],['tabata','TABATA'],['intervals','INTERVALS']];
+const FMTS=[['random','Random'],['amrap','AMRAP'],['emom','EMOM'],['fortime','FOR TIME'],['tabata','TABATA'],['intervals','INTERVALS'],['partner','👥 PARTNER']];
 
 function segBtns(el,opts,cur,on){el.innerHTML=opts.map(([v,l])=>`<button data-v="${v}" class="${String(v)===String(cur)?'on':''}">${l}</button>`).join('');
   el.onclick=e=>{const b=e.target.closest('button');if(!b)return;on(b.dataset.v);el.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))}}
@@ -1388,7 +1402,7 @@ function renderSetup(){
   segBtns($('#bbSeg'),[20,30,40,50,60,70,80,100,120,140,160].map(v=>[v,v+' kg']),ST.bbMax||60,v=>{ST.bbMax=+v;save()});
   segBtns($('#lvlSeg'),LVL.map((l,i)=>[i,l]),ST.lvl,v=>{ST.lvl=+v;save()});
   segBtns($('#durSeg'),[20,30,45,60].map(v=>[v,v+"'"]),ST.dur,v=>{ST.dur=+v;save()});
-  segBtns($('#fmtSeg'),FMTS,ST.fmt,v=>{ST.fmt=v;save()});
+  segBtns($('#fmtSeg'),FMTS,ST.fmt,v=>{ST.fmt=v;save();if(v==='partner')partnerSetup()});
   const fc=$('#focusChips');const drawF=()=>{fc.innerHTML=`<button class="all ${ST.focus.length?'':'on'}" data-k="">Full body</button>`+Object.keys(MUN).map(k=>`<button data-k="${k}" class="${ST.focus.includes(k)?'on':''}">${MUN[k]}</button>`).join('')};drawF();
   fc.onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;if(!k)ST.focus=[];else{const i=ST.focus.indexOf(k);if(i>=0)ST.focus.splice(i,1);else ST.focus.push(k)}save();drawF()};
   const bw=$('#bw');bw.value=ST.bw||'';bw.oninput=()=>{ST.bw=bw.value;save()};
@@ -1552,9 +1566,10 @@ function generate0(){
   const M={20:12,30:17,45:26,60:40}[ST.dur]||17;const hasM=ST.eq.bike||ST.eq.tread||ST.eq.rower;
   let fmt=ST.fmt;if(fmt==='random'){const o=['amrap','emom','fortime','tabata'];if(hasM)o.push('intervals','intervals');fmt=rand(o)}
   if(fmt==='intervals'&&!hasM)fmt='amrap';
-  const main=buildMain(fmt,M);let worked=ST.focus.slice();
+  if(fmt==='partner'&&!partnerNames(true))return;
+  const main=fmt==='partner'?buildPartner(M):buildMain(fmt,M);let worked=ST.focus.slice();
   if(!worked.length){const cnt={};main.forEach(b=>(b.list||[]).forEach(i=>{const e=EXM[i.ex];(e&&e.m||[]).forEach((m,j)=>{cnt[m]=(cnt[m]||0)+(j===0?2:1)})}));worked=Object.keys(cnt).filter(m=>m!=='cardio').sort((a,b)=>cnt[b]-cnt[a]).slice(0,4)}
-  const blocks=[buildWarm(),...main];if(ST.dur>=30)blocks.push(buildFinisher());blocks.push(buildCool(worked));
+  const blocks=[buildWarm(),...main];if(ST.dur>=30&&fmt!=='partner')blocks.push(buildFinisher());blocks.push(buildCool(worked));
   const bw=parseFloat(ST.bw)||75;const kcal=blocks.reduce((s,b)=>s+b.min*b.met*3.5*bw/200,0);
   const total=Math.round(blocks.reduce((s,b)=>s+b.min,0)+blocks.length*10/60);
   const mainB=blocks.find(b=>b.fmt);
@@ -1759,7 +1774,8 @@ function pickVoice(){try{const vs=speechSynthesis.getVoices();VV=vs.find(v=>v.la
 try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
 function say(t,urgent){if(!VOICE||!SOUND||!('speechSynthesis' in window)||!t)return;try{if(urgent)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=VLANG;if(VV)u.voice=VV;u.rate=1.02;u.pitch=1;u.volume=1;speechSynthesis.speak(u)}catch(e){}}
 function sayKey(k,t,urgent){if(k===lastSay)return;lastSay=k;say(t,urgent)}
-function spokenIt(it){if(!it)return'';const sub=(it.sub||'').replace(/·/g,',').replace(/\bkg\b/g,' kilos').replace(/(\d+)\s*''/g,'$1 seconds').replace(/(\d+)'/g,'$1 minutes');return it.rest?('Rest. '+(it.label&&!/^ΔΙΑΛΕΙΜΜΑ|^REST/i.test(it.label)?it.label:'')):(it.label+(sub?'. '+sub:''))}
+function spokenIt(it){if(!it)return'';if(it.who){const N=partnerNames()||{a:'',b:''};const nm=it.who==='both'?'Together':(it.who==='a'?N.a:N.b);return `${nm}! ${it.label}`}const sub=(it.sub||'').replace(/·/g,',').replace(/\bkg\b/g,' kilos').replace(/(\d+)\s*''/g,'$1 seconds').replace(/(\d+)'/g,'$1 minutes');return it.rest?('Rest. '+(it.label&&!/^ΔΙΑΛΕΙΜΜΑ|^REST/i.test(it.label)?it.label:'')):(it.label+(sub?'. '+sub:''))}
+function tvRestore(){try{if(LS.get('hw_tv',false))$('#player').classList.add('tv'),$('#plTv').classList.add('on')}catch(e){}}
 function wakeOn(){try{if(navigator.wakeLock&&P&&!$('#player').hidden)navigator.wakeLock.request('screen').then(w=>{wake=w}).catch(()=>{})}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)wakeOn()});
 function beep(f,d){if(!SOUND||!AC)return;try{const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=f;g.gain.setValueAtTime(.12,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
@@ -1767,7 +1783,7 @@ const fmtT=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padSta
 function startWorkout(){
   try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){AC=null}
   wakeOn();try{if(VOICE&&'speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(e){}lastSay='';
-  P={bi:0,si:0,el:0,prep:10,running:true,rounds:0,res:[],start:Date.now()};wakeOn();
+  P={bi:0,si:0,el:0,prep:10,running:true,rounds:0,res:[],start:Date.now()};wakeOn();tvRestore();
   $('#player').hidden=false;$('#plRun').hidden=false;$('#plFin').hidden=true;$('#plDlg').hidden=true;document.body.style.overflow='hidden';
   last=performance.now();clearInterval(timer);timer=setInterval(tick,100);update();
 }
@@ -1827,7 +1843,7 @@ function update(){
   if(P.prep>0)sayKey('p'+P.bi,`${b.name.charAt(0)+b.name.slice(1).toLocaleLowerCase(VLANG)}. ${b.type==='amrap'?`As many rounds as possible in ${b.cap/60} minutes. `:b.type==='fortime'?'For time. ':''}First exercise: ${spokenIt(it)}`,true);
   else sayKey('s'+P.bi+'.'+P.si+'.'+(b.type==='amrap'?P.rounds:''),spokenIt(it),true);
   plFig.set(it.ex);
-  $('#plLabel').textContent=it.label;$('#plSub').textContent=it.sub||'';
+  $('#plLabel').textContent=it.label;$('#plSub').textContent=it.sub||'';{const w=$('#plWho');if(it.who){const N=partnerNames()||{a:'1',b:'2'};w.hidden=false;w.className='who '+it.who;w.textContent=it.who==='both'?'👥 TOGETHER':'👤 '+(it.who==='a'?N.a:N.b)}else w.hidden=true}
   $('#plCue').textContent=it.rest?'':(ex.cues[0]||'');
   const n=nextIt();$('#plNext').textContent=n?n.label:'END';
   $('#plTimer').style.opacity=P.running?1:.4;$('#plTimer').classList.toggle('rest',!!it.rest&&!(P.prep>0));
@@ -1837,10 +1853,11 @@ $('#plMain').onclick=()=>{if(!P)return;if(P.prep>0){P.prep=0;beep(990,.3);update
   if(b.type==='timeline'){P.running=false;update()}else done()};
 $('#plFwd').onclick=()=>P&&done();
 $('#plPrev').onclick=()=>P&&prev();
-$('#plSound').onclick=()=>{SOUND=!SOUND;$('#plSound').textContent=SOUND?'SOUND ON':'SOUND OFF';if(!SOUND)try{speechSynthesis.cancel()}catch(e){}};
-$('#plVoice').textContent=VOICE?'VOICE ON':'VOICE OFF';
+$('#plSound').onclick=()=>{SOUND=!SOUND;$('#plSound').textContent=SOUND?'🔔':'🔕';if(!SOUND)try{speechSynthesis.cancel()}catch(e){}};
+$('#plVoice').textContent=VOICE?'🗣️':'🤐';
 $('#plCam').onclick=()=>camFromPlayer();
-$('#plVoice').onclick=()=>{VOICE=!VOICE;LS.set('hw_voice',VOICE);$('#plVoice').textContent=VOICE?'VOICE ON':'VOICE OFF';if(!VOICE)try{speechSynthesis.cancel()}catch(e){}else{lastSay='';say('Voice on')}};
+$('#plTv').onclick=()=>tvToggle();
+$('#plVoice').onclick=()=>{VOICE=!VOICE;LS.set('hw_voice',VOICE);$('#plVoice').textContent=VOICE?'🗣️':'🤐';if(!VOICE)try{speechSynthesis.cancel()}catch(e){}else{lastSay='';say('Voice on')}};
 $('#plMenu').onclick=()=>{if(!P)return;if(!$('#plFin').hidden){closePlayer();return}P.wasRunning=P.running;P.running=false;$('#plDlg').hidden=false;update()};
 $('#dResume').onclick=()=>{$('#plDlg').hidden=true;P.running=true;last=performance.now();update()};
 $('#dSkip').onclick=()=>{$('#plDlg').hidden=true;finishBlock(false);P.running=true;last=performance.now();update()};
@@ -1866,7 +1883,7 @@ function endWorkout(complete){
   $('#finClose').onclick=()=>{saveRating(null);closePlayer()};P.running=false;bindRate();
   {const fin={name:WOD.name,fmt:WOD.fmt,min:mins,kcal,res:P.res.slice(),complete,date:new Date()};$('#finShare').onclick=()=>shareCard(fin);const hb=$('#finHealth');if(hb)hb.onclick=()=>toHealth(fin)}
 }
-function closePlayer(){setTimeout(()=>{try{renderProgBox();renderDash()}catch(e){}},50);try{speechSynthesis.cancel()}catch(e){}$('#player').hidden=true;document.body.style.overflow='';$('#plMenu').textContent='MENU';clearInterval(timer);P=null;try{wake&&wake.release()}catch(e){}renderHist()}
+function closePlayer(){try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}setTimeout(()=>{try{renderProgBox();renderDash()}catch(e){}},50);try{speechSynthesis.cancel()}catch(e){}$('#player').hidden=true;document.body.style.overflow='';$('#plMenu').textContent='MENU';clearInterval(timer);P=null;try{wake&&wake.release()}catch(e){}renderHist()}
 document.addEventListener('keydown',e=>{if(!P||$('#player').hidden)return;if(e.code==='Space'){e.preventDefault();$('#plMain').click()}if(e.code==='ArrowRight')$('#plFwd').click();if(e.code==='ArrowLeft')$('#plPrev').click()});
 
 /* ================= MUSIC ================= */
@@ -1960,7 +1977,7 @@ $('#tmGo').onclick=tmStart;
 $('#ckMain').onclick=()=>{if(!C)return;if(C.done){tmStart();return}if(C.prep>0){C.prep=0;beep(990,.4);cupdate();return}C.running=!C.running;clast=performance.now();cupdate()};
 $('#ckAlt').onclick=()=>{if(!C||C.done)return;if(C.cfg.rounds){C.rounds++;beep(880,.1)}else if(C.prep>0){C.prep=0}else{C.pi++;C.el=0;if(C.pi>=C.cfg.ph.length)cfinish();else beep(990,.3)}cupdate()};
 $('#ckReset').onclick=()=>{if(!C)return;tmStart();C.running=false;C.prep=10;cupdate()};
-$('#ckSound').onclick=()=>{SOUND=!SOUND;$('#ckSound').textContent=$('#plSound').textContent=SOUND?'SOUND ON':'SOUND OFF'};
+$('#ckSound').onclick=()=>{SOUND=!SOUND;$('#ckSound').textContent=$('#plSound').textContent=SOUND?'🔔':'🔕'};
 $('#ckClose').onclick=()=>{if(C&&C.cfg.up&&C.tot>=60&&C.el>0){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:[`Time ${fmtT(C.el)}`].concat(C.cfg.rounds&&C.rounds?[`${C.rounds} rounds`]:[])});persist('hw_hist',h.slice(-200))}
   else if(C&&C.tot>=60){const h=LS.get('hw_hist',[]);h.push({date:new Date().toISOString(),name:C.cfg.name,fmt:'TIMER',min:Math.round(C.tot/60),kcal:0,res:C.cfg.rounds&&C.rounds?[`${C.rounds} rounds`]:[]});persist('hw_hist',h.slice(-200))}
   clearInterval(ctimer);C=null;$('#clock').hidden=true;document.body.style.overflow='';try{wake&&wake.release()}catch(e){}};
@@ -2993,6 +3010,31 @@ function confirmBox(){return window.confirm('Close without saving?')}
 function gpsFromProg(){const S=progState();if(!S||!S.P.run){gpsOpen({});return}const sp=runSpec(S.week,S.day,S.p);if(sp.strength){startProgSession();return}
   const tot=sp.parts.reduce((a,o)=>a+(o.km||0)*(o.n||1),0);const rw=(sp.parts.find(o=>o.rw)||{}).rw;gpsOpen({name:sp.t,target:Math.round(tot*10)/10,rw,prog:S.i})}
 
+/* ===== Partner WOD (you go, I go) ===== */
+function partnerNames(ask){const N=LS.get('hw_partner',null);if(N&&N.a&&N.b)return N;if(ask)partnerSetup(()=>generate());return null}
+function partnerSetup(cb){const N=LS.get('hw_partner',{})||{};const d=document.createElement('div');d.className='modal';
+  d.innerHTML=`<div class="mbox"><h3>👥 Partner workout</h3><p class="note">You take turns: while one does the exercise, the other rests. At the end of each round you do something together.</p>
+   <label class="note" style="display:block;margin-top:12px">Name 1<input class="inp" id="pnA" maxlength="14" value="${escH(N.a||'')}" placeholder="e.g. Alex" style="width:100%;margin-top:4px"></label>
+   <label class="note" style="display:block;margin-top:10px">Name 2<input class="inp" id="pnB" maxlength="14" value="${escH(N.b||'')}" placeholder="e.g. Maria" style="width:100%;margin-top:4px"></label>
+   <div class="mrow"><button class="btn primary" id="pnGo">Build partner WOD</button><button class="btn" id="pnX">Cancel</button></div></div>`;
+  document.body.appendChild(d);d.querySelector('#pnX').onclick=()=>d.remove();
+  d.querySelector('#pnGo').onclick=()=>{const a=d.querySelector('#pnA').value.trim()||'Player 1',b=d.querySelector('#pnB').value.trim()||'Player 2';LS.set('hw_partner',{a,b});d.remove();if(cb)cb()}}
+function buildPartner(M){const N=partnerNames()||{a:'Player 1',b:'Player 2'};const mv=pickMoves(4,{noSec:true});const W=ST.lvl===0?30:40;
+  const together=['plank','wall_sit','air_squat','high_knees','glute_bridge'].filter(id=>EXM[id]&&exOK(EXM[id]));
+  const per=mv.length*W*2+30;const R=Math.max(2,Math.round(M*60/per));const segs=[];
+  for(let r=0;r<R;r++){mv.forEach(e=>{const ld=load(e);
+      segs.push({ex:e.id,label:e.name,sub:`${ld?ld+' · ':''}${N.b} rests`,dur:W,info:`ROUND ${r+1}/${R} · ${N.a.toUpperCase()}`,who:'a'});
+      segs.push({ex:e.id,label:e.name,sub:`${ld?ld+' · ':''}${N.a} rests`,dur:W,info:`ROUND ${r+1}/${R} · ${N.b.toUpperCase()}`,who:'b'})});
+    const t=EXM[together[r%together.length]]||EXM.plank;segs.push({ex:t.id,label:t.name,sub:'Together, side by side!',dur:30,info:`ROUND ${r+1}/${R} · TOGETHER`,who:'both'})}
+  return [{name:`PARTNER · ${R} ROUNDS`,type:'timeline',segs,list:mv.map(e=>({ex:e.id,label:`${W}" ${e.name}`,sub:`${N.a} → ${N.b} · ${load(e)||e.gr}`})).concat([{ex:'plank',label:'30" together',sub:'plank, wall sit or squats side by side'}]),
+    desc:`${N.a} and ${N.b}: while one does ${W}″ of the exercise, the other rests. At the end of each round, 30″ together. Change names in Settings → “Partner” format.`,min:R*per/60,met:6.5,fmt:'PARTNER'}]}
+
+/* ===== TV mode ===== */
+function tvToggle(on){const pl=$('#player');const v=on==null?!pl.classList.contains('tv'):on;pl.classList.toggle('tv',v);LS.set('hw_tv',v);$('#plTv').classList.toggle('on',v);
+  if(v){try{const el=document.documentElement;if(el.requestFullscreen&&!document.fullscreenElement)el.requestFullscreen().catch(()=>{})}catch(e){}try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})}catch(e){}
+    if(!LS.get('hw_tv_tip',false)){LS.set('hw_tv_tip',true);toast('📺 For TV: Control Centre → Screen Mirroring (AirPlay) and turn your phone sideways.')}}
+  else{try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}}}
+
 /* ===== Simple home dashboard ===== */
 function greet(){const h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
 function setupSummary(){const eq=ST.bwOnly?['Bodyweight only']:Object.keys(ST.eq||{}).filter(k=>ST.eq[k]).map(k=>EQN[k]);
@@ -3169,7 +3211,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='34';
+const APP_VER='35';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
