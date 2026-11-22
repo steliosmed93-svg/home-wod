@@ -233,6 +233,11 @@ svg.mini{width:56px;height:56px;flex:none;background:#151518;border:1px solid va
 .empty{color:var(--mut);text-align:center;padding:40px 0;font-size:14px}
 #player{position:fixed;inset:0;background:radial-gradient(circle at 50% 46%,#22191a 0,var(--bg) 62%);z-index:20;display:flex;flex-direction:column;overflow:hidden}
 #player[hidden]{display:none}
+.sideflag{display:inline-block;margin:0 0 8px;padding:6px 14px;border-radius:99px;font-weight:800;font-size:15px;background:var(--card2);border:1px solid var(--line2)}
+.sideflag.warn{background:#ffd36b;color:#2a1d00;border-color:transparent}
+.sideflag.go{background:var(--acc);color:var(--ink);border-color:transparent;font-size:20px;animation:sfp .5s ease 2}
+@keyframes sfp{50%{transform:scale(1.12)}}
+#player.tv .sideflag{font-size:4vh;padding:1vh 3vh}#player.tv .sideflag.go{font-size:5.5vh}
 .pl-top .r button{min-width:40px;font-size:15px!important;padding:7px 10px!important}.pl-top .bn{min-width:0}
 .pl-ex .who{display:inline-block;margin-bottom:8px;padding:6px 16px;border-radius:99px;font-weight:900;font-size:18px;letter-spacing:.02em}
 .pl-ex .who.a{background:var(--acc);color:var(--ink)}.pl-ex .who.b{background:#6fd6b8;color:#06231a}.pl-ex .who.both{background:#ffd36b;color:#2a1d00}
@@ -932,7 +937,7 @@ header .navdd .tabs button{text-align:left;padding:12px 14px!important;font-size
     <div class="pl-info" id="plInfo"></div>
     <div class="pl-bar"><i id="plBar"></i></div>
     <div class="pl-stage"><svg class="fig" id="plAv"></svg><div class="prep" id="plPrep">GET READY</div></div>
-    <div class="pl-ex"><div class="who" id="plWho" hidden></div><div class="lb" id="plLabel"></div><div class="sb" id="plSub"></div><div class="cu" id="plCue"></div></div>
+    <div class="pl-ex"><div class="sideflag" id="plSide" hidden></div><div class="who" id="plWho" hidden></div><div class="lb" id="plLabel"></div><div class="sb" id="plSub"></div><div class="cu" id="plCue"></div></div>
     <div class="pl-next">NEXT: <span id="plNext"></span></div>
     <div class="pl-ctrl">
       <button class="arrow" id="plPrev" aria-label="Previous">‹</button>
@@ -1801,11 +1806,26 @@ function curIt(b){b=b||blk();if(b.type==='timeline')return b.segs[P.si];if(b.typ
 function nextIt(){const b=blk();if(b.type==='amrap')return b.items[(P.si+1)%b.items.length];const arr=b.type==='timeline'?b.segs:b.items;
   if(P.si+1<arr.length)return arr[P.si+1];const nb=WOD.blocks[P.bi+1];if(!nb)return null;return nb.type==='timeline'?nb.segs[0]:nb.items[0]}
 function crossed(before,after){const a=Math.ceil(before),b=Math.ceil(after);return a!==b&&b<=3&&b>0}
+
+/* ===== Per-side switch cue ===== */
+const ARM_SIDE=/shoulder_stretch|triceps_stretch|single_chest|side_plank/,LEG_SIDE=/hip_flexor|calf_stretch|standing_hamstring|pigeon|figure4|runners_lunge|^quad$|glute_stretch|single_leg|lunge/;
+function segSide(s){if(!s||s.dur<10)return null;const e=EXM[s.ex];const by=(e&&e.side)||/each side|per side|each leg|each arm/.test(s.sub||'');if(!by)return null;
+  return ARM_SIDE.test(s.ex)?'arm':LEG_SIDE.test(s.ex)?'leg':'side'}
+const SIDE_TXT={arm:['Right arm','Left arm','the other arm','Start with your right arm'],leg:['Right leg','Left leg','the other leg','Start with your right leg'],side:['Right side','Left side','the other side','Start on your right side']};
+function sideTick(s,b4,el){const k=segSide(s);if(!k)return;const H=s.dur/2,T=SIDE_TXT[k];
+  if(b4<0.05&&el>=0.05)setTimeout(()=>say(T[3]),1800);
+  if(b4<H-3&&el>=H-3){say('Switch in 3',true);beep(660,.12)}
+  if(b4<H-2&&el>=H-2)beep(660,.12);if(b4<H-1&&el>=H-1)beep(660,.12);
+  if(b4<H&&el>=H){beep(1100,.45);say(`Switch! Now ${T[2]}.`,true);try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}}
+function sideUI(s){const f=$('#plSide');if(!f)return;const k=P&&P.prep<=0?segSide(s):null;if(!k){f.hidden=true;return}const H=s.dur/2,T=SIDE_TXT[k],el=P.el;f.hidden=false;
+  if(el>=H-3&&el<H){f.className='sideflag warn';f.textContent=`↔ Switch in ${Math.ceil(H-el)}`}
+  else if(el>=H&&el<H+2.5){f.className='sideflag go';f.textContent=`↔ SWITCH! ${T[1]}`}
+  else{f.className='sideflag';f.textContent=`${el<H?T[0]:T[1]} · ${el<H?'1':'2'}/2`}}
 function tick(){
   const now=performance.now(),dt=(now-last)/1000;last=now;if(!P||!P.running)return;
   if(P.prep>0){const b4=P.prep;P.prep-=dt;if(crossed(b4,P.prep))beep(660,.12);if(P.prep<=0){P.prep=0;beep(990,.4);say('Let’s go!',true)}update();return}
   const b=blk(),b4=P.el;P.el+=dt;
-  if(b.type==='timeline'){const s=b.segs[P.si];if(crossed(s.dur-b4,s.dur-P.el))beep(660,.12);if(s.dur>=25&&b4<s.dur-10&&P.el>=s.dur-10&&!s.rest)say('10 seconds');if(P.el>=s.dur)advance()}
+  if(b.type==='timeline'){const s=b.segs[P.si];sideTick(s,b4,P.el);if(crossed(s.dur-b4,s.dur-P.el))beep(660,.12);if(s.dur>=25&&b4<s.dur-10&&P.el>=s.dur-10&&!s.rest)say('10 seconds');if(P.el>=s.dur)advance()}
   else if(b.type==='amrap'){if(crossed(b.cap-b4,b.cap-P.el))beep(660,.12);if(b4<b.cap-60&&P.el>=b.cap-60&&b.cap>=240)say('One minute left');if(b4<b.cap-10&&P.el>=b.cap-10)say('10 seconds');if(P.el>=b.cap)finishBlock(true)}
   else{if(P.el>=b.cap)finishBlock(true)}
   update();
@@ -1852,6 +1872,7 @@ function update(){
   if(P.prep>0)sayKey('p'+P.bi,`${b.name.charAt(0)+b.name.slice(1).toLocaleLowerCase(VLANG)}. ${b.type==='amrap'?`As many rounds as possible in ${b.cap/60} minutes. `:b.type==='fortime'?'For time. ':''}First exercise: ${spokenIt(it)}`,true);
   else sayKey('s'+P.bi+'.'+P.si+'.'+(b.type==='amrap'?P.rounds:''),spokenIt(it),true);
   plFig.set(it.ex);
+  try{const bb=blk();sideUI(bb.type==='timeline'?bb.segs[P.si]:null)}catch(e){}
   $('#plLabel').textContent=it.label;$('#plSub').textContent=it.sub||'';{const w=$('#plWho');if(it.who){const N=partnerNames()||{a:'1',b:'2'};w.hidden=false;w.className='who '+it.who;w.textContent=it.who==='both'?'👥 TOGETHER':'👤 '+(it.who==='a'?N.a:N.b)}else w.hidden=true}
   $('#plCue').textContent=it.rest?'':(ex.cues[0]||'');
   const n=nextIt();$('#plNext').textContent=n?n.label:'END';
@@ -3220,7 +3241,7 @@ $('#stretchBtn').onclick=()=>{const pick=pickStretches(ST.focus,14);const segs=[
     blocks:[{name:'STRETCHING',type:'timeline',segs,list,desc:names.length?`Stretches for: ${names.join(', ')}. Calm breaths, no pain.`:'Full-body stretches. Calm breaths, no pain.',min,met:2.5}]};
   renderWod()};
 requestAnimationFrame(loop);
-const APP_VER='37';
+const APP_VER='38';
 async function checkUpdate(){try{if(!document.getElementById('player')?.hidden&&document.getElementById('player'))return;const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
   if(j.v&&j.v!==APP_VER&&sessionStorage.getItem('hw_reload')!==j.v){sessionStorage.setItem('hw_reload',j.v);location.reload()}}catch(e){}}
 window.addEventListener('load',()=>setTimeout(checkUpdate,1500));
